@@ -6,7 +6,7 @@
   "metrics": {
     "n_records": 1498,
     "n_questions": 1498,
-    "order_flip_rate": null,
+    "order_flip_rate": 0.19158878504672897,
     "batched_vs_separate_max_dp": null,
     "repeat_max_dp": null,
     "jitter_max_dp": null,

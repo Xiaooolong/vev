@@ -124,8 +124,10 @@ is significant.
 ## Limitations
 
 - Jev is more accurate than Vev on every text set we have, and much more accurate on nimble.
-- Answers change when the options are listed in a different order more often than we would like. The measured
-  rates are in [results/](results/).
+- Answers depend on the order in which options are listed. Reversing the options changes the top answer on
+  13–17% of JevBench and kev transfer-v4 questions for Vev-9B and 17–21% for Vev-4B on the harder sets, against
+  10–12% for kev-4B and under 4% for Jev. Training lowered this rate on most sets (Qwen3.5-4B zero-shot: 24–25% on
+  the same two sets) but not on nimble for the 4B model.
 - Judgments that need several steps of reasoning are weaker than the base model's when it is allowed to think
   before answering. On our internal scenario set the thinking mode of the same base model is 4–8 points more
   accurate than Vev's single-pass answer.
