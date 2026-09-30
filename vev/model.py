@@ -80,23 +80,30 @@ def encode_row(processor, text: str, images: list[Image.Image]) -> dict[str, Any
 
 
 def encode_rows(processor, texts: list[str], images: list[Image.Image]) -> list[dict[str, Any]]:
-    """encode_row for several prompts that contain the same images: the image processor runs once. The other rows get
-    the image placeholders expanded the way the processor does (the k-th <|image_pad|> becomes grid_k / merge² copies)
-    and reuse the first row's pixel_values and image_grid_thw."""
+    """encode_row for several prompts that contain the same images. The first row goes through the full processor; the
+    others are tokenized in one call, with the image placeholders expanded the way the processor does (the k-th
+    <|image_pad|> becomes grid_k / merge² copies) and the first row's pixel_values and image_grid_thw reused, so the
+    image processor runs once."""
     first = encode_row(processor, texts[0], images)
-    if not images or len(texts) == 1:
-        return [first] + [encode_row(processor, x, images) for x in texts[1:]]
-    token = processor.image_token
-    counts = [int(g.prod()) // processor.image_processor.merge_size ** 2 for g in first["image_grid_thw"]]
+    if len(texts) == 1:
+        return [first]
+    rest = texts[1:]
+    if images:
+        token = processor.image_token
+        counts = [int(g.prod()) // processor.image_processor.merge_size ** 2 for g in first["image_grid_thw"]]
+        expanded = []
+        for text in rest:
+            parts = text.split(token)
+            if len(parts) != len(counts) + 1:
+                raise RuntimeError("image placeholders do not match the images")
+            expanded.append(parts[0] + "".join(token * c + tail for c, tail in zip(counts, parts[1:])))
+        rest = expanded
+    enc = processor(text=rest)
     rows = [first]
-    for text in texts[1:]:
-        parts = text.split(token)
-        if len(parts) != len(counts) + 1:
-            raise RuntimeError("image placeholders do not match the images")
-        expanded = parts[0] + "".join(token * c + rest for c, rest in zip(counts, parts[1:]))
-        enc = processor(text=[expanded], return_tensors="pt")
-        row: dict[str, Any] = {k: v[0] for k, v in enc.items()}
-        row["pixel_values"], row["image_grid_thw"] = first["pixel_values"], first["image_grid_thw"]
+    for i in range(len(rest)):
+        row: dict[str, Any] = {k: torch.tensor(enc[k][i], dtype=first[k].dtype) for k in enc.keys()}
+        if images:
+            row["pixel_values"], row["image_grid_thw"] = first["pixel_values"], first["image_grid_thw"]
         row["decide"] = int(row["input_ids"].shape[0]) - 1
         rows.append(row)
     return rows

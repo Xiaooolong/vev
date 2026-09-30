@@ -92,9 +92,13 @@ def test_encode_rows_matches_encode_row_with_an_image():
           {"type": "choice", "instructions": "Which?", "criteria": {"x": "first", "y": None}},
           {"type": "score", "instructions": "How much?", "criteria": ["low", "high"]}]
     texts = [render_row(proc, segments, q, labels) for q in qs]
-    fast = encode_rows(proc, texts, images)
-    for text, got in zip(texts, fast):
-        want = encode_row(proc, text, images)
-        assert set(got) == set(want)
-        for k, v in want.items():
-            assert (torch.equal(got[k], v) if isinstance(v, torch.Tensor) else got[k] == v), k
+    plain = [render_row(proc, ["plain text"], q, labels) for q in qs]
+    for rows_texts, imgs in ((texts, images), (plain, [])):
+        for text, got in zip(rows_texts, encode_rows(proc, rows_texts, imgs)):
+            want = encode_row(proc, text, imgs)
+            assert set(got) == set(want)
+            for k, v in want.items():
+                if isinstance(v, torch.Tensor):
+                    assert got[k].dtype == v.dtype and torch.equal(got[k], v), k
+                else:
+                    assert got[k] == v, k
