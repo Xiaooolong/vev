@@ -16,7 +16,7 @@ pip install vev-ai
 vev serve --model OWNER/vev-4b          # downloads the weights on first start, listens on 127.0.0.1:8009
 ```
 
-A GPU with about 12 GB of memory runs `vev-4b` in bf16; `vev-9b` needs about 22 GB. Docker:
+In bf16, `vev-4b` takes about 10 GB of GPU memory once loaded and `vev-9b` about 19 GB; long states and images need more on top. Docker:
 
 ```bash
 docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface \
@@ -37,8 +37,8 @@ resp = client.system_one(
                        criteria={"shipping": "Delivery and tracking", "billing": "Charges and refunds"}),
     },
 )
-print(resp.answers["urgent"].noul)          # probability of "yes", e.g. 0.93
-print(resp.answers["team"].probabilities)   # {'shipping': 0.97, 'billing': 0.03}
+print(resp.answers["urgent"].noul)          # probability of "yes": 0.98 with vev-4b
+print(resp.answers["team"].probabilities)   # {"shipping": 0.97, "billing": 0.03}
 ```
 
 Images go inside the state as an `image` object with a data URL:
