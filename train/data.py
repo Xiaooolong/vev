@@ -4,43 +4,48 @@ Every question is its own row carrying the full state prefix."""
 from __future__ import annotations
 
 import json
+import math
 import random
 import re
 import sys
+from collections.abc import Callable, Iterator
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 import torch
+from PIL import Image
 from torch.utils.data import IterableDataset, get_worker_info
 
 from data.augment import Augmenter
-from vev.pointer import (LabelTokens, collate_rows, encode_prior_row, encode_row, image_loader_for, option_spans,
-                         prior_row, row_text, special_ids, target_vector)
+from vev.model import collate_rows, encode_row, render_row
+from vev.readout import LabelTokens
 from vev.state import serialize_state
 
 _SOURCE_RE = re.compile(rb'"source": "([^"]+)"')
 
 
-def option_ids(q: dict[str, Any]) -> list[str]:
-    """Identity of each rendered option: choice label; score level index in the question as given."""
+def target_vector(q: dict[str, Any], target: Any) -> list[float]:
+    """Soft target over the options in the order they are shown."""
+    if q["type"] == "noul":
+        p = float(target)
+        return [p, 1.0 - p]
     if q["type"] == "choice":
-        return list(q["criteria"])
-    return [str(i) for i in range(len(q["criteria"]))]
+        return [float(target[label]) for label in q["criteria"]]
+    return [float(target[str(i)]) for i in range(len(q["criteria"]))]
 
 
-def permuted(q: dict[str, Any], ids: list[str], rng: random.Random, reverse: bool = False) -> tuple[dict[str, Any], list[str]]:
-    """Same question with its options in another order: choice shuffled (or reversed), score levels reversed (a score
-    scale is only ever shown ascending or descending). Returns the question and the option identity per position."""
-    if q["type"] == "score":
-        return {**q, "criteria": list(reversed(q["criteria"]))}, list(reversed(ids))
-    keys = list(q["criteria"])
-    order = list(range(len(keys)))
-    if reverse:
-        order.reverse()
-    else:
-        while len(keys) > 1 and order == list(range(len(keys))):
-            rng.shuffle(order)
-    return {**q, "criteria": {keys[i]: q["criteria"][keys[i]] for i in order}}, [ids[i] for i in order]
+def image_loader_for(base_dir: Path, max_pixels: int) -> Callable[[dict], Image.Image]:
+    """Images of a build are stored as files next to the jsonl ({"image": {"path": ...}})."""
+    def load(value: dict) -> Image.Image:
+        img = Image.open(base_dir / value["path"])
+        img.load()
+        img = img.convert("RGB")
+        w, h = img.size
+        if w * h > max_pixels:
+            s = math.sqrt(max_pixels / (w * h))
+            img = img.resize((max(1, int(w * s)), max(1, int(h * s))), Image.Resampling.BICUBIC)
+        return img
+    return load
 
 
 def _images(node, out: list) -> None:
@@ -58,19 +63,10 @@ def _images(node, out: list) -> None:
 class RowDataset(IterableDataset):
     def __init__(self, build_dir: str | Path, split: str, processor, *, limit: int = 0, seed: int = 0, max_q: int = 4,
                  augment: bool = True, max_pixels: int = 1024 * 1024, max_row_tokens: int = 4096,
-                 sources: set[str] | None = None, max_images: int = 8, prior: bool = False,
-                 source_weights: dict[str, float] | None = None, views: str | None = None, view_frac: float = 1.0):
-        """views (prior mode, choice/score questions): 'consistency' adds, for a view_frac share of rows, one copy with
-        the options permuted (row['views'], trained to agree with the row); 'anchor_sym' shows the row itself in a random
-        order and attaches the question in its given and reversed order as teacher views (their base distributions
-        are averaged, so the anchor does not pin the base model's position bias). Each view carries 'idx': for
-        every option of the row, its position in the view."""
+                 sources: set[str] | None = None, max_images: int = 8):
         self.build = Path(build_dir)
-        self.views, self.view_frac = views, view_frac
         self.processor = processor
-        self.tok = processor.tokenizer
-        self.sid = special_ids(self.tok)
-        self.labels = LabelTokens(self.tok) if prior else None
+        self.labels = LabelTokens(processor.tokenizer)
         self.seed, self.max_q, self.augment = seed, max_q, augment
         self.max_pixels, self.max_row_tokens, self.max_images = max_pixels, max_row_tokens, max_images
         lines = []
@@ -83,19 +79,8 @@ class RowDataset(IterableDataset):
                     if not m or m.group(1).decode() not in sources:
                         continue
                 lines.append(line)
-        rng = random.Random(f"{seed}:records")
-        rng.shuffle(lines)
-        lines = lines[:limit] if limit else lines
-        if source_weights:  # up/down-sample sources: weight w keeps floor(w) copies plus one more with prob frac(w)
-            out = []
-            for line in lines:
-                m = _SOURCE_RE.search(line)
-                w = source_weights.get(m.group(1).decode(), 1.0) if m else 1.0
-                k = int(w) + (1 if rng.random() < (w - int(w)) else 0)
-                out.extend([line] * k)
-            rng.shuffle(out)
-            lines = out
-        self.lines = lines
+        random.Random(f"{seed}:records").shuffle(lines)
+        self.lines = lines[:limit] if limit else lines
         cfg_path = self.build / "augment_config.json"
         self.aug_cfg = json.loads(cfg_path.read_text(encoding="utf-8")) if cfg_path.exists() else None
         self.text_pool: list[str] = []
@@ -116,12 +101,6 @@ class RowDataset(IterableDataset):
 
     def _skip(self, why: str) -> None:
         self.skipped[why] = self.skipped.get(why, 0) + 1
-
-    def _encode(self, segments, images, q: dict[str, Any], k: int) -> dict[str, Any]:
-        if self.labels:
-            text, ends = prior_row(self.processor, segments, q, self.labels.letters)
-            return encode_prior_row(self.processor, text, images, ends)
-        return encode_row(self.processor, row_text(self.processor, segments, q), images, self.sid, k)
 
     def __iter__(self) -> Iterator[dict[str, Any]]:
         info = get_worker_info()
@@ -151,46 +130,20 @@ class RowDataset(IterableDataset):
                 continue
             for name in names[: self.max_q]:
                 q = rec["questions"][name]
-                k = len(option_spans(q))
-                if k < 2:
+                answer_ids = self.labels.answer_ids(q)
+                if len(answer_ids) < 2:
                     self._skip("single_option")
                     continue
-                target = rec["targets"][name]
-                view_qs: list[tuple[dict[str, Any], list[str]]] = []
-                if self.views and self.labels and q["type"] in ("choice", "score"):
-                    ids = option_ids(q)
-                    if self.views == "consistency" and rng.random() < self.view_frac:
-                        view_qs = [permuted(q, ids, rng)]
-                        prim_ids = ids
-                    elif self.views == "anchor_sym":
-                        view_qs = [(q, ids), permuted(q, ids, rng, reverse=True)]
-                        if q["type"] == "choice" or rng.random() < 0.5:
-                            q, prim_ids = permuted(q, ids, rng)
-                        else:
-                            prim_ids = ids
-                        target = None
                 try:
-                    row = self._encode(segments, images, q, k)
-                    views = []
-                    for vq, vids in view_qs:
-                        v = self._encode(segments, images, vq, k)
-                        v["answer_ids"] = self.labels.answer_ids(vq)
-                        v["idx"] = torch.tensor([vids.index(i) for i in prim_ids])
-                        views.append(v)
+                    row = encode_row(self.processor, render_row(self.processor, segments, q, self.labels), images)
                 except Exception as e:  # noqa: BLE001
                     self._skip(f"encode:{type(e).__name__}")
                     continue
                 if int(row["input_ids"].shape[0]) > self.max_row_tokens:
                     self._skip("too_long")
                     continue
-                if views:
-                    row["views"] = views
-                if target is None:  # anchor rows: placeholder target, only the KL is used
-                    row["target"] = torch.full((k,), 1.0 / k)
-                else:
-                    row["target"] = torch.tensor(target_vector(q, target), dtype=torch.float32)
-                if self.labels:
-                    row["answer_ids"] = self.labels.answer_ids(q)
+                row["target"] = torch.tensor(target_vector(q, rec["targets"][name]), dtype=torch.float32)
+                row["answer_ids"] = answer_ids
                 row["qtype"] = q["type"]
                 row["source"] = rec["source"]
                 row["id"] = f"{rec['id']}:{name}"
@@ -199,7 +152,7 @@ class RowDataset(IterableDataset):
 
 def micro_batches(rows: Iterator[dict[str, Any]], micro_tokens: int, pad_id: int, buffer: int = 64):
     """Group rows into right-padded batches of at most micro_tokens padded tokens; a small buffer is sorted by length
-    first so padding stays low. Yields (batch tensors, readouts, rows)."""
+    first so padding stays low. Yields (batch tensors, decide positions, rows)."""
     buf: list[dict[str, Any]] = []
 
     def flush(items: list[dict[str, Any]]):
@@ -208,13 +161,13 @@ def micro_batches(rows: Iterator[dict[str, Any]], micro_tokens: int, pad_id: int
         for r in items:
             L = int(r["input_ids"].shape[0])
             if cur and L * (len(cur) + 1) > micro_tokens:
-                batch, readouts = collate_rows(cur, pad_id)
-                yield batch, readouts, cur
+                batch, decide = collate_rows(cur, pad_id)
+                yield batch, decide, cur
                 cur = []
             cur.append(r)
         if cur:
-            batch, readouts = collate_rows(cur, pad_id)
-            yield batch, readouts, cur
+            batch, decide = collate_rows(cur, pad_id)
+            yield batch, decide, cur
 
     for row in rows:
         buf.append(row)

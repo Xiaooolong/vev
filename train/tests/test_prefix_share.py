@@ -5,7 +5,7 @@ import pytest
 import torch
 from transformers.cache_utils import DynamicCache, DynamicLayer, LinearAttentionLayer
 
-from vev.pointer import common_prefix_len, fork_cache
+from vev.model import common_prefix_len, fork_cache
 
 
 def test_common_prefix_len():
@@ -21,24 +21,23 @@ def test_fork_cache_isolates_branches():
     lin.update_recurrent_state(torch.ones(1, 2, 4, 4))
     cache = DynamicCache()
     cache.layers = [att, lin]
-    f = fork_cache(cache, 3)
-    assert f.layers[0].keys.shape == (3, 2, 3, 4) and f.layers[1].recurrent_states[0].shape == (3, 2, 4, 4)
-    f.layers[1].update_recurrent_state(torch.zeros(3, 2, 4, 4))  # in-place in the fork only
-    f.layers[1].update_conv_state(torch.zeros(3, 5, 1))
-    f.layers[0].update(torch.zeros(3, 2, 1, 4), torch.zeros(3, 2, 1, 4))
+    f = fork_cache(cache)
+    f.layers[1].update_recurrent_state(torch.zeros(1, 2, 4, 4))  # in place, in the fork only
+    f.layers[1].update_conv_state(torch.zeros(1, 5, 1))
+    f.layers[0].update(torch.zeros(1, 2, 1, 4), torch.zeros(1, 2, 1, 4))
     assert lin.recurrent_states[0].eq(1).all() and lin.conv_states[0].eq(1).all()
-    assert att.keys.shape == (1, 2, 3, 4) and cache.layers[1] is lin
+    assert att.keys.shape == (1, 2, 3, 4) and f.layers[0].keys.shape == (1, 2, 4, 4) and cache.layers[1] is lin
 
 
-CKPT = os.environ.get("VEV_TEST_POINTER_CKPT")
+CKPT = os.environ.get("VEV_TEST_CKPT")
 
 
 @pytest.mark.skipif(not CKPT or not torch.cuda.is_available() or not Path(CKPT or ".").is_dir(),
-                    reason="set VEV_TEST_POINTER_CKPT=<checkpoint dir> (needs CUDA)")
+                    reason="set VEV_TEST_CKPT=<checkpoint dir> (needs CUDA)")
 def test_prefix_share_matches_per_row_fp32():
-    from vev.pointer import PointerEngine
+    from vev.model import CheckpointEngine
 
-    eng = PointerEngine(CKPT, dtype="fp32", prefix_min_tokens=0)
+    eng = CheckpointEngine(CKPT, dtype="fp32")
     state = {"ticket": "My kettle never arrived and I was charged twice. Refund please.", "tier": "gold"}
     qs = {"refund": {"type": "noul", "instructions": "Is the customer asking for a refund?", "criteria": None},
           "topic": {"type": "choice", "instructions": "Topic?", "criteria": {"delivery": None, "billing": "Charges"}},
@@ -47,9 +46,9 @@ def test_prefix_share_matches_per_row_fp32():
     def probs(r):
         return {k: [a["noul"]] if a["type"] == "noul" else list(a["probabilities"].values()) for k, a in r.answers.items()}
 
-    eng.prefix_share = False
+    eng.prefix_min_tokens = 10**9
     old = eng.run(state, qs)
-    eng.prefix_share = True
+    eng.prefix_min_tokens = 0
     new = eng.run(state, qs)
     assert new.input_tokens == old.input_tokens and new.extensions["tokens"] == old.extensions["tokens"]
     po, pn = probs(old), probs(new)

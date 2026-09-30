@@ -1,7 +1,7 @@
-"""Train the pointer head (+ LoRA) on a build directory. Candidate B: --lora-r 0; candidate C: --lora-r 16.
+"""LoRA fine-tuning of the answer-token readout on a build directory (see TRAINING.md for the release recipe).
 
-    python -m train.train --build data/build/v1-research --base Qwen/Qwen3.5-4B --out runs/c-4b \
-        --limit 100000 --max-steps 1500 --lr 5e-5 --head-lr 1e-4 --micro-tokens 8192 --accum 8
+    python -m train.train --build data/build/v1-research --base Qwen/Qwen3.5-4B --out runs/vev-4b \
+        --limit 100000 --max-steps 2500 --anchor-kl 0.3 --anchor-build data/build/anchor-v3 --anchor-weight 2
 
 Writes <out>/metrics.jsonl (train + validation curves), <out>/ckpt/step-N/ (resumable), <out>/export/ (servable)."""
 
@@ -9,20 +9,18 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 import random
-import sys
 import time
 from pathlib import Path
 from typing import Any
 
 import torch
+import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from train.data import RowDataset, micro_batches
-from vev.pointer import SPECIAL, SYSTEM_PROMPT, PointerModel, collate_rows, row_loss
-
-DTYPES = {"bf16": torch.bfloat16, "fp16": torch.float16, "fp32": torch.float32}
+from vev.model import VevModel
+from vev.readout import DTYPES
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -32,27 +30,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     ap.add_argument("--out", required=True)
     ap.add_argument("--limit", type=int, default=0, help="training records (grids) to use; 0 = all")
     ap.add_argument("--sources", default=None, help="comma list of sources to keep")
-    ap.add_argument("--source-weights", default=None, help="comma list source=weight; records of that source are repeated weight times (fractions by chance)")
     ap.add_argument("--max-steps", type=int, required=True, help="optimizer steps; data cycles over epochs as needed")
-    ap.add_argument("--lr", type=float, default=5e-5, help="LoRA learning rate")
-    ap.add_argument("--head-lr", type=float, default=1e-4)
-    ap.add_argument("--lora-r", type=int, default=16, help="0 = head only (candidate B)")
+    ap.add_argument("--lr", type=float, default=5e-5)
+    ap.add_argument("--lora-r", type=int, default=16)
     ap.add_argument("--lora-alpha", type=int, default=0, help="0 = 2r")
     ap.add_argument("--lora-dropout", type=float, default=0.05)
-    ap.add_argument("--lora-targets", default="all", choices=["all", "attn"], help="attn = attention + DeltaNet projections only")
-    ap.add_argument("--dp", type=int, default=256)
-    ap.add_argument("--prior", action="store_true", help="zero-shot label-token prior + zero-initialised residual head")
     ap.add_argument("--anchor-kl", type=float, default=0.0,
-                    help="prior mode: weight of KL(base prior || adapted prior); the base prior is computed with adapters disabled")
-    ap.add_argument("--anchor-build", default=None, help="build dir of unlabeled anchor rows (data/anchor/build.py): KL to the base only, no CE")
+                    help="weight of KL(base || adapted) on training rows; the base is the same model with adapters disabled")
+    ap.add_argument("--anchor-build", default=None, help="build dir of unlabeled anchor rows: KL to the base only, no CE")
     ap.add_argument("--anchor-weight", type=float, default=1.0, help="KL weight on anchor rows")
-    ap.add_argument("--anchor-sym", action="store_true",
-                    help="anchor rows: student sees a random option order, teacher = base averaged over the given and reversed order")
-    ap.add_argument("--consistency", type=float, default=0.0,
-                    help="weight of the order-consistency term: symmetric KL between a row and a copy with permuted options (prior mode)")
-    ap.add_argument("--consistency-frac", type=float, default=0.5, help="share of choice/score rows that get a permuted copy")
-    ap.add_argument("--micro-tokens", type=int, default=8192)
-    ap.add_argument("--accum", type=int, default=8)
+    ap.add_argument("--micro-tokens", type=int, default=16384)
+    ap.add_argument("--accum", type=int, default=4)
     ap.add_argument("--max-q", type=int, default=4)
     ap.add_argument("--max-row-tokens", type=int, default=4096)
     ap.add_argument("--max-pixels", type=int, default=1024 * 1024)
@@ -65,16 +53,28 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     ap.add_argument("--no-gradient-checkpointing", action="store_true")
     ap.add_argument("--dtype", default="bf16", choices=list(DTYPES))
     ap.add_argument("--attn", default=None, help="attn_implementation override")
-    ap.add_argument("--workers", type=int, default=4)
-    ap.add_argument("--eval-every", type=int, default=200)
-    ap.add_argument("--eval-rows", type=int, default=800)
+    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--eval-every", type=int, default=250)
+    ap.add_argument("--eval-rows", type=int, default=1000)
     ap.add_argument("--eval-records", type=int, default=2000, help="validation records the eval rows are drawn from")
-    ap.add_argument("--save-every", type=int, default=200)
+    ap.add_argument("--save-every", type=int, default=250)
     ap.add_argument("--log-every", type=int, default=10)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--resume", default=None, help="ckpt/step-N directory to continue from")
     ap.add_argument("--device", default="cuda")
     return ap.parse_args(argv)
+
+
+def row_loss(z: torch.Tensor, t: torch.Tensor, qtype: str, brier_w: float = 0.1, score_w: float = 0.05) -> torch.Tensor:
+    """Soft-label cross-entropy + brier_w * Brier (+ score_w * squared normalized expectation gap for score)."""
+    logp = F.log_softmax(z, -1)
+    p = logp.exp()
+    loss = -(t * logp).sum() + brier_w * (p - t).square().sum()
+    k = z.shape[0]
+    if qtype == "score" and score_w > 0 and k > 1:
+        idx = torch.arange(k, device=z.device, dtype=z.dtype)
+        loss = loss + score_w * (((p * idx).sum() - (t * idx).sum()) / (k - 1)).square()
+    return loss
 
 
 def row_metrics(z: torch.Tensor, t: torch.Tensor, qtype: str) -> dict[str, float]:
@@ -86,8 +86,7 @@ def row_metrics(z: torch.Tensor, t: torch.Tensor, qtype: str) -> dict[str, float
     return {"acc": acc, "brier": float((p - t).square().sum()), "nll": float(-(t * torch.log(p.clamp_min(1e-12))).sum())}
 
 
-AUX = ("anchor", "anchorset", "consistency")
-PAD_ID = 0  # set in main from the tokenizer
+AUX = ("anchor", "anchorset")
 
 
 class Meter:
@@ -108,7 +107,7 @@ class Meter:
         for qtype, s in self.sums.items():
             out[qtype] = {k: round(v / self.n[qtype], 4) for k, v in s.items()}
             out[qtype]["n"] = self.n[qtype]
-            if qtype in AUX:  # KL bookkeeping rows, not questions: keep them out of the per-question totals
+            if qtype in AUX:  # KL bookkeeping, not questions: keep them out of the per-question totals
                 continue
             for k, v in s.items():
                 tot[k] = tot.get(k, 0.0) + v
@@ -121,99 +120,58 @@ def to_device(batch: dict[str, torch.Tensor], device: torch.device) -> dict[str,
     return {k: v.to(device, non_blocking=True) for k, v in batch.items()}
 
 
-def run_batch(model: PointerModel, batch, readouts, rows, args, device, autocast, meter: Meter) -> torch.Tensor:
+def base_kl(model: VevModel, dev_batch, decide, ids, logits, autocast) -> torch.Tensor:
+    """KL(base || adapted) of the answer distribution; the base is the same rows with adapters disabled, no grad."""
+    with torch.no_grad(), model.backbone.disable_adapter(), autocast:
+        base = model(dev_batch, decide, ids)
+    kls = [F.kl_div(torch.log_softmax(z, -1), torch.softmax(b, -1), reduction="sum") for z, b in zip(logits, base)]
+    return torch.stack(kls).mean()
+
+
+def run_batch(model: VevModel, batch, decide, rows, args, device, autocast, meter: Meter) -> torch.Tensor:
     dev_batch = to_device(batch, device)
-    ids = [r["answer_ids"] for r in rows] if args.prior else None
+    ids = [r["answer_ids"] for r in rows]
     with autocast:
-        if args.prior:
-            logits, priors = model(dev_batch, readouts, ids, return_prior=True)
-        else:
-            logits = model(dev_batch, readouts)
+        logits = model(dev_batch, decide, ids)
     losses = []
     for z, r in zip(logits, rows):
         t = r["target"].to(device)
         losses.append(row_loss(z, t, r["qtype"], args.brier, args.score_w))
         meter.add(r["qtype"], {**row_metrics(z.detach(), t, r["qtype"]), "loss": float(losses[-1].detach())})
     loss = torch.stack(losses).mean()
-    if args.consistency > 0:
-        pairs = [(i, r["views"][0]) for i, r in enumerate(rows) if r.get("views")]
-        if pairs:
-            vb, vr = collate_rows([v for _, v in pairs], PAD_ID)
-            with autocast:
-                zv = model(to_device(vb, device), vr, [v["answer_ids"] for _, v in pairs])
-            cs = []
-            for (i, v), z in zip(pairs, zv):
-                a, b = torch.log_softmax(logits[i].float(), -1), torch.log_softmax(z.float()[v["idx"].to(z.device)], -1)
-                cs.append(0.5 * ((a.exp() * (a - b)).sum() + (b.exp() * (b - a)).sum()))
-            c = torch.stack(cs).mean()
-            meter.add("consistency", {"skl": float(c.detach())})
-            loss = loss + args.consistency * c
-    if args.prior and args.anchor_kl > 0 and model.lora_r:
-        kl = base_kl(model, dev_batch, readouts, ids, priors, autocast)
+    if args.anchor_kl > 0:
+        kl = base_kl(model, dev_batch, decide, ids, logits, autocast)
         meter.add("anchor", {"kl": float(kl.detach())})
         loss = loss + args.anchor_kl * kl
     return loss
 
 
-def base_kl(model: PointerModel, dev_batch, readouts, ids, priors, autocast) -> torch.Tensor:
-    """KL(base || adapted) of the label-token prior; teacher = the same rows with adapters disabled, no grad."""
-    with torch.no_grad(), model.backbone.disable_adapter(), autocast:
-        _, base_priors = model(dev_batch, readouts, ids, return_prior=True)
-    kls = [torch.nn.functional.kl_div(torch.log_softmax(pz, -1), torch.softmax(bz, -1), reduction="sum")
-           for pz, bz in zip(priors, base_priors)]
-    return torch.stack(kls).mean()
-
-
-def anchor_batch(model: PointerModel, batch, readouts, rows, device, autocast, meter: Meter) -> torch.Tensor:
-    """Unlabeled anchor rows: only the KL of the adapted prior to the base, the targets are ignored. Rows with teacher
-    views (--anchor-sym) take the base distribution averaged over the views, mapped to the row's option order."""
+def anchor_batch(model: VevModel, batch, decide, rows, device, autocast, meter: Meter) -> torch.Tensor:
+    """Unlabeled anchor rows: only the KL of the adapted answer distribution to the base; targets are ignored."""
     dev_batch = to_device(batch, device)
     ids = [r["answer_ids"] for r in rows]
     with autocast:
-        _, priors = model(dev_batch, readouts, ids, return_prior=True)
-    if not any(r.get("views") for r in rows):
-        kl = base_kl(model, dev_batch, readouts, ids, priors, autocast)
-    else:
-        with torch.no_grad(), model.backbone.disable_adapter(), autocast:
-            _, base_priors = model(dev_batch, readouts, ids, return_prior=True)
-            flat = [(i, v) for i, r in enumerate(rows) for v in r.get("views", [])]
-            vb, vr = collate_rows([v for _, v in flat], PAD_ID)
-            _, vpri = model(to_device(vb, device), vr, [v["answer_ids"] for _, v in flat], return_prior=True)
-        teach: dict[int, list[torch.Tensor]] = {}
-        for (i, v), z in zip(flat, vpri):
-            teach.setdefault(i, []).append(torch.softmax(z.float()[v["idx"].to(z.device)], -1))
-        kls = []
-        for i, pz in enumerate(priors):
-            t = torch.stack(teach[i]).mean(0) if i in teach else torch.softmax(base_priors[i].float(), -1)
-            kls.append(torch.nn.functional.kl_div(torch.log_softmax(pz.float(), -1), t, reduction="sum"))
-        kl = torch.stack(kls).mean()
+        logits = model(dev_batch, decide, ids)
+    kl = base_kl(model, dev_batch, decide, ids, logits, autocast)
     meter.add("anchorset", {"kl": float(kl.detach())})
     return kl
 
 
 @torch.no_grad()
-def evaluate(model: PointerModel, args, processor, device, autocast) -> dict[str, Any]:
+def evaluate(model: VevModel, args, processor, device, autocast) -> dict[str, Any]:
     model.eval()
     ds = RowDataset(args.build, "validation", processor, limit=args.eval_records, seed=args.seed, max_q=2, augment=False,
-                    max_pixels=args.max_pixels, max_row_tokens=args.max_row_tokens, prior=args.prior)
+                    max_pixels=args.max_pixels, max_row_tokens=args.max_row_tokens)
     loader = DataLoader(ds, batch_size=None, num_workers=min(args.workers, 4))
     meter = Meter()
     seen = 0
-    for batch, readouts, rows in micro_batches(iter(loader), args.micro_tokens, processor.tokenizer.pad_token_id):
+    for batch, decide, rows in micro_batches(iter(loader), args.micro_tokens, processor.tokenizer.pad_token_id):
         with autocast:
-            if args.prior:
-                logits, priors = model(to_device(batch, device), readouts, [r["answer_ids"] for r in rows], return_prior=True)
-            else:
-                logits, priors = model(to_device(batch, device), readouts), None
-        for i, (z, r) in enumerate(zip(logits, rows)):
+            logits = model(to_device(batch, device), decide, [r["answer_ids"] for r in rows])
+        for z, r in zip(logits, rows):
             t = r["target"].to(device)
             m = row_metrics(z, t, r["qtype"])
             m["loss"] = float(row_loss(z, t, r["qtype"], args.brier, args.score_w))
-            if priors is not None:  # prior-mode diagnostics
-                pz = priors[i]
-                m["prior_acc"] = row_metrics(pz, t, r["qtype"])["acc"]
-                m["override"] = float(int(pz.argmax()) != int(z.argmax()))
-                m["head_norm"] = float((z - pz).norm())
             meter.add(r["qtype"], m)
         seen += len(rows)
         if seen >= args.eval_rows:
@@ -222,7 +180,7 @@ def evaluate(model: PointerModel, args, processor, device, autocast) -> dict[str
     return meter.summary()
 
 
-def save_checkpoint(model: PointerModel, opt, sched, step: int, epoch: int, args, out: Path, meta: dict) -> Path:
+def save_checkpoint(model: VevModel, opt, sched, step: int, epoch: int, out: Path, meta: dict) -> Path:
     d = out / "ckpt" / f"step-{step}"
     model.save(d, {**meta, "step": step})
     torch.save({"optimizer": opt.state_dict(), "scheduler": sched.state_dict(), "step": step, "epoch": epoch,
@@ -231,13 +189,11 @@ def save_checkpoint(model: PointerModel, opt, sched, step: int, epoch: int, args
     return d
 
 
-def load_checkpoint(model: PointerModel, opt, sched, path: Path) -> tuple[int, int]:
-    if (path / "adapter").exists():
-        from peft import set_peft_model_state_dict
-        from safetensors.torch import load_file
+def load_checkpoint(model: VevModel, opt, sched, path: Path) -> tuple[int, int]:
+    from peft import set_peft_model_state_dict
+    from safetensors.torch import load_file
 
-        set_peft_model_state_dict(model.backbone, load_file(str(path / "adapter" / "adapter_model.safetensors")))
-    model.head.load_state_dict(torch.load(path / "head.pt", map_location="cpu"))
+    set_peft_model_state_dict(model.backbone, load_file(str(path / "adapter" / "adapter_model.safetensors")))
     st = torch.load(path / "train_state.pt", map_location="cpu", weights_only=False)
     opt.load_state_dict(st["optimizer"])
     sched.load_state_dict(st["scheduler"])
@@ -252,6 +208,8 @@ def main(argv: list[str] | None = None) -> None:
     from transformers import AutoProcessor
 
     args = parse_args(argv)
+    if args.lora_r <= 0:
+        raise SystemExit("--lora-r must be positive")
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / "args.json").write_text(json.dumps(vars(args), indent=2), encoding="utf-8")
@@ -264,46 +222,30 @@ def main(argv: list[str] | None = None) -> None:
     processor = AutoProcessor.from_pretrained(args.base)
     processor.tokenizer.padding_side = "right"
     pad_id = processor.tokenizer.pad_token_id
-    global PAD_ID
-    PAD_ID = pad_id
-    model = PointerModel(args.base, dtype=dtype, lora_r=args.lora_r, lora_alpha=args.lora_alpha or None,
-                         lora_dropout=args.lora_dropout, dp=args.dp, gradient_checkpointing=not args.no_gradient_checkpointing,
-                         attn_implementation=args.attn, prior=args.prior, lora_targets=args.lora_targets).to(device)
+    model = VevModel(args.base, dtype=dtype, lora_r=args.lora_r, lora_alpha=args.lora_alpha or None,
+                     lora_dropout=args.lora_dropout, gradient_checkpointing=not args.no_gradient_checkpointing,
+                     attn_implementation=args.attn).to(device)
     model.train()
-    rest, head = model.trainable_parameters()
-    if args.head_lr == 0:  # prior-only ablation: the head stays at its zero init, out of the optimizer and the grad-clip norm
-        for p in head:
-            p.requires_grad_(False)
-        head = []
-    n_rest, n_head = sum(p.numel() for p in rest), sum(p.numel() for p in head)
-    print(f"[train] trainable: lora {n_rest / 1e6:.2f}M, head {n_head / 1e6:.2f}M; hidden {model.hidden_size}", flush=True)
-    groups = ([{"params": rest, "lr": args.lr}] if rest else []) + ([{"params": head, "lr": args.head_lr}] if head else [])
-    max_lrs = ([args.lr] if rest else []) + ([args.head_lr] if head else [])
-    opt = torch.optim.AdamW(groups, lr=args.lr, weight_decay=args.weight_decay, betas=(0.9, 0.98))
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=max_lrs, total_steps=args.max_steps, pct_start=args.warmup_pct,
+    params = [p for p in model.parameters() if p.requires_grad]
+    print(f"[train] trainable: {sum(p.numel() for p in params) / 1e6:.2f}M", flush=True)
+    opt = torch.optim.AdamW(params, lr=args.lr, weight_decay=args.weight_decay, betas=(0.9, 0.98))
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=args.lr, total_steps=args.max_steps, pct_start=args.warmup_pct,
                                                 anneal_strategy="cos", div_factor=25.0, final_div_factor=100.0)
-    meta = {"base": args.base, "dp": args.dp, "lora_r": args.lora_r, "lora_targets": args.lora_targets, "prior": args.prior, "special": SPECIAL, "system_prompt": SYSTEM_PROMPT,
-            "temperatures": {}, "train_args": vars(args)}
+    meta = {"base": args.base, "lora_r": args.lora_r, "train_args": vars(args)}
     step, epoch = 0, 0
     if args.resume:
         step, epoch = load_checkpoint(model, opt, sched, Path(args.resume))
         print(f"[train] resumed at step {step}, epoch {epoch}", flush=True)
 
     sources = set(args.sources.split(",")) if args.sources else None
-    weights = {k: float(v) for k, v in (x.split("=") for x in args.source_weights.split(","))} if args.source_weights else None
     ds = RowDataset(args.build, "train", processor, limit=args.limit, seed=args.seed, max_q=args.max_q,
-                    augment=not args.no_augment, max_pixels=args.max_pixels, max_row_tokens=args.max_row_tokens, sources=sources,
-                    prior=args.prior, source_weights=weights,
-                    views="consistency" if args.consistency > 0 else None, view_frac=args.consistency_frac)
+                    augment=not args.no_augment, max_pixels=args.max_pixels, max_row_tokens=args.max_row_tokens, sources=sources)
     print(f"[train] {len(ds)} training records; augment={not args.no_augment}", flush=True)
     anchor_ds = None
     if args.anchor_build:
-        if not (args.prior and model.lora_r):
-            raise SystemExit("--anchor-build needs --prior and LoRA")
         anchor_ds = RowDataset(args.anchor_build, "train", processor, seed=args.seed, max_q=args.max_q, augment=False,
-                               max_pixels=args.max_pixels, max_row_tokens=args.max_row_tokens, prior=True,
-                               views="anchor_sym" if args.anchor_sym else None)
-        print(f"[train] {len(anchor_ds)} anchor records (KL only, weight {args.anchor_weight}, sym {args.anchor_sym})", flush=True)
+                               max_pixels=args.max_pixels, max_row_tokens=args.max_row_tokens)
+        print(f"[train] {len(anchor_ds)} anchor records (KL only, weight {args.anchor_weight})", flush=True)
     metrics_path = out / "metrics.jsonl"
 
     def log(rec: dict[str, Any]) -> None:
@@ -317,8 +259,6 @@ def main(argv: list[str] | None = None) -> None:
                             persistent_workers=False)
         return micro_batches(iter(loader), args.micro_tokens, pad_id)
 
-    if step == 0 and args.prior and args.anchor_kl > 0 and model.lora_r:
-        print("[train] prior mode with KL anchor: the first logged 'anchor.kl' must be ~0 (teacher == student at step 0)", flush=True)
     if step == 0:
         ev = evaluate(model, args, processor, device, autocast)
         log({"kind": "eval", "step": 0, "epoch": epoch, **ev})
@@ -335,17 +275,16 @@ def main(argv: list[str] | None = None) -> None:
     meter = Meter()
     tokens_window, rows_window, t_window = 0, 0, time.perf_counter()
     while step < args.max_steps:
-        t_step = time.perf_counter()
         opt.zero_grad(set_to_none=True)
         for _ in range(args.accum):
             try:
-                batch, readouts, rows = next(mb_iter)
+                batch, decide, rows = next(mb_iter)
             except StopIteration:
                 epoch += 1
                 print(f"[train] epoch {epoch} begins at step {step}; skipped so far {ds.skipped}", flush=True)
                 mb_iter = new_epoch_iter(epoch)
-                batch, readouts, rows = next(mb_iter)
-            loss = run_batch(model, batch, readouts, rows, args, device, autocast, meter)
+                batch, decide, rows = next(mb_iter)
+            loss = run_batch(model, batch, decide, rows, args, device, autocast, meter)
             if not torch.isfinite(loss):
                 raise RuntimeError(f"non-finite loss at step {step}")
             (loss / args.accum).backward()
@@ -353,18 +292,18 @@ def main(argv: list[str] | None = None) -> None:
             rows_window += len(rows)
             if anchor_iter is not None:
                 try:
-                    abatch, areadouts, arows = next(anchor_iter)
+                    abatch, adecide, arows = next(anchor_iter)
                 except StopIteration:
                     anchor_epoch += 1
                     anchor_iter = new_anchor_iter(anchor_epoch)
-                    abatch, areadouts, arows = next(anchor_iter)
-                akl = anchor_batch(model, abatch, areadouts, arows, device, autocast, meter)
+                    abatch, adecide, arows = next(anchor_iter)
+                akl = anchor_batch(model, abatch, adecide, arows, device, autocast, meter)
                 if not torch.isfinite(akl):
                     raise RuntimeError(f"non-finite anchor KL at step {step}")
                 (args.anchor_weight * akl / args.accum).backward()
                 tokens_window += int(abatch["attention_mask"].sum())
         if args.grad_clip > 0:
-            torch.nn.utils.clip_grad_norm_([p for g in groups for p in g["params"]], args.grad_clip)
+            torch.nn.utils.clip_grad_norm_(params, args.grad_clip)
         opt.step()
         sched.step()
         step += 1
@@ -376,7 +315,7 @@ def main(argv: list[str] | None = None) -> None:
                    "peak_gb": round(torch.cuda.max_memory_allocated() / 1e9, 2) if device.type == "cuda" else None, **s}
             log(rec)
             print(f"[train] step {step} loss {s['all'].get('loss')} acc {s['all'].get('acc')} brier {s['all'].get('brier')} "
-                  f"tok/s {rec['tokens_per_s']} step_s {rec['step_s']} peak {rec['peak_gb']}GB lr {[f'{x:.2e}' for x in rec['lr']]}", flush=True)
+                  f"tok/s {rec['tokens_per_s']} step_s {rec['step_s']} peak {rec['peak_gb']}GB lr {rec['lr'][0]:.2e}", flush=True)
             meter = Meter()
             tokens_window, rows_window, t_window = 0, 0, time.perf_counter()
         if step % args.eval_every == 0 and step < args.max_steps:
@@ -384,13 +323,13 @@ def main(argv: list[str] | None = None) -> None:
             log({"kind": "eval", "step": step, "epoch": epoch, **ev})
             print(f"[eval] step {step} {json.dumps(ev['all'])} | " + " ".join(f"{k}:{v.get('acc')}" for k, v in ev.items() if k != "all"), flush=True)
         if step % args.save_every == 0 and step < args.max_steps:
-            d = save_checkpoint(model, opt, sched, step, epoch, args, out, meta)
+            d = save_checkpoint(model, opt, sched, step, epoch, out, meta)
             print(f"[train] saved {d}", flush=True)
 
     ev = evaluate(model, args, processor, device, autocast)
     log({"kind": "eval", "step": step, "epoch": epoch, "final": True, **ev})
     print(f"[eval] final {json.dumps(ev, ensure_ascii=False)}", flush=True)
-    save_checkpoint(model, opt, sched, step, epoch, args, out, meta)
+    save_checkpoint(model, opt, sched, step, epoch, out, meta)
     model.save(out / "export", {**meta, "step": step, "final_eval": ev})
     (out / "summary.json").write_text(json.dumps({"step": step, "epoch": epoch, "final_eval": ev, "skipped": ds.skipped,
                                                   "args": vars(args)}, ensure_ascii=False, indent=2), encoding="utf-8")

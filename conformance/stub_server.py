@@ -21,7 +21,6 @@ from vev.state import serialize_state
 
 class StubEngine:
     base_id = "stub"
-    temperatures = {"choice": 1.0, "noul": 1.0, "score": 1.0}
 
     def warmup(self) -> None:
         pass

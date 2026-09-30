@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import os
 import threading
@@ -144,9 +143,7 @@ def create_app(engine: Engine, model_name: str, hf_id: str, allow_remote_images:
 
     @app.get("/v1/models")
     def models():
-        card = model_card(model_name, hf_id)
-        card["temperatures"] = engine.temperatures
-        return {"models": [card]}
+        return {"models": [model_card(model_name, hf_id)]}
 
     @app.post("/v1/systemone")
     def systemone(req: SystemOneRequest, request: Request):
@@ -187,43 +184,21 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--allow-remote-images", action="store_true")
     ap.add_argument("--no-warmup", action="store_true")
-    ap.add_argument("--head-scale", type=float, default=None,
-                    help="prior-mode checkpoints: final logits = prior + head_scale * head (0 = zero-shot prior only)")
-    ap.add_argument("--no-prefix-share", action="store_true",
-                    help="pointer checkpoints: always run every question as one full row")
     ap.add_argument("--prefix-min-tokens", type=int, default=4096,
-                    help="share the state prefill only for states of at least this many tokens; shorter states are faster as full rows "
-                         "(4B on H800: sharing wins from ~2k tokens with 4+ questions, loses ~40-130 ms with 1 question)")
-    ap.add_argument("--branch-batch", action="store_true",
-                    help="pointer checkpoints: run question branches as one padded batch (faster; bf16 isolation not exact)")
-    ap.add_argument("--temperatures", default=None,
-                    help="JSON from train.calibrate ({'temperatures': {choice, noul, score}}); default = raw softmax")
+                    help="Vev checkpoints: prefill the state once and share it across questions for states of at least "
+                         "this many tokens")
     a = ap.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-    name = a.name or "zeroshot-" + a.model.split("/")[-1].lower()
-    temperatures = None
-    if a.temperatures:
-        with open(a.temperatures, encoding="utf-8") as fh:
-            temperatures = json.load(fh)["temperatures"]
-        log.info("temperatures %s", temperatures)
-        if not a.name:
-            name += "-calibrated"
-    from vev.pointer import is_checkpoint
+    from vev.model import CheckpointEngine, is_checkpoint
 
     if is_checkpoint(a.model):
-        from vev.pointer import PointerEngine  # trained checkpoint (adapter + pointer head, or a merged release)
-
-        engine = PointerEngine(a.model, dtype=a.dtype, device=a.device, temperatures=temperatures, head_scale=a.head_scale,
-                               prefix_share=not a.no_prefix_share, branch_batch=a.branch_batch,
-                               prefix_min_tokens=a.prefix_min_tokens)
-        if not a.name:
-            name = "vev-" + os.path.basename(os.path.normpath(a.model)).lower().removeprefix("vev-")
-            if a.head_scale is not None:
-                name += f"-alpha{a.head_scale:g}"
+        engine = CheckpointEngine(a.model, dtype=a.dtype, device=a.device, prefix_min_tokens=a.prefix_min_tokens)
+        name = a.name or "vev-" + os.path.basename(os.path.normpath(a.model)).lower().removeprefix("vev-")
         hf_id = engine.base_id
     else:
-        engine = Engine(a.model, dtype=a.dtype, device=a.device, temperatures=temperatures)
+        engine = Engine(a.model, dtype=a.dtype, device=a.device)
+        name = a.name or "zeroshot-" + a.model.split("/")[-1].lower()
         hf_id = a.model
     if not a.no_warmup:
         t0 = time.perf_counter()
