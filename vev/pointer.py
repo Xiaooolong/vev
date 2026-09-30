@@ -384,9 +384,11 @@ def is_checkpoint(ckpt: str | Path) -> bool:
         return True
     if Path(ckpt).exists() or str(ckpt).count("/") != 1:
         return False
-    try:
-        from huggingface_hub import file_exists
+    from huggingface_hub import file_exists, try_to_load_from_cache
 
+    try:
+        if isinstance(try_to_load_from_cache(str(ckpt), "vev_pointer.json"), str):   # works offline
+            return True
         return file_exists(str(ckpt), "vev_pointer.json")
     except Exception:
         return False
