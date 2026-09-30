@@ -12,15 +12,17 @@ Vev 是一个开放权重的判断模型。输入一段状态（文本、JSON、
 ## 快速上手
 
 ```bash
-pip install vev-ai
+pip install git+https://github.com/Xiaooolong/vev
 vev serve --model CountingSheep/vev-4b          # 首次启动会下载权重，监听 127.0.0.1:8009
 ```
 
 需要 Python 3.11 及以上和 NVIDIA GPU；CPU 和 Apple Silicon 没有测过。bf16 下，`vev-4b` 加载后约占 10 GB 显存，`vev-9b` 约 19 GB；状态很长或带图片时还要再多一些。用 Docker：
 
 ```bash
-docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface \
-  ghcr.io/xiaooolong/vev:0.1 --model CountingSheep/vev-4b
+git clone https://github.com/Xiaooolong/vev && cd vev
+docker build -t vev .
+docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev \
+  --model CountingSheep/vev-4b
 ```
 
 用官方 Python SDK（`pip install typesafe-sdk`）：

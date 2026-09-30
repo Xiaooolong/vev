@@ -13,7 +13,7 @@ This is v0.1, a research preview. The weights are licensed for non-commercial us
 ## Quickstart
 
 ```bash
-pip install vev-ai
+pip install git+https://github.com/Xiaooolong/vev
 vev serve --model CountingSheep/vev-4b          # downloads the weights on first start, listens on 127.0.0.1:8009
 ```
 
@@ -21,8 +21,10 @@ Vev needs Python 3.11 or newer and an NVIDIA GPU; CPU and Apple Silicon are unte
 10 GB of GPU memory once loaded and `vev-9b` about 19 GB; long states and images need more on top. Docker:
 
 ```bash
-docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface \
-  ghcr.io/xiaooolong/vev:0.1 --model CountingSheep/vev-4b
+git clone https://github.com/Xiaooolong/vev && cd vev
+docker build -t vev .
+docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev \
+  --model CountingSheep/vev-4b
 ```
 
 With the official Python SDK (`pip install typesafe-sdk`):
