@@ -27,3 +27,5 @@ To run the same suite against a real server, start `vev serve` and drop `SO_STUB
 - Add or update tests for behaviour changes.
 - Run `ruff check vev conformance` and `pytest -q` before pushing.
 - If a change affects model outputs, include before/after numbers from `python -m evals.run` on the sets it touches.
+
+This project follows a [code of conduct](CODE_OF_CONDUCT.md).

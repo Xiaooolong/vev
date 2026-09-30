@@ -125,7 +125,7 @@
     "evidence_url": "https://visualqa.org/terms.html",
     "quote": "The annotations in this dataset belong to the VQA Consortium and are licensed under a Commons Attribution 4.0 International License.",
     "checked": "2026-09-23",
-    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io. Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images."
+    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript). Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images."
   },
   "vqav2_mc": {
     "tier": "commercial-ok",
@@ -133,7 +133,7 @@
     "evidence_url": "https://visualqa.org/terms.html",
     "quote": "The annotations in this dataset belong to the VQA Consortium and are licensed under a Commons Attribution 4.0 International License.",
     "checked": "2026-09-23",
-    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io. Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images. Alias of vqav2 (source name used in README source list)."
+    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript). Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images. Alias of vqav2 (source name used in README source list)."
   },
   "vqav2_yesno": {
     "tier": "commercial-ok",
@@ -141,7 +141,7 @@
     "evidence_url": "https://visualqa.org/terms.html",
     "quote": "The annotations in this dataset belong to the VQA Consortium and are licensed under a Commons Attribution 4.0 International License.",
     "checked": "2026-09-23",
-    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io. Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images. Alias of vqav2 (source name used in README source list)."
+    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript). Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images. Alias of vqav2 (source name used in README source list)."
   },
   "aokvqa": {
     "tier": "unknown",
@@ -149,7 +149,7 @@
     "evidence_url": "https://github.com/allenai/aokvqa",
     "quote": "Apache License Version 2.0, January 2004",
     "checked": "2026-09-23",
-    "notes": "Quote is the repo LICENSE, which covers code; README has no data license sentence. HF HuggingFaceM4/A-OKVQA: no YAML license, body 'More Information needed'. allenai.org project page 403, prior.allenai.org page 404, HF allenai/aokvqa 401. Images COCO 2017; val uses COCO val images (dropped by dedup). Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+    "notes": "Quote is the repo LICENSE, which covers code; README has no data license sentence. HF HuggingFaceM4/A-OKVQA: no YAML license, body 'More Information needed'. allenai.org project page 403, prior.allenai.org page 404, HF allenai/aokvqa 401. Images COCO 2017; val uses COCO val images (dropped by dedup). Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript)."
   },
   "ai2d": {
     "tier": "commercial-ok",
@@ -165,7 +165,7 @@
     "evidence_url": "https://github.com/yukezhu/visual7w-toolkit",
     "quote": "Visual7W ... collected on 47,300 COCO images ... constitutes a part of the Visual Genome project",
     "checked": "2026-09-23",
-    "notes": "web.stanford.edu/~yukez/visual7w redirects; ai.stanford.edu/~yukez/visual7w/ has no license text; toolkit repo MIT covers code; HF visual7w 404. Visual Genome is CC BY 4.0 (visualgenome.org/about) but nothing says that covers the Visual7W release. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+    "notes": "web.stanford.edu/~yukez/visual7w redirects; ai.stanford.edu/~yukez/visual7w/ has no license text; toolkit repo MIT covers code; HF visual7w 404. Visual Genome is CC BY 4.0 (visualgenome.org/about) but nothing says that covers the Visual7W release. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript)."
   },
   "mme_realworld": {
     "tier": "non-commercial",
@@ -181,7 +181,7 @@
     "evidence_url": "https://huggingface.co/datasets/cambridgeltl/vsr_random",
     "quote": "license: cc-by-4.0",
     "checked": "2026-09-23",
-    "notes": "GitHub cambridgeltl/visual-spatial-reasoning is Apache-2.0 (code). Image links point to COCO train2017/val2017; val2017 items dropped by dedup. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+    "notes": "GitHub cambridgeltl/visual-spatial-reasoning is Apache-2.0 (code). Image links point to COCO train2017/val2017; val2017 items dropped by dedup. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript)."
   },
   "nlvr2": {
     "tier": "non-commercial",
@@ -205,7 +205,7 @@
     "evidence_url": "https://github.com/RAIVNLab/sugar-crepe",
     "quote": "MIT License (GitHub API spdx_id: MIT)",
     "checked": "2026-09-23",
-    "notes": "All images are COCO-2017 val set, so every item is dropped by dedup rule 3 (COCO val exclusion). Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+    "notes": "All images are COCO-2017 val set, so every item is dropped by dedup rule 3 (COCO val exclusion). Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript)."
   },
   "foil_coco": {
     "tier": "commercial-ok",
@@ -213,7 +213,7 @@
     "evidence_url": "https://foilunitn.github.io/",
     "quote": "Creative Commons Attribution 4.0 License ... MS-COCO images follow Flickr terms and MS-COCO annotations use the same CC-BY 4.0 license",
     "checked": "2026-09-23",
-    "notes": "FOIL test split is built on COCO val2014, dropped by dedup. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+    "notes": "FOIL test split is built on COCO val2014, dropped by dedup. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript)."
   },
   "imagereward": {
     "tier": "commercial-ok",
@@ -221,7 +221,7 @@
     "evidence_url": "https://huggingface.co/datasets/THUDM/ImageRewardDB",
     "quote": "The ImageRewardDB dataset is available under the Apache license 2.0",
     "checked": "2026-09-23",
-    "notes": "Code MIT. 'All images in ImageRewardDB are collected from DiffusionDB' (Stable Diffusion outputs; DiffusionDB itself is CC0, not re-verified this session)."
+    "notes": "Code MIT. 'All images in ImageRewardDB are collected from DiffusionDB' (Stable Diffusion outputs; DiffusionDB itself is listed as CC0)."
   },
   "hpdv2": {
     "tier": "commercial-ok",
@@ -341,7 +341,7 @@
     "evidence_url": "https://huggingface.co/datasets/AIMClab/COCO-CN",
     "quote": "License: MIT",
     "checked": "2026-09-23",
-    "notes": "GitHub li-xirong/coco-cn also MIT. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+    "notes": "GitHub li-xirong/coco-cn also MIT. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. Image-side statement from foilunitn.github.io (the cocodataset.org terms page is rendered by JavaScript)."
   },
   "the_cauldron": {
     "tier": "unknown",

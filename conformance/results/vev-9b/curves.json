@@ -1,0 +1,80 @@
+{
+  "target": "vev-9b",
+  "base_url": "http://127.0.0.1:8540",
+  "model": "jev-latest",
+  "measured": "2026-09-30T11:16:16.930268+00:00",
+  "latency_vs_questions": {
+    "1": {
+      "p50_ms": 36.5,
+      "min_ms": 36.1,
+      "max_ms": 40.0,
+      "input_tokens": 144,
+      "n": 5
+    },
+    "5": {
+      "p50_ms": 172.2,
+      "min_ms": 171.4,
+      "max_ms": 178.9,
+      "input_tokens": 475,
+      "n": 5
+    },
+    "10": {
+      "p50_ms": 344.3,
+      "min_ms": 340.6,
+      "max_ms": 347.1,
+      "input_tokens": 870,
+      "n": 5
+    },
+    "25": {
+      "p50_ms": 859.9,
+      "min_ms": 857.0,
+      "max_ms": 870.9,
+      "input_tokens": 2095,
+      "n": 5
+    },
+    "50": {
+      "p50_ms": 1718.6,
+      "min_ms": 1699.9,
+      "max_ms": 1778.0,
+      "input_tokens": 4145,
+      "n": 5
+    },
+    "100": {
+      "p50_ms": 3461.2,
+      "min_ms": 3416.9,
+      "max_ms": 3509.6,
+      "input_tokens": 8220,
+      "n": 5
+    }
+  },
+  "latency_vs_state_words": {
+    "60": {
+      "p50_ms": 106.4,
+      "min_ms": 104.8,
+      "max_ms": 110.9,
+      "input_tokens": 322,
+      "n": 5
+    },
+    "500": {
+      "p50_ms": 116.0,
+      "min_ms": 111.2,
+      "max_ms": 119.4,
+      "input_tokens": 825,
+      "n": 5
+    },
+    "2000": {
+      "p50_ms": 305.5,
+      "min_ms": 305.2,
+      "max_ms": 346.2,
+      "input_tokens": 2540,
+      "n": 5
+    },
+    "6000": {
+      "p50_ms": 475.3,
+      "min_ms": 469.0,
+      "max_ms": 615.7,
+      "input_tokens": 7111,
+      "n": 5
+    }
+  }
+}

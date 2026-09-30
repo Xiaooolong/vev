@@ -7,6 +7,9 @@ This file records how `vev-4b` and `vev-9b` were trained, so the runs can be rep
 Both models are LoRA fine-tunes of the base model with the same settings; only `--base` differs.
 
 ```bash
+git clone https://github.com/Xiaooolong/vev && cd vev
+pip install -e ".[train]"
+
 # 1. Build the training mixture (downloads the 42 sources; see data/README.md)
 python -m data.sources.run_parallel --jobs 8
 python -m data.build --version v1-research --allow commercial-ok,non-commercial,unknown
@@ -41,7 +44,8 @@ The build applies the augmentations recorded in `augment_config` of `data/manife
 shuffled on every row, and negated questions, distractor hints and injected instructions are added to a fraction of
 rows.
 
-The full argument list of each run is in `train_args` inside the released `vev.json`. The release runs used an
+The full argument list of each run is in `train_args` inside `vev.json` in each Hugging Face repository
+(`lora_alpha: 0` there means the default, 2 × rank = 32, which is the value in `adapter/adapter_config.json`). The release runs used an
 earlier version of `train/train.py`, whose model carried a zero-initialised pointer head that was never trained
 (`--prior --head-lr 0` in `train_args`); it adds exactly zero to the logits, so the current code computes the same
 readout without it. In that version the LM head of Qwen3.5-9B, which is not tied to the input embeddings, was left

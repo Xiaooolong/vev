@@ -13,7 +13,7 @@ data/
 ├─ images/<src>/<id>.jpg        images, longest side ≤ 1024, JPEG quality 90 (not in git)
 ├─ grid.py              gridding: group by grid_id, derive questions, sample
 ├─ augment.py           code augmentations (applied at load time, never written to disk)
-├─ dedup.py             decontamination: image pHash, text MinHash, COCO val exclusion
+├─ dedup.py             decontamination: image dHash, text MinHash, COCO val exclusion
 ├─ split.py             train / calibration / validation split
 ├─ manifest.py          manifest
 ├─ coco_licenses.py     COCO per-image license map for --coco-licenses
@@ -38,7 +38,7 @@ Same as `evals/README.md`, plus these hard rules:
 
 ```json
 {"vqav2": {"tier": "commercial-ok", "license": "CC BY 4.0 (annotations)", "evidence_url": "https://visualqa.org/terms.html",
-           "quote": "…", "checked": "2026-09-23", "notes": "images are COCO (CC BY 4.0 per image)"}}
+           "quote": "…", "checked": "2026-09-23", "notes": "images are COCO; each has its own Flickr license"}}
 ```
 
 Three tiers: `commercial-ok` (Apache / MIT / BSD / CC BY / CC BY-SA), `non-commercial` (any NC, research-only, access on request, or terms like Yelp/Amazon), `unknown`. GPL is recorded as `copyleft` and treated as `non-commercial`. Converters only write the tier into the records; filtering happens in `build.py` via `--allow`, which by default admits only `commercial-ok`.

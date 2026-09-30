@@ -155,7 +155,7 @@ Probabilities are not quantized (the official API quantizes to 0.01; this server
 |---|---|---|
 | question isolation | on the same state, N questions sent in one request vs. one at a time differ by ≤ 1e-4 in every probability (fp32 inference); the `instructions`/`criteria` of one question have no effect on the answers to the others | conformance "isolation" group |
 | determinism | the same request sent again gives bit-identical probabilities | conformance "determinism" group |
-| no generation | the server does no autoregressive decoding; latency is roughly independent of the number of questions (100 questions ≤ 1.5 × 1 question) | conformance "curves" group, written to JSON |
+| no generation | the server does no autoregressive decoding; each question is one forward pass over its own row (state + question), so latency grows linearly with the number of questions: vev-4b on one H800, 1 question 43 ms, 10 questions 383 ms, 100 questions 3.75 s. For states of at least 4,096 tokens the state is prefilled once and shared by the questions | `conformance/curves.py`, measured in `conformance/results/vev-*/curves.json` |
 | option order | not guaranteed to be invariant; the model card reports the flip rate after reversing the options | eval suite |
 | cold start | at startup the server warms up with one request carrying an image and three questions, so the first external request is not slow (the official Python SDK times out after 10 s) | conformance "clients" group, run as the first test |
 | isolation and precision | question isolation ≤ 1e-4 holds at the server's default precision (bf16), not only fp32 | conformance "isolation" group, run at default precision |
@@ -181,11 +181,10 @@ Status codes and body shapes follow the official API as observed on 2026-09-23 (
 | 422 | body does not match the schema: missing `questions`, missing `model`, empty `questions` object, `state` is null, choice without `criteria`, JSON parse failure | FastAPI list `[{"type","loc","msg","input"}]` | `{"detail":[{"type":"missing","loc":["body","questions"],"msg":"Field required",…}]}` |
 | 400 | semantic errors or limits: unknown `type`, unknown `model`, choice with 0 or more than 255 options, score with more than 10 levels, bad image, image limits exceeded | string, or `{"error_type","message"}` | `{"detail":"Too many choices. Must have at most 255 choices."}`; `{"detail":{"error_type":"api_usage_error","message":"Unknown model: no-such-model-xyz"}}` |
 | 401 | key checking enabled and the key does not match | `{"error_type":"authentication_error","message"}` | same wording as official |
-| 429 | queue full; carries the header `retry-after-ms` | `{"error_type":"rate_limit_error","message"}` | not observed |
-| 529 | server overloaded | `{"error_type":"overloaded_error","message"}` | not observed |
 | 500 | anything else | `{"error_type":"internal_error","message"}` | — |
 
-Vev always uses the object shape `{"error_type","message"}` for 400, with `message` pointing at the exact path (`questions.<name>.<field>`, or which image in `state.<path>`).
+Vev never returns 429 or 529: the server processes one request at a time, and concurrent requests wait in a queue
+without a limit or timeout. Vev always uses the object shape `{"error_type","message"}` for 400, with `message` pointing at the exact path (`questions.<name>.<field>`, or which image in `state.<path>`).
 
 ## 9. GET /v1/models
 
@@ -199,5 +198,56 @@ Vev always uses the object shape `{"error_type","message"}` for 400, with `messa
 ```
 
 `name`, `description` and `release_date` have the same shape as the official ModelCard; `limits` and `aliases` are Vev additions, and the official SDK's type definitions ignore unknown fields (verified by the conformance suite).
+
+## 10. How answers are computed
+
+This section is enough to reproduce Vev's answers with the model weights alone (for example in another inference
+engine). The code is `vev/model.py` (trained checkpoints) and `vev/readout.py` (zero-shot base models).
+
+Each question becomes one prompt. The state is rendered to text by `vev/state.py`: a string state is used as is;
+objects become `key: value` lines and arrays numbered `1.` `2.` lines, nested values indented by two spaces; an image
+object is replaced by the model's image placeholder at its position. The chat messages are:
+
+```
+system: You are a careful judge. Read the state, then answer the question about it. Reply with only the answer token, nothing else.
+user:   State:
+        <rendered state>
+
+        Question: <instructions>          (this line and its blank line are left out when instructions are empty)
+
+        <answer format>
+```
+
+`<answer format>` depends on the question type (`<desc>` is the criteria description: strings as is, objects and
+arrays as JSON, null as nothing):
+
+```
+choice   Options:
+         A. <label> - <desc>              (" - <desc>" is left out when the description is empty)
+         B. <label>
+         ...
+
+         Answer with the letter of the single best option.
+
+score    Scale, from lowest (0) to highest (<n-1>):
+         0. <desc>
+         1. <desc>
+         ...
+
+         Answer with the level number only.
+
+noul     Answer Yes or No.
+         Yes means: <desc of true>        (only if given)
+         No means: <desc of false>        (only if given)
+```
+
+The messages go through the model's chat template with `add_generation_prompt=True` and `enable_thinking=False` (for
+Qwen3.5 the prompt then ends with an empty `<think>` block). For trained checkpoints, caller text in the state and
+the question is sanitized first so it cannot produce special tokens: `<|name|>` becomes `<¦name¦>`.
+
+The answer is read from the next-token logits at the last position of the prompt, taken only at the answer tokens:
+`A`, `B`, … for choice (after `Z` come two-letter labels such as `AA`, keeping only those the tokenizer encodes as
+one token), `Yes` and `No` for noul, `0` … `9` for score. A softmax over these logits gives the probabilities;
+`noul` is the probability of `Yes`. One forward pass per question, no sampling.
 
 Behaviour of the official API observed with the conformance suite is recorded in `conformance/README.md`.

@@ -1,5 +1,7 @@
 # Vev
 
+[![ci](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml/badge.svg)](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev-v01-6abd3e17303828e10c49dc65)
+
 Vev is a judgment model with open weights. You send it a state (text, JSON, images, or a mix) and a set of typed questions
 (yes/no, multiple choice, or a graded score), and it returns a probability for every answer in one forward pass,
 without generating text. The server speaks the same request and response format as TypeSafe's `/v1/systemone`
@@ -18,7 +20,13 @@ vev serve --model CountingSheep/vev-4b          # downloads the weights on first
 ```
 
 Vev needs Python 3.11 or newer and an NVIDIA GPU; CPU and Apple Silicon are untested. In bf16, `vev-4b` takes about
-10 GB of GPU memory once loaded and `vev-9b` about 19 GB; long states and images need more on top. Docker:
+10 GB of GPU memory once loaded and `vev-9b` about 19 GB; long states and images need more on top.
+
+The server handles one request at a time; concurrent requests wait in a queue. Each question is one forward pass, so
+latency grows with the number of questions: on one H800, `vev-4b` takes 43 ms for one question and 383 ms for ten
+(`conformance/results/vev-4b/curves.json`).
+
+Docker:
 
 ```bash
 git clone https://github.com/Xiaooolong/vev && cd vev
@@ -85,7 +93,7 @@ The text sets are [judgekit](https://github.com/lexingtonhibiki/judgekit) (Chine
 
 ### Text judgment
 
-| Set | n | kev-4B | Vev-4B | Vev-9B | Jev |
+| Set | n | kev-4B | vev-4b | vev-9b | Jev |
 |---|---|---|---|---|---|
 | judgekit (Chinese) | 130 | 0.846 | 0.962 | 0.938 | 0.962 |
 | JevBench (public subset) | 231 | 0.719 | 0.766 | 0.823 | 0.861 |
@@ -95,16 +103,18 @@ The text sets are [judgekit](https://github.com/lexingtonhibiki/judgekit) (Chine
 kev-4B was run locally with the same harness. Jev was queried through TypeSafe's API (`jev-latest`, 23–24 September
 2026); no Jev outputs were used for training.
 
-Against kev-4B, Vev-4B is better on judgekit and Vev-9B on judgekit and JevBench; both Vev models are 2–3 points
-behind on kev's own test set, and nimble is n.s. for both. Jev is significantly ahead of both Vev models on nimble
-(18–22 points) and kev transfer-v4 (7–8 points), and ahead of Vev-4B on JevBench; Vev-9B's 3.9-point gap on JevBench
-is n.s. On judgekit Vev-4B ties Jev and Vev-9B is 2.3 points lower (n.s.).
+Differences in accuracy points (paired bootstrap):
+
+- vev-4b against kev-4B: +11.5 on judgekit, −2.6 on kev transfer-v4; JevBench and nimble are n.s.
+- vev-9b against kev-4B: +9.2 on judgekit, +10.4 on JevBench, −2.1 on kev transfer-v4; nimble is n.s.
+- vev-4b against Jev: −9.5 on JevBench, −21.6 on nimble, −7.8 on kev transfer-v4; judgekit is a tie.
+- vev-9b against Jev: −17.6 on nimble, −7.3 on kev transfer-v4; judgekit (−2.3) and JevBench (−3.9) are n.s.
 
 ### Before and after training
 
 The table compares Vev with its base model, read the same way without fine-tuning (zero-shot).
 
-| Set | n | Qwen3.5-4B | Vev-4B | Qwen3.5-9B | Vev-9B |
+| Set | n | Qwen3.5-4B | vev-4b | Qwen3.5-9B | vev-9b |
 |---|---|---|---|---|---|
 | judgekit | 130 | 0.962 | 0.962 | 0.938 | 0.938 |
 | JevBench | 231 | 0.758 | 0.766 | 0.805 | 0.823 |
@@ -114,8 +124,8 @@ The table compares Vev with its base model, read the same way without fine-tunin
 | POPE | 9000 | 0.894 | *0.889* | 0.894 | 0.897 |
 | MMStar | 1498 | 0.544 | **0.627** | 0.608 | **0.674** |
 
-Bold marks a significant improvement, italics a significant drop. The one regression is Vev-4B on POPE: accuracy is
-0.5 points lower (95% interval −0.9 to −0.1) and the Brier score 0.007 worse. Vev-9B has no significant drop.
+Bold marks a significant improvement, italics a significant drop. The one regression is vev-4b on POPE: accuracy is
+0.5 points lower (95% interval −0.9 to −0.1) and the Brier score 0.007 worse. vev-9b has no significant drop.
 
 ### Image judgment
 
@@ -123,7 +133,7 @@ Public vision benchmarks mostly ask questions about an image. Vev is meant for j
 rule, so we built judgment sets from human-labelled public data. The converters are in `evals/datasets/`; the
 converted data is not redistributed.
 
-| Set | What is judged | n | Qwen3.5-4B | Vev-4B | Qwen3.5-9B | Vev-9B |
+| Set | What is judged | n | Qwen3.5-4B | vev-4b | Qwen3.5-9B | vev-9b |
 |---|---|---|---|---|---|---|
 | policy_mod | Does the image violate this safety policy? (LlavaGuard) | 659 | 0.686 | **0.742** | 0.666 | **0.724** |
 | game_glitch | Does the game screenshot contain a glitch? (VideoGameQA-Bench) | 1000 | 0.646 | 0.613 | 0.577 | **0.626** |
@@ -132,15 +142,15 @@ converted data is not redistributed.
 | ui_input | Is there a text input field? (MobileViews) | 800 | 0.949 | 0.951 | 0.948 | 0.955 |
 | t2i_elem | Does the generated image show this prompt element? (EvalMuse) | 1027 | 0.690 | **0.715** | 0.733 | 0.703 |
 
-Vev-4B on game_glitch and Vev-9B on t2i_elem are about 3 points lower than their base models; neither difference
+vev-4b on game_glitch and vev-9b on t2i_elem are about 3 points lower than their base models; neither difference
 is significant.
 
 ## Limitations
 
-- Jev is more accurate than Vev on nimble and kev transfer-v4 (by 18–22 and 7–8 points), and than Vev-4B on
+- Jev is more accurate than Vev on nimble and kev transfer-v4 (by 18–22 and 7–8 points), and than vev-4b on
   JevBench.
 - Answers depend on the order in which options are listed. Reversing the options changes the top answer on 13%
-  (Vev-9B) and 17% (Vev-4B) of JevBench and kev transfer-v4 questions, against 10–12% for kev-4B and under 4% for
+  (vev-9b) and 17% (vev-4b) of JevBench and kev transfer-v4 questions, against 10–12% for kev-4B and under 4% for
   Jev. Fine-tuning lowered the rate on those two sets (the base models: 19–25%). On nimble it went down for 9B
   (33% → 9%) and up for 4B (19% → 21%).
 - Judgments that need several steps of reasoning are weaker than the base model's own answer when it may think

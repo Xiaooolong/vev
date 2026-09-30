@@ -1,5 +1,7 @@
 # Vev
 
+[![ci](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml/badge.svg)](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev-v01-6abd3e17303828e10c49dc65)
+
 Vev 是一个开放权重的判断模型。输入一段状态（文本、JSON、图片或混合）和一组带类型的问题（是/否、单选、分档打分），它在一次前向计算里给出每个候选答案的概率，不生成文本。服务端的请求和响应格式与 TypeSafe 的 `/v1/systemone` 接口一致（[TypeSafe 文档](https://docs.typesafe.ai/concepts/system-one.md)），为那个接口写的客户端改一下 base URL 就能接 Vev。
 
 当前是 v0.1 研究预览版。模型权重只许非商业使用，见[许可](#许可)。
@@ -13,7 +15,11 @@ pip install git+https://github.com/Xiaooolong/vev
 vev serve --model CountingSheep/vev-4b          # 首次启动会下载权重，监听 127.0.0.1:8009
 ```
 
-需要 Python 3.11 及以上和 NVIDIA GPU；CPU 和 Apple Silicon 没有测过。bf16 下，`vev-4b` 加载后约占 10 GB 显存，`vev-9b` 约 19 GB；状态很长或带图片时还要再多一些。用 Docker：
+需要 Python 3.11 及以上和 NVIDIA GPU；CPU 和 Apple Silicon 没有测过。bf16 下，`vev-4b` 加载后约占 10 GB 显存，`vev-9b` 约 19 GB；状态很长或带图片时还要再多一些。
+
+服务端一次只处理一个请求，并发请求会排队等待。每个问题做一次前向计算，所以延迟随问题数增长：单张 H800 上，`vev-4b` 1 个问题 43 ms，10 个问题 383 ms（见 `conformance/results/vev-4b/curves.json`）。
+
+用 Docker：
 
 ```bash
 git clone https://github.com/Xiaooolong/vev && cd vev
@@ -69,20 +75,27 @@ curl -s http://127.0.0.1:8009/v1/systemone -H 'Content-Type: application/json' -
 
 ### 文本判断
 
-| 评测集 | 题数 | kev-4B | Vev-4B | Vev-9B | Jev |
+| 评测集 | 题数 | kev-4B | vev-4b | vev-9b | Jev |
 |---|---|---|---|---|---|
 | judgekit（中文） | 130 | 0.846 | 0.962 | 0.938 | 0.962 |
 | JevBench（公开子集） | 231 | 0.719 | 0.766 | 0.823 | 0.861 |
 | nimble | 324 | 0.735 | 0.707 | 0.747 | 0.923 |
 | kev transfer-v4 | 1528 | 0.802 | 0.776 | 0.781 | 0.854 |
 
-kev-4B 用同一套脚本在本地跑；Jev 通过 TypeSafe 的 API 调用（`jev-latest`，2026 年 9 月 23–24 日）；训练没有用到任何 Jev 的输出。和 kev-4B 比，Vev-4B 在 judgekit 上显著更好，Vev-9B 在 judgekit 和 JevBench 上显著更好；在 kev 自己的测试集上两个 Vev 都落后 2–3 个点；nimble 上两者差异都不显著。Jev 在 nimble（差 18–22 个点）和 kev transfer-v4（差 7–8 个点）上显著领先两个 Vev，在 JevBench 上显著领先 Vev-4B；Vev-9B 在 JevBench 上低 3.9 个点，不显著。judgekit 上 Vev-4B 与 Jev 持平，Vev-9B 低 2.3 个点，不显著。
+kev-4B 用同一套脚本在本地跑；Jev 通过 TypeSafe 的 API 调用（`jev-latest`，2026 年 9 月 23–24 日）；训练没有用到任何 Jev 的输出。
+
+各组差异（正确率点数，配对 bootstrap）：
+
+- vev-4b 对 kev-4B：judgekit +11.5，kev transfer-v4 −2.6；JevBench 和 nimble 不显著。
+- vev-9b 对 kev-4B：judgekit +9.2，JevBench +10.4，kev transfer-v4 −2.1；nimble 不显著。
+- vev-4b 对 Jev：JevBench −9.5，nimble −21.6，kev transfer-v4 −7.8；judgekit 持平。
+- vev-9b 对 Jev：nimble −17.6，kev transfer-v4 −7.3；judgekit（−2.3）和 JevBench（−3.9）不显著。
 
 ### 训练前后
 
 下表对比 Vev 和未微调的基座模型（零样本，读出方式相同）。
 
-| 评测集 | 题数 | Qwen3.5-4B | Vev-4B | Qwen3.5-9B | Vev-9B |
+| 评测集 | 题数 | Qwen3.5-4B | vev-4b | Qwen3.5-9B | vev-9b |
 |---|---|---|---|---|---|
 | judgekit | 130 | 0.962 | 0.962 | 0.938 | 0.938 |
 | JevBench | 231 | 0.758 | 0.766 | 0.805 | 0.823 |
@@ -92,13 +105,13 @@ kev-4B 用同一套脚本在本地跑；Jev 通过 TypeSafe 的 API 调用（`je
 | POPE | 9000 | 0.894 | *0.889* | 0.894 | 0.897 |
 | MMStar | 1498 | 0.544 | **0.627** | 0.608 | **0.674** |
 
-加粗表示显著变好，斜体表示显著变差。唯一的退步是 Vev-4B 在 POPE 上：正确率低 0.5 个点（95% 区间 −0.9 到−0.1），Brier 分数差 0.007。Vev-9B 没有显著变差的集。
+加粗表示显著变好，斜体表示显著变差。唯一的退步是 vev-4b 在 POPE 上：正确率低 0.5 个点（95% 区间 −0.9 到−0.1），Brier 分数差 0.007。vev-9b 没有显著变差的集。
 
 ### 图片判断
 
 公开的视觉评测大多是就图片内容提问，而 Vev 要做的是按给定规则判断一张图，所以我们用带人工标注的公开数据转换出了几个判断集。转换脚本在 `evals/datasets/`，转换后的数据不再分发。
 
-| 评测集 | 判断内容 | 题数 | Qwen3.5-4B | Vev-4B | Qwen3.5-9B | Vev-9B |
+| 评测集 | 判断内容 | 题数 | Qwen3.5-4B | vev-4b | Qwen3.5-9B | vev-9b |
 |---|---|---|---|---|---|---|
 | policy_mod | 图片是否违反给定的安全规则（LlavaGuard） | 659 | 0.686 | **0.742** | 0.666 | **0.724** |
 | game_glitch | 游戏截图里有没有画面错误（VideoGameQA-Bench） | 1000 | 0.646 | 0.613 | 0.577 | **0.626** |
@@ -107,12 +120,12 @@ kev-4B 用同一套脚本在本地跑；Jev 通过 TypeSafe 的 API 调用（`je
 | ui_input | 界面上有没有文本输入框（MobileViews） | 800 | 0.949 | 0.951 | 0.948 | 0.955 |
 | t2i_elem | 生成的图片是否画出了提示词里的某个元素（EvalMuse） | 1027 | 0.690 | **0.715** | 0.733 | 0.703 |
 
-Vev-4B 在 game_glitch、Vev-9B 在 t2i_elem 上比各自的基座低约 3 个点，两处差异都不显著。
+vev-4b 在 game_glitch、vev-9b 在 t2i_elem 上比各自的基座低约 3 个点，两处差异都不显著。
 
 ## 局限
 
-- Jev 在 nimble 和 kev transfer-v4 上比 Vev 准（分别高 18–22 和 7–8 个点），在 JevBench 上比 Vev-4B 准。
-- 答案会受选项顺序影响。把选项倒过来排，JevBench 和 kev transfer-v4 上首选答案会变的题，Vev-9B 占 13%，Vev-4B 占 17%；kev-4B 是 10–12%，Jev 不到 4%。微调让这两个集上的比例下降了（基座模型是 19–25%）。nimble 上 9B 从 33% 降到 9%，4B 反而从 19% 升到 21%。
+- Jev 在 nimble 和 kev transfer-v4 上比 Vev 准（分别高 18–22 和 7–8 个点），在 JevBench 上比 vev-4b 准。
+- 答案会受选项顺序影响。把选项倒过来排，JevBench 和 kev transfer-v4 上首选答案会变的题，vev-9b 占 13%，vev-4b 占 17%；kev-4B 是 10–12%，Jev 不到 4%。微调让这两个集上的比例下降了（基座模型是 19–25%）。nimble 上 9B 从 33% 降到 9%，4B 反而从 19% 升到 21%。
 - 需要多步推理的判断，不如基座模型先思考再回答。在一个内部场景集上（未公开），基座的思考模式比 Vev 的单次读出准 4–8 个点；在我们试过的大多数公开集上，单次读出和思考模式一样准或更准。
 - 在“这里有没有问题”这类二分类问题上，基座模型和 Vev 都倾向于答“没有”，标出问题的次数比标注里少。
 - 图片判断集是我们自己从公开数据转换的，不是公认的评测基准。
