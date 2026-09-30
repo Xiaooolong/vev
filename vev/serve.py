@@ -93,7 +93,7 @@ def model_card(name: str, hf_id: str) -> dict[str, Any]:
             "(choice letters, Yes/No, level digits). One forward pass per question, no decoding. "
             "confidence = (p_max - 1/K) / (1 - 1/K). output_tokens is informational only."
         ),
-        "release_date": "2026-09-30T00:00:00Z",
+        "release_date": "2026-10-01T00:00:00Z",
         "limits": {
             "max_images": MAX_IMAGES,
             "max_image_pixels": MAX_IMAGE_PIXELS,

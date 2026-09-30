@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 (2026-09-30)
+## 0.1.0 (2026-10-01)
 
 First public release, a research preview.
 
