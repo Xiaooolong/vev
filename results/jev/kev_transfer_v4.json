@@ -1,0 +1,22 @@
+{
+  "set": "kev_transfer_v4",
+  "model": "jev",
+  "records_sha256": "c2e382f0e18e4f3b106cb8b5350c80125222f44d8dd2e1f9991267eaa03d4e2e",
+  "n": 1528,
+  "metrics": {
+    "n_records": 1528,
+    "n_questions": 1528,
+    "order_flip_rate": 0.025826446280991736,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": 0.21000000000000002,
+    "negation_gap": null,
+    "accuracy": 0.8540575916230366,
+    "macro_f1": 0.7762722899698314,
+    "brier": 0.21213946335078532,
+    "nll": 0.9268930270550046,
+    "ece": 0.051590314136129675,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.8206999639193856,
+    "confidence_distinct": 89
+  }
+}

@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[dev,train]"
+          pip install typesafe-sdk langchain-typesafe
+      - name: Lint
+        run: ruff check vev conformance
+      - name: Unit tests
+        run: pytest -q
+      - name: Conformance (stub engine, no GPU)
+        run: |
+          python conformance/stub_server.py --port 8009 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8009/healthz && break; sleep 1; done
+          SO_STUB=1 SO_TARGET=stub SO_SUPPORTS_IMAGES=1 SO_RESULTS_DIR=/tmp/conformance pytest conformance -q

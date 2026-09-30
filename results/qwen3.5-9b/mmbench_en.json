@@ -1,0 +1,25 @@
+{
+  "set": "mmbench_en",
+  "model": "qwen3.5-9b",
+  "records_sha256": "6706ad178e390de0f25e8e1965f3971015eca6ff7aeb6f79e3bb04397794dc1f",
+  "n": 1164,
+  "metrics": {
+    "n_records": 1164,
+    "n_questions": 1164,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.8865979381443299,
+    "macro_f1": 0.8855919652752837,
+    "brier": 0.15940566677119883,
+    "nll": 0.326671947147211,
+    "ece": 0.022785322529446116,
+    "ece_maxprob": 0.04308171124802422,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.9204508750293634,
+    "confidence_distinct": 1106
+  }
+}

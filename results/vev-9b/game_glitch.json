@@ -1,0 +1,25 @@
+{
+  "set": "game_glitch",
+  "model": "vev-9b",
+  "records_sha256": "7e561250d951487d9dc2e5f287f7642780996243e4c6b9267b63ada0b7f35551",
+  "n": 1000,
+  "metrics": {
+    "n_records": 1000,
+    "n_questions": 1000,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.626,
+    "macro_f1": 0.5879169311049997,
+    "brier": 0.4543540619272706,
+    "nll": 0.6441725129202686,
+    "ece": 0.11770034629479051,
+    "ece_maxprob": 0.11770034629479051,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.6809810186055253,
+    "confidence_distinct": 1000
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "set": "game_clip",
+  "model": "vev-9b",
+  "records_sha256": "fefc9d12dc44f7d8ff5bd57a4e6350f286eb3b609173d2f9ebe2a0c608705c84",
+  "n": 686,
+  "metrics": {
+    "n_records": 686,
+    "n_questions": 686,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.7288629737609329,
+    "macro_f1": 0.7274148892534864,
+    "brier": 0.3498848643271006,
+    "nll": 0.5243146509088685,
+    "ece": 0.08382448221695318,
+    "ece_maxprob": 0.08382448221695318,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.7390537634408603,
+    "confidence_distinct": 686
+  }
+}

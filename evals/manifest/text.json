@@ -1,0 +1,77 @@
+{
+  "jevbench": {
+    "file": "evals/data/text/jevbench.jsonl",
+    "n_records": 231,
+    "n_questions": 231,
+    "by_type": {
+      "choice": 139,
+      "noul": 74,
+      "score": 18
+    },
+    "by_split": {
+      "public": 231
+    },
+    "sha256": "c05c93a92cf7693ba0cdabf1bfde24ba1416ec3bd3c8e637f11863070749e365",
+    "source_repo": "https://github.com/fstandhartinger/jevbench",
+    "source_commit": "f79a1cab94ab9a5879383b7ef9ee1805b9dc2d84",
+    "license": "commercial-ok",
+    "lang": "en"
+  },
+  "judgekit": {
+    "file": "evals/data/text/judgekit.jsonl",
+    "n_records": 130,
+    "n_questions": 130,
+    "by_type": {
+      "choice": 130
+    },
+    "by_split": {
+      "test": 130
+    },
+    "sha256": "9580456dc885c929f876d0cef6ad499e19d0797430013cf4c33bb49c0fb84859",
+    "source_repo": "https://github.com/lexingtonhibiki/judgekit",
+    "source_commit": "da010de3a7ec3d672471c5738449f0f5ed46d419",
+    "license": "commercial-ok",
+    "lang": "zh"
+  },
+  "kev_transfer_v4": {
+    "file": "evals/data/text/kev_transfer_v4.jsonl",
+    "n_records": 1528,
+    "n_questions": 1528,
+    "by_type": {
+      "choice": 888,
+      "noul": 560,
+      "score": 80
+    },
+    "by_split": {
+      "dev": 764,
+      "test": 764
+    },
+    "sha256": "c2e382f0e18e4f3b106cb8b5350c80125222f44d8dd2e1f9991267eaa03d4e2e",
+    "source_repo": "https://github.com/jaredpalmer/kev",
+    "source_commit": "557598fced1dada75dfbf36ed144dce309ac6ceb",
+    "license": {
+      "commercial-ok": 584,
+      "unknown": 712,
+      "non-commercial": 232
+    },
+    "lang": "en"
+  },
+  "nimble": {
+    "file": "evals/data/text/nimble.jsonl",
+    "n_records": 324,
+    "n_questions": 324,
+    "by_type": {
+      "choice": 146,
+      "noul": 114,
+      "score": 64
+    },
+    "by_split": {
+      "heldout": 324
+    },
+    "sha256": "97718b460aa62e546fd898f1a8ff16bfc85917cdbb93e383edcc85ff721d521a",
+    "source_repo": "https://github.com/bespokelabsai/nimble",
+    "source_commit": "54c2e82e8f613a7ab3a4d4072c50dfb9376db4e3",
+    "license": "unknown",
+    "lang": "en"
+  }
+}

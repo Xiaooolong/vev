@@ -1,0 +1,25 @@
+{
+  "set": "game_vr",
+  "model": "vev-4b",
+  "records_sha256": "deb50d0c4fb9e46ab4675d605b55fc62b178f9dc2417951efedce5fbab2072a1",
+  "n": 250,
+  "metrics": {
+    "n_records": 250,
+    "n_questions": 250,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.94,
+    "macro_f1": 0.8467824310520939,
+    "brier": 0.30087439176882314,
+    "nll": 0.4861769273486425,
+    "ece": 0.31598380345106125,
+    "ece_maxprob": 0.31598380345106125,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.8902127659574468,
+    "confidence_distinct": 249
+  }
+}

@@ -1,0 +1,17 @@
+name: Bug report
+description: Something does not work as documented
+body:
+  - type: textarea
+    attributes:
+      label: What happened
+      description: Include the request body (redact anything private) and the response or traceback.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Version
+      description: Output of `vev version`
+  - type: input
+    attributes:
+      label: Model and hardware
+      description: e.g. vev-4b on one L4, bf16

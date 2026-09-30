@@ -1,0 +1,394 @@
+{
+  "banking77": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0",
+    "evidence_url": "https://huggingface.co/datasets/legacy-datasets/banking77",
+    "quote": "Creative Commons Attribution 4.0 International",
+    "checked": "2026-09-23",
+    "notes": "YAML cc-by-4.0 and Licensing Information body agree. PolyAI/banking77 card shows the same."
+  },
+  "boolq": {
+    "tier": "commercial-ok",
+    "license": "CC BY-SA 3.0",
+    "evidence_url": "https://huggingface.co/datasets/google/boolq",
+    "quote": "BoolQ is released under the Creative Commons Share-Alike 3.0 license.",
+    "checked": "2026-09-23",
+    "notes": "Share-alike: derived data must stay CC BY-SA. Passages from Wikipedia."
+  },
+  "ag_news": {
+    "tier": "unknown",
+    "license": "unspecified",
+    "evidence_url": "https://huggingface.co/datasets/fancyzhx/ag_news",
+    "quote": "Licensing Information: [More Information Needed]",
+    "checked": "2026-09-23",
+    "notes": "HF YAML license: unknown; body empty. Upstream AG corpus page (groups.di.unipi.it/~gulli) unreachable (SSL error). Underlying news articles are third-party copyrighted."
+  },
+  "mnli": {
+    "tier": "commercial-ok",
+    "license": "OANC license + CC BY-SA 3.0 + CC BY 3.0 + public domain (mixed permissive)",
+    "evidence_url": "https://huggingface.co/datasets/nyu-mll/multi_nli",
+    "quote": "The majority of the corpus is released under the OANC's license, which allows all content to be freely used, modified, and shared under permissive terms.",
+    "checked": "2026-09-23",
+    "notes": "Fiction genre: Seven Swords CC BY-SA 3.0; Living History / Password Incorrect CC BY 3.0; rest US public domain ('may be licensed differently elsewhere'). YAML lists cc-by-3.0, cc-by-sa-3.0, mit, other. cims.nyu.edu/~sbowman/multinli only points to the paper."
+  },
+  "sst5": {
+    "tier": "unknown",
+    "license": "unspecified",
+    "evidence_url": "https://huggingface.co/datasets/SetFit/sst5",
+    "quote": "Stanford Sentiment Treebank with 5 labels: very positive, positive, neutral, negative, very negative",
+    "checked": "2026-09-23",
+    "notes": "SetFit card has no license; nlp.stanford.edu/sentiment/ states no license either. Sentences are Rotten Tomatoes review snippets (third-party copyright)."
+  },
+  "yelp": {
+    "tier": "non-commercial",
+    "license": "Yelp Dataset Terms of Use",
+    "evidence_url": "https://s3-media3.fl.yelpcdn.com/assets/srv0/engineering_pages/bea5c1e92bf3/assets/vendor/yelp-dataset-agreement.pdf",
+    "quote": "solely for academic or non-commercial purposes ... you agree that you will not: ... B. use the Data in connection with any commercial purpose;",
+    "checked": "2026-09-23",
+    "notes": "HF Yelp/yelp_review_full: YAML license 'other', body points to this agreement. Agreement is revocable and restricts redistribution."
+  },
+  "trec": {
+    "tier": "unknown",
+    "license": "unspecified",
+    "evidence_url": "https://huggingface.co/datasets/CogComp/trec",
+    "quote": "Licensing Information: [More Information Needed]",
+    "checked": "2026-09-23",
+    "notes": "HF YAML license: unknown. Upstream cogcomp.seas.upenn.edu/Data/QA/QC/ has no license statement."
+  },
+  "dbpedia14": {
+    "tier": "commercial-ok",
+    "license": "CC BY-SA 3.0 / GFDL",
+    "evidence_url": "https://huggingface.co/datasets/fancyzhx/dbpedia_14",
+    "quote": "The DBPedia ontology classification dataset is licensed under the terms of the Creative Commons Attribution-ShareAlike License and the GNU Free Documentation License.",
+    "checked": "2026-09-23",
+    "notes": "Share-alike. Text from Wikipedia abstracts. YAML cc-by-sa-3.0."
+  },
+  "amazon_reviews_multi_en": {
+    "tier": "non-commercial",
+    "license": "Amazon Reviews Corpus license (research only)",
+    "evidence_url": "https://huggingface.co/datasets/defunct-datasets/amazon_reviews_multi",
+    "quote": "You may not resell, republish, or make any commercial use of the Reviews Corpus",
+    "checked": "2026-09-23",
+    "notes": "Original HF dataset is defunct 'due to the decision of data providers'; license text was at docs.opendata.aws/amazon-reviews-ml/license.txt (now 404). Mirrors mteb/amazon_reviews_multi (no license, empty README) and SetFit/amazon_reviews_multi_en (YAML apache-2.0, empty README) cannot relicense the upstream corpus; mirror YAML ignored."
+  },
+  "imdb": {
+    "tier": "unknown",
+    "license": "unspecified",
+    "evidence_url": "https://huggingface.co/datasets/stanfordnlp/imdb",
+    "quote": "Licensing Information: [More Information Needed]",
+    "checked": "2026-09-23",
+    "notes": "HF YAML license 'other'. Upstream ai.stanford.edu/~amaas/data/sentiment/ gives a citation request only, no license. Reviews scraped from IMDb (third-party copyright)."
+  },
+  "clinc150": {
+    "tier": "commercial-ok",
+    "license": "CC BY 3.0",
+    "evidence_url": "https://github.com/clinc/oos-eval/blob/master/LICENSE",
+    "quote": "Creative Commons Legal Code / Attribution 3.0 Unported",
+    "checked": "2026-09-23",
+    "notes": "HF clinc/clinc_oos YAML cc-by-3.0 (body 'More Information Needed'); GitHub LICENSE file confirms CC BY 3.0."
+  },
+  "stsb": {
+    "tier": "unknown",
+    "license": "unspecified (GLUE: refer to original licenses)",
+    "evidence_url": "https://huggingface.co/datasets/nyu-mll/glue",
+    "quote": "The primary GLUE tasks are built on and derived from existing datasets. We refer users to the original licenses accompanying each dataset.",
+    "checked": "2026-09-23",
+    "notes": "GLUE YAML license 'other'. STS benchmark wiki (ixa2.si.ehu.eus/stswiki) unreachable (TLS cert error); mteb/stsbenchmark-sts YAML 'unknown'; sentence-transformers/stsb no license. Sources: news headlines, video/image captions, NLI data."
+  },
+  "ocnli": {
+    "tier": "non-commercial",
+    "license": "CC BY-NC 2.0",
+    "evidence_url": "https://github.com/CLUEbenchmark/OCNLI",
+    "quote": "Attribution-NonCommercial 2.0 Generic (CC BY-NC 2.0)",
+    "checked": "2026-09-23",
+    "notes": "clue/clue HF card: YAML unknown, body empty. News-genre premises from LCMC corpus used with ELRA permission."
+  },
+  "tnews": {
+    "tier": "unknown",
+    "license": "unspecified",
+    "evidence_url": "https://huggingface.co/datasets/clue/clue",
+    "quote": "Licensing Information: [More Information Needed]",
+    "checked": "2026-09-23",
+    "notes": "clue/clue YAML unknown; CLUEbenchmark/CLUE GitHub has no LICENSE (API license=null, LICENSE 404) and README has no license text. Data are Toutiao news titles."
+  },
+  "afqmc": {
+    "tier": "unknown",
+    "license": "unspecified",
+    "evidence_url": "https://huggingface.co/datasets/clue/clue",
+    "quote": "Licensing Information: [More Information Needed]",
+    "checked": "2026-09-23",
+    "notes": "clue/clue YAML unknown; CLUE GitHub no LICENSE, README silent. Data originate from an Ant Financial competition; original competition terms not found."
+  },
+  "vqav2": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (annotations); images per-image Flickr licenses via COCO",
+    "evidence_url": "https://visualqa.org/terms.html",
+    "quote": "The annotations in this dataset belong to the VQA Consortium and are licensed under a Commons Attribution 4.0 International License.",
+    "checked": "2026-09-23",
+    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io. Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images."
+  },
+  "vqav2_mc": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (annotations); images per-image Flickr licenses via COCO",
+    "evidence_url": "https://visualqa.org/terms.html",
+    "quote": "The annotations in this dataset belong to the VQA Consortium and are licensed under a Commons Attribution 4.0 International License.",
+    "checked": "2026-09-23",
+    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io. Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images. Alias of vqav2 (source name used in README source list)."
+  },
+  "vqav2_yesno": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (annotations); images per-image Flickr licenses via COCO",
+    "evidence_url": "https://visualqa.org/terms.html",
+    "quote": "The annotations in this dataset belong to the VQA Consortium and are licensed under a Commons Attribution 4.0 International License.",
+    "checked": "2026-09-23",
+    "notes": "Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io. Tier reflects annotations only; a strict commercial build would need per-image COCO license filtering (COCO JSON carries a license id per image). Cauldron vqav2 config redistributes the images. Alias of vqav2 (source name used in README source list)."
+  },
+  "aokvqa": {
+    "tier": "unknown",
+    "license": "unspecified for data (repo code Apache-2.0)",
+    "evidence_url": "https://github.com/allenai/aokvqa",
+    "quote": "Apache License Version 2.0, January 2004",
+    "checked": "2026-09-23",
+    "notes": "Quote is the repo LICENSE, which covers code; README has no data license sentence. HF HuggingFaceM4/A-OKVQA: no YAML license, body 'More Information needed'. allenai.org project page 403, prior.allenai.org page 404, HF allenai/aokvqa 401. Images COCO 2017; val uses COCO val images (dropped by dedup). Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+  },
+  "ai2d": {
+    "tier": "commercial-ok",
+    "license": "CC BY-SA 4.0",
+    "evidence_url": "https://registry.opendata.aws/allenai-diagrams/",
+    "quote": "License: CC BY-SA (links to creativecommons.org/licenses/by-sa/4.0/)",
+    "checked": "2026-09-23",
+    "notes": "Share-alike. Diagram images were collected via web image search; the registry license applies to the dataset as released, no separate image-level terms found."
+  },
+  "visual7w": {
+    "tier": "unknown",
+    "license": "unspecified (toolkit code MIT)",
+    "evidence_url": "https://github.com/yukezhu/visual7w-toolkit",
+    "quote": "Visual7W ... collected on 47,300 COCO images ... constitutes a part of the Visual Genome project",
+    "checked": "2026-09-23",
+    "notes": "web.stanford.edu/~yukez/visual7w redirects; ai.stanford.edu/~yukez/visual7w/ has no license text; toolkit repo MIT covers code; HF visual7w 404. Visual Genome is CC BY 4.0 (visualgenome.org/about) but nothing says that covers the Visual7W release. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+  },
+  "mmt_bench": {
+    "tier": "unknown",
+    "license": "HF YAML MIT only; no license on GitHub",
+    "evidence_url": "https://huggingface.co/datasets/Kaining/MMT-Bench",
+    "quote": "license: mit",
+    "checked": "2026-09-23",
+    "notes": "Only the YAML field; card body has no license text. GitHub OpenGVLab/MMT-Bench: API license=null, no LICENSE file, README silent. Questions are built on images from many existing third-party datasets whose licenses are not propagated."
+  },
+  "mme_realworld": {
+    "tier": "non-commercial",
+    "license": "academic research only (HF YAML says Apache-2.0)",
+    "evidence_url": "https://github.com/yfzhang114/MME-RealWorld",
+    "quote": "MME-RealWorld is only used for academic research. Commercial use in any form is prohibited.",
+    "checked": "2026-09-23",
+    "notes": "Conflict: HF yifanzhang114/MME-RealWorld YAML apache-2.0; GitHub README (upstream) prohibits commercial use, says 'The copyright of all images belongs to the image owners' and forbids redistribution without approval. Upstream text prevails."
+  },
+  "vsr": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (annotations); images COCO",
+    "evidence_url": "https://huggingface.co/datasets/cambridgeltl/vsr_random",
+    "quote": "license: cc-by-4.0",
+    "checked": "2026-09-23",
+    "notes": "GitHub cambridgeltl/visual-spatial-reasoning is Apache-2.0 (code). Image links point to COCO train2017/val2017; val2017 items dropped by dedup. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+  },
+  "nlvr2": {
+    "tier": "non-commercial",
+    "license": "CC BY 4.0 (annotations); images unlicensed, research-only access",
+    "evidence_url": "https://github.com/lil-lab/nlvr",
+    "quote": "We have licensed the annotations of the NLVR2 images (sentences and binary labels) under CC-BY-4.0 ... We do not license the NLVR2 images as we do not hold the copyright to them.",
+    "checked": "2026-09-23",
+    "notes": "nlvr2/README: 'we can provide direct access to the images as long as you are using them for research purposes' (Google Form + ToS). Images are web-crawled; ~5% of URLs dead. Tiered by the image side since the task needs the images. Cauldron nlvr2 config redistributes these images."
+  },
+  "naturalbench": {
+    "tier": "non-commercial",
+    "license": "Apache-2.0 (HF YAML); images include Flickr30K",
+    "evidence_url": "https://huggingface.co/datasets/BaiqiL/NaturalBench",
+    "quote": "license: apache-2.0 ... images collected from three resources: Flicker30k, DOCCI, XM3600",
+    "checked": "2026-09-23",
+    "notes": "Tiered non-commercial because part of the images come from Flickr30K, whose terms are non-commercial research/education; DOCCI is CC BY 4.0, XM3600 images from Open Images. Card: 'We bear all responsibilities in case of violation of rights.' A DOCCI/XM3600-only subset could be reconsidered. GitHub BaiqiL/NaturalBench 404."
+  },
+  "sugarcrepe": {
+    "tier": "commercial-ok",
+    "license": "MIT",
+    "evidence_url": "https://github.com/RAIVNLab/sugar-crepe",
+    "quote": "MIT License (GitHub API spdx_id: MIT)",
+    "checked": "2026-09-23",
+    "notes": "All images are COCO-2017 val set, so every item is dropped by dedup rule 3 (COCO val exclusion). Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+  },
+  "seetrue": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0",
+    "evidence_url": "https://huggingface.co/datasets/yonatanbitton/SeeTRUE",
+    "quote": "The dataset is under the CC-By 4.0 license. ... SeeTRUE contains a single split: TEST, and should not be used for training.",
+    "checked": "2026-09-23",
+    "notes": "License permits training, but the authors explicitly ask that it not be used for training (eval-only intent). Images: COCO, DrawBench, EditBench, generated images. Consider treating as held-out."
+  },
+  "foil_coco": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (annotations); images COCO",
+    "evidence_url": "https://foilunitn.github.io/",
+    "quote": "Creative Commons Attribution 4.0 License ... MS-COCO images follow Flickr terms and MS-COCO annotations use the same CC-BY 4.0 license",
+    "checked": "2026-09-23",
+    "notes": "FOIL test split is built on COCO val2014, dropped by dedup. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+  },
+  "imagereward": {
+    "tier": "commercial-ok",
+    "license": "Apache-2.0",
+    "evidence_url": "https://huggingface.co/datasets/THUDM/ImageRewardDB",
+    "quote": "The ImageRewardDB dataset is available under the Apache license 2.0",
+    "checked": "2026-09-23",
+    "notes": "Code MIT. 'All images in ImageRewardDB are collected from DiffusionDB' (Stable Diffusion outputs; DiffusionDB itself is CC0, not re-verified this session)."
+  },
+  "hpdv2": {
+    "tier": "commercial-ok",
+    "license": "Apache-2.0",
+    "evidence_url": "https://huggingface.co/datasets/ymhao/HPDv2",
+    "quote": "The HPDv2 dataset is available under the Apache license 2.0.",
+    "checked": "2026-09-23",
+    "notes": "GitHub tgxs002/HPSv2 Apache-2.0. Images: outputs of CogView2, DALL-E 2, GLIDE, SD 1.4/2.0 etc. plus 28,272 COCO Captions real images (COCO/Flickr per-image licenses). HPD v1 was application-only; v2 is not."
+  },
+  "llava_critic": {
+    "tier": "commercial-ok",
+    "license": "Apache-2.0",
+    "evidence_url": "https://huggingface.co/datasets/lmms-lab/LLaVA-Critic-113k",
+    "quote": "license: apache-2.0",
+    "checked": "2026-09-23",
+    "notes": "Only the YAML carries the license; card describes research use. Judgments/reasons generated by GPT-4o (OpenAI terms restrict using outputs to build competing models); images and responses come from 8 existing multimodal datasets with their own licenses, not listed per item."
+  },
+  "agiqa3k": {
+    "tier": "commercial-ok",
+    "license": "MIT",
+    "evidence_url": "https://github.com/lcysyzxdxc/AGIQA-3K-Database",
+    "quote": "The database is distributed under the MIT license.",
+    "checked": "2026-09-23",
+    "notes": "GitHub API spdx_id MIT. Images are AI-generated by several popular T2I models; generator terms may apply to the images."
+  },
+  "genai_bench": {
+    "tier": "commercial-ok",
+    "license": "Apache-2.0",
+    "evidence_url": "https://huggingface.co/datasets/BaiqiL/GenAI-Bench",
+    "quote": "License: apache-2.0",
+    "checked": "2026-09-23",
+    "notes": "YAML only; no body license text. Images generated by DALL-E 3, DeepFloyd IF, Midjourney v6, SDXL variants; generator ToS may apply. GenAI-Bench was also considered as a held-out candidate."
+  },
+  "textvqa": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (annotations); images Open Images (listed CC BY 2.0)",
+    "evidence_url": "https://huggingface.co/datasets/facebook/textvqa",
+    "quote": "CC by 4.0",
+    "checked": "2026-09-23",
+    "notes": "Images from Open Images v4: 'The images are listed as having a CC BY 2.0 license' (storage.googleapis.com/openimages/web/factsfigures_v4.html), no per-image warranty from Google. textvqa.org page did not render."
+  },
+  "plotqa": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (data); code MIT",
+    "evidence_url": "https://github.com/NiteshMethani/PlotQA",
+    "quote": "All the datasets created as part of this work are released under a CC-BY-4.0 license",
+    "checked": "2026-09-23",
+    "notes": "Plots are synthetically rendered from real-world statistics tables, so no third-party image copyright."
+  },
+  "charxiv": {
+    "tier": "unknown",
+    "license": "CC BY-SA 4.0 (annotations); charts copyright original arXiv authors",
+    "evidence_url": "https://github.com/princeton-nlp/CharXiv",
+    "quote": "The copyright of the charts belong to the original authors, where you can find the source in image_metadata_val.json and image_metadata_test.json",
+    "checked": "2026-09-23",
+    "notes": "HF princeton-nlp/CharXiv YAML cc-by-sa-4.0; code Apache-2.0. Chart images are not licensed by CharXiv; per-paper arXiv licenses vary (many use the default arXiv license, not reusable). Only val/test splits exist (benchmark)."
+  },
+  "androidcontrol": {
+    "tier": "commercial-ok",
+    "license": "Apache-2.0",
+    "evidence_url": "https://github.com/google-research/google-research/tree/master/android_control",
+    "quote": "Licensed under the Apache License, Version 2.0",
+    "checked": "2026-09-23",
+    "notes": "Statement is the google-research standard Apache header in the android_control README; no separate data license found. Screenshots of third-party Android apps."
+  },
+  "amex": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0",
+    "evidence_url": "https://huggingface.co/datasets/Yuxiang007/AMEX",
+    "quote": "License: cc-by-4.0",
+    "checked": "2026-09-23",
+    "notes": "YAML only; body has no extra terms. Screenshots of third-party mobile apps."
+  },
+  "gui_odyssey": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0",
+    "evidence_url": "https://huggingface.co/datasets/hflqf88888/GUIOdyssey",
+    "quote": "license: cc-by-4.0 ... Creative Commons Attribution 4.0 International License",
+    "checked": "2026-09-23",
+    "notes": "Card disclaimer: intended primarily for research purposes (not a license restriction). Screenshots of third-party apps."
+  },
+  "guicourse": {
+    "tier": "commercial-ok",
+    "license": "CC BY 4.0 (data); code MIT",
+    "evidence_url": "https://github.com/yiye3/GUICourse",
+    "quote": "The datasets are licensed under a Creative Commons Attribution 4.0 International License.",
+    "checked": "2026-09-23",
+    "notes": "Web/app screenshots of third-party sites."
+  },
+  "procgen": {
+    "tier": "commercial-ok",
+    "license": "Apache-2.0",
+    "evidence_url": "https://huggingface.co/datasets/EpicPinkPenguin/procgen",
+    "quote": "license: apache-2.0",
+    "checked": "2026-09-23",
+    "notes": "Frames rendered from OpenAI Procgen environments by PPO agents; no third-party image rights."
+  },
+  "alfred": {
+    "tier": "commercial-ok",
+    "license": "MIT",
+    "evidence_url": "https://github.com/askforalfred/alfred",
+    "quote": "MIT License",
+    "checked": "2026-09-23",
+    "notes": "Repo MIT covers code and dataset release. Frames rendered in AI2-THOR 2.1.0, whose assets have their own license (not verified this session)."
+  },
+  "multi_benchmark": {
+    "tier": "unknown",
+    "license": "unspecified for data (repo code MIT)",
+    "evidence_url": "https://huggingface.co/datasets/OpenDFM/MULTI-Benchmark",
+    "quote": "(no license field and no license text on the dataset card)",
+    "checked": "2026-09-23",
+    "notes": "GitHub repo LICENSE is MIT (API spdx_id MIT) but repo data/ holds only placeholders; actual data is on HF without a license. Content is authentic Chinese exam questions (third-party copyright unclear)."
+  },
+  "cmm_math": {
+    "tier": "commercial-ok",
+    "license": "BSD-3-Clause",
+    "evidence_url": "https://huggingface.co/datasets/ecnu-icalk/cmm-math",
+    "quote": "license: bsd-3-clause",
+    "checked": "2026-09-23",
+    "notes": "YAML only; GitHub ECNU-ICALK/EduChat-Math README gives no license or problem provenance. K-12 math problems, original source undocumented."
+  },
+  "gaokao_mm": {
+    "tier": "commercial-ok",
+    "license": "Apache-2.0",
+    "evidence_url": "https://github.com/OpenMOSS/GAOKAO-MM",
+    "quote": "Apache-2.0 (GitHub API spdx_id; LICENSE at repo root alongside Data/ and Images/)",
+    "checked": "2026-09-23",
+    "notes": "README has no separate data terms. Content is 2010-2023 national Gaokao image MC questions; copyright of official exam papers is not addressed."
+  },
+  "coco_cn": {
+    "tier": "commercial-ok",
+    "license": "MIT (annotations); images COCO",
+    "evidence_url": "https://huggingface.co/datasets/AIMClab/COCO-CN",
+    "quote": "License: MIT",
+    "checked": "2026-09-23",
+    "notes": "GitHub li-xirong/coco-cn also MIT. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
+  },
+  "the_cauldron": {
+    "tier": "unknown",
+    "license": "per sub-dataset; prompts CC BY 4.0",
+    "evidence_url": "https://huggingface.co/datasets/HuggingFaceM4/the_cauldron",
+    "quote": "Each of the publicly available sub-datasets present in the Cauldron are governed by specific licensing conditions. ... prompts, these are licensed under CC-BY-4.0.",
+    "checked": "2026-09-23",
+    "notes": "No YAML license field. The container grants nothing beyond prompts; each config inherits its upstream license (use the per-source entry). Known restricted configs: scienceqa, iconqa, tqa, tabmwp, dvqa (NC); chartqa, chart2text, raven, vistext (GPL); nlvr2 images research-only."
+  },
+  "synth_gates": {
+    "tier": "commercial-ok",
+    "license": "generated by deepseek-flash (DeepSeek Open Platform terms 4.2(3) permit training other models on outputs)",
+    "evidence_url": "https://platform.deepseek.com/terms",
+    "quote": "DeepSeek API terms, section 4.2(3): model outputs may be used to train other models",
+    "checked": "2026-09-24",
+    "notes": "synthetic gate questions with long criteria; labels from the same model in thinking mode"
+  }
+}

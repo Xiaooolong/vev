@@ -1,0 +1,340 @@
+{
+  "ccbench": {
+    "file": "evals/data/image/ccbench.jsonl",
+    "hf_id": "lmms-lab-encoder/MMBench",
+    "hf_config": "cc",
+    "hf_split": "test",
+    "hf_revision": "56ba1af8954932c4804bd3f522e05ed96e63b654",
+    "n_records_local": 509,
+    "n_records_full": 509,
+    "by_type": {
+      "choice": 509
+    },
+    "license": "commercial-ok",
+    "lang": "zh",
+    "notes": "License: open-compass/MMBench GitHub is Apache-2.0; HF card has no license field; images come from third-party sources. Only split is 'test' but it carries answers. 2,040 rows = 510 questions + CircularEval rotations (index >= 1e6), skipped. 1 question has answer 'CC' (not a label) and is skipped -> 509. lmms-lab/CCBench does not exist on HF; the 'cc' config of the MMBench mirror is used."
+  },
+  "cmmmu": {
+    "file": "evals/data/image/cmmmu.jsonl",
+    "hf_id": "m-a-p/CMMMU",
+    "hf_config": "all 6 configs",
+    "hf_split": "val",
+    "hf_revision": "d7ba0c8d5b73a45a0897ec29a9e841fab8acdde2",
+    "n_records_local": 674,
+    "n_records_full": 674,
+    "by_type": {
+      "choice": 586,
+      "noul": 88
+    },
+    "license": "commercial-ok",
+    "lang": "zh",
+    "notes": "900 val rows: 590 multiple-choice, 88 true/false, 222 fill-in (skipped). 4 multiple-choice with multi-letter answers (e.g. 'ABCD') skipped -> 586 choice + 88 noul (对=1, 错=0). Inline tags <img=\"file\"> in question/options rewritten to '<image N>' and images put in state under those keys in order of appearance; unreferenced images appended (meta.unreferenced_images). License: GitHub Apache-2.0, HF card has no field. n_records_full excludes rows whose images turn out missing (not checkable without downloading)."
+  },
+  "game_clip": {
+    "file": "evals/data/image/game_clip.jsonl",
+    "hf_id": "taesiri/VideoGameQA-Bench",
+    "hf_config": null,
+    "hf_split": "test",
+    "hf_revision": "2afbfdcc9cb84318845f348c023bb2e92b942e29",
+    "n_records_local": 686,
+    "n_records_full": 686,
+    "n_questions": 686,
+    "sha256": "fefc9d12dc44f7d8ff5bd57a4e6350f286eb3b609173d2f9ebe2a0c608705c84",
+    "by_type": {
+      "noul": 686
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "ClippingDetection/ParametricTest rows (synthetic white-sphere renders); instruction = upstream prompt minus the output-format tail. meta.cluster = media_source. 5 distinct instruction texts. Data license cc-by-4.0."
+  },
+  "game_glitch": {
+    "file": "evals/data/image/game_glitch.jsonl",
+    "hf_id": "taesiri/VideoGameQA-Bench",
+    "hf_config": null,
+    "hf_split": "test",
+    "hf_revision": "2afbfdcc9cb84318845f348c023bb2e92b942e29",
+    "n_records_local": 1000,
+    "n_records_full": 1000,
+    "n_questions": 1000,
+    "sha256": "7e561250d951487d9dc2e5f287f7642780996243e4c6b9267b63ada0b7f35551",
+    "by_type": {
+      "noul": 1000
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "VideoGameQA-Bench BugDetection/GlitchDetection single-image rows; instruction = upstream prompt minus the output-format tail (the definition of 'glitch' is the upstream one). meta.cluster = media_source. 1 distinct instruction texts. Data license cc-by-4.0."
+  },
+  "game_vr": {
+    "file": "evals/data/image/game_vr.jsonl",
+    "hf_id": "taesiri/VideoGameQA-Bench",
+    "hf_config": null,
+    "hf_split": "test",
+    "hf_revision": "2afbfdcc9cb84318845f348c023bb2e92b942e29",
+    "n_records_local": 250,
+    "n_records_full": 250,
+    "n_questions": 250,
+    "sha256": "deb50d0c4fb9e46ab4675d605b55fc62b178f9dc2417951efedce5fbab2072a1",
+    "by_type": {
+      "noul": 250
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "VisualRegression rows: state.reference / state.candidate; the upstream ACCEPTABLE/UNACCEPTABLE lists are the criteria. Unity subset (171) is all test_pass=false; Cutscene (79) 53/26. Diagnostic set: report Cutscene-only discrimination and Unity false-positive rate, not in the gate. 2 distinct instruction texts. Data license cc-by-4.0."
+  },
+  "glitch_type": {
+    "file": "evals/data/image/glitch_type.jsonl",
+    "hf_id": "glitchbench/GlitchBench",
+    "hf_config": null,
+    "hf_split": "validation",
+    "hf_revision": "4a8530a68293035b9372be947a6cb56374b3a390",
+    "n_records_local": 607,
+    "n_records_full": 607,
+    "n_questions": 607,
+    "sha256": "fd79e12359914af0c13c73605e751f2e7ad57a8a8e215ae610bfa7cdde2f1268",
+    "by_type": {
+      "choice": 607
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "4-way glitch-type choice; upstream type strings with/without 'Issues'/'Errors' merged. Class descriptions written by us (not upstream). Imbalanced 433/83/70/21: diagnostic only, read macro-F1. Every image is a glitch (no clean frames). MIT; screenshots belong to the games' publishers."
+  },
+  "hallusionbench": {
+    "file": "evals/data/image/hallusionbench.jsonl",
+    "hf_id": "lmms-lab-encoder/HallusionBench",
+    "hf_config": "default",
+    "hf_split": "image (non_image read and skipped)",
+    "hf_revision": "cd417161857aefb23d878d42cf1bb53aa9dd646f",
+    "n_records_local": 951,
+    "n_records_full": 951,
+    "by_type": {
+      "noul": 951
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "1,129 questions = 951 with a figure (split 'image', visual_input 1 = original figure, 2 = edited/illusion figure) + 178 text-only (split 'non_image', visual_input 0) which are skipped. gt_answer 1=yes, 0=no. Pair structure kept in meta.set_id/figure_id/question_id (same set_id+question_id across figure_id = the original/edited control pair); records id split is 'test'. One file per figure (346 figures). License BSD-3 (GitHub)."
+  },
+  "mjbench": {
+    "file": "evals/data/image/mjbench.jsonl",
+    "hf_id": "MJ-Bench/MJ-Bench",
+    "hf_config": "data_files=data/alignment.parquet",
+    "hf_split": "train",
+    "hf_revision": "4b9667374c71463f63ae663ddd88373d3ffc5ba9",
+    "n_records_local": 729,
+    "n_records_full": 729,
+    "by_type": {
+      "choice": 729
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "Subset 'alignment' (729 pairs) chosen because it is exactly 'which image follows the prompt'; safety (672) / quality (1,120, ~7 GB) / bias (1,548, different task) not converted. The file is a single 206 MB row group, so even --limit 30 downloads all of it. label = index of the preferred image (per MJ-Bench eval code); upstream 643:86 favours image0, so ~half the pairs are swapped by a stable hash (meta.swapped). Record split = 'alignment'. HF card: Apache-2.0."
+  },
+  "mmbench_cn": {
+    "file": "evals/data/image/mmbench_cn.jsonl",
+    "hf_id": "lmms-lab-encoder/MMBench",
+    "hf_config": "cn",
+    "hf_split": "dev",
+    "hf_revision": "56ba1af8954932c4804bd3f522e05ed96e63b654",
+    "n_records_local": 1164,
+    "n_records_full": 1164,
+    "by_type": {
+      "choice": 1164
+    },
+    "license": "commercial-ok",
+    "lang": "zh",
+    "notes": "License: open-compass/MMBench GitHub is Apache-2.0; HF card has no license field; images come from third-party sources. Chinese translation of the EN dev set (same 1,164 questions/images). dev has 4,329 rows incl. CircularEval rotations (index >= 1e6), skipped. 'nan' options dropped. hint prepended to state.context. test split has no answers."
+  },
+  "mmbench_en": {
+    "file": "evals/data/image/mmbench_en.jsonl",
+    "hf_id": "lmms-lab-encoder/MMBench",
+    "hf_config": "en",
+    "hf_split": "dev",
+    "hf_revision": "56ba1af8954932c4804bd3f522e05ed96e63b654",
+    "n_records_local": 1164,
+    "n_records_full": 1164,
+    "by_type": {
+      "choice": 1164
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "License: open-compass/MMBench GitHub is Apache-2.0; HF card has no license field; images come from third-party sources. dev has 4,329 rows = 1,164 questions + CircularEval rotations (index >= 1e6); rotations skipped (use run.py --perturb order instead). 'nan' options dropped (2-/3-option questions). hint prepended to the question in state.context. test split has no answers."
+  },
+  "mmmu": {
+    "file": "evals/data/image/mmmu.jsonl",
+    "hf_id": "MMMU/MMMU",
+    "hf_config": "all 30 subjects",
+    "hf_split": "validation",
+    "hf_revision": "98e6ac0cb9b7b2cd2c991b85a50762edc4aedc68",
+    "n_records_local": 847,
+    "n_records_full": 847,
+    "by_type": {
+      "choice": 847
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "validation only (test has no public answers); 53 open questions skipped -> 847. 2-9 options, labels A.. in option order. Images go into state under keys '<image N>' matching the tags in the text, ordered by first appearance in question then options (16 questions have images only inside options); images present but never referenced are appended after and listed in meta.unreferenced_images. 39 questions are multi-image. HF card: Apache-2.0."
+  },
+  "mmstar": {
+    "file": "evals/data/image/mmstar.jsonl",
+    "hf_id": "Lin-Chen/MMStar",
+    "hf_config": "val",
+    "hf_split": "val",
+    "hf_revision": "bc98d668301da7b14f648724866e57302778ab27",
+    "n_records_local": 1498,
+    "n_records_full": 1498,
+    "by_type": {
+      "choice": 1498
+    },
+    "license": "unknown",
+    "lang": "en",
+    "notes": "Options parsed out of the question text (two styles: 'Options: A: .., B: ..' and '[Choices:]\\n(A) ..'); 'nan' options dropped; MathVista answer-format hints are stripped. License not stated on HF card or GitHub; samples are drawn from other benchmarks (MMBench/SEED/AI2D/ScienceQA/MathVista/MMMU). Held-out."
+  },
+  "policy_cat": {
+    "file": "evals/data/image/policy_cat.jsonl",
+    "hf_id": "AIML-TUDA/LlavaGuard",
+    "hf_config": "test.csv",
+    "hf_split": "test",
+    "hf_revision": "6a3376099a76d115e8c244e60841d0949efedb01",
+    "n_records_local": 659,
+    "n_records_full": 734,
+    "n_questions": 659,
+    "sha256": "43106ea1306bd77068b9d0bc64381d088de916d9859ee1cf76b78895c02b4045",
+    "by_type": {
+      "choice": 659
+    },
+    "license": "unknown",
+    "lang": "en",
+    "notes": "LlavaGuard test.csv: 734 rows over 446 images, 75 rows skipped (image unavailable); 144 rows in Safe/Unsafe flip pairs (same image, rewritten policy). policy_mod: instruction = the row's policy categories (upstream prompt cut before 'Assessment Steps', '<image>' placeholder removed) + the question; Unsafe = 1; meta.upstream_prompt keeps the authors' full prompt. policy_cat: 10-way category of the content, no policy text (diagnostic). Images are real unsafe content: kept local, never redistributed. Annotations apache-2.0; images under their own terms."
+  },
+  "policy_mod": {
+    "file": "evals/data/image/policy_mod.jsonl",
+    "hf_id": "AIML-TUDA/LlavaGuard",
+    "hf_config": "test.csv",
+    "hf_split": "test",
+    "hf_revision": "6a3376099a76d115e8c244e60841d0949efedb01",
+    "n_records_local": 659,
+    "n_records_full": 734,
+    "n_questions": 659,
+    "sha256": "0015a6f74ad20677b7dfe2e97c311c19711ef871169d08f7a084d8c88ad30a86",
+    "by_type": {
+      "noul": 659
+    },
+    "license": "unknown",
+    "lang": "en",
+    "notes": "LlavaGuard test.csv: 734 rows over 446 images, 75 rows skipped (image unavailable); 144 rows in Safe/Unsafe flip pairs (same image, rewritten policy). policy_mod: instruction = the row's policy categories (upstream prompt cut before 'Assessment Steps', '<image>' placeholder removed) + the question; Unsafe = 1; meta.upstream_prompt keeps the authors' full prompt. policy_cat: 10-way category of the content, no policy text (diagnostic). Images are real unsafe content: kept local, never redistributed. Annotations apache-2.0; images under their own terms."
+  },
+  "pope": {
+    "file": "evals/data/image/pope.jsonl",
+    "hf_id": "lmms-lab-encoder/POPE",
+    "hf_config": "default",
+    "hf_split": "test",
+    "hf_revision": "4db1276663dfa5eb8ad16a52d24c31a09e470896",
+    "n_records_local": 9000,
+    "n_records_full": 9000,
+    "by_type": {
+      "noul": 9000
+    },
+    "license": "unknown",
+    "lang": "en",
+    "notes": "3 x 3,000 questions (meta.category = adversarial/popular/random) on 500 COCO val2014 images; each image is stored once (images/pope/<COCO name>.jpg) and shared. yes=1, no=0. meta.negated_questions gives 'Is there no X in the image?'. License: POPE code is MIT, no data license stated; images are COCO (Flickr terms) -> unknown."
+  },
+  "t2i_elem": {
+    "file": "evals/data/image/t2i_elem.jsonl",
+    "hf_id": "DY-Evalab/EvalMuse",
+    "hf_config": "train_list.json + images.zip",
+    "hf_split": "train",
+    "hf_revision": "fd2087b4bde6486ee1358a4ee546e3ee6c1860a6",
+    "n_records_local": 350,
+    "n_records_full": 32717,
+    "n_questions": 1027,
+    "sha256": "a106f15826c7bd4fe4d72ec2427f95bb1e052fd8f3329ff02729fed875d5067e",
+    "by_type": {
+      "noul": 1027
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "Held-out block of 120 prompt_ids (seed 0, 10 prompts removed because their text occurs in the training t2i sources), up to 4 generators per prompt, 480 images. Element targets = 3-vote share; t2i_elem keeps unanimous elements only, t2i_elem_soft the split votes (Brier only). Score target = vote histogram over 5 levels. Prompt ids in t2i_align_heldout_prompts.json (exclude from any EvalMuse training use). BSD-3."
+  },
+  "t2i_elem_soft": {
+    "file": "evals/data/image/t2i_elem_soft.jsonl",
+    "hf_id": "DY-Evalab/EvalMuse",
+    "hf_config": "train_list.json + images.zip",
+    "hf_split": "train",
+    "hf_revision": "fd2087b4bde6486ee1358a4ee546e3ee6c1860a6",
+    "n_records_local": 316,
+    "n_records_full": 32717,
+    "n_questions": 835,
+    "sha256": "7f328cf4dea9fbdbb221208ab7c582499b030a83505605daa700c91c21b26b90",
+    "by_type": {
+      "noul": 835
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "Held-out block of 120 prompt_ids (seed 0, 10 prompts removed because their text occurs in the training t2i sources), up to 4 generators per prompt, 480 images. Element targets = 3-vote share; t2i_elem keeps unanimous elements only, t2i_elem_soft the split votes (Brier only). Score target = vote histogram over 5 levels. Prompt ids in t2i_align_heldout_prompts.json (exclude from any EvalMuse training use). BSD-3."
+  },
+  "t2i_score": {
+    "file": "evals/data/image/t2i_score.jsonl",
+    "hf_id": "DY-Evalab/EvalMuse",
+    "hf_config": "train_list.json + images.zip",
+    "hf_split": "train",
+    "hf_revision": "fd2087b4bde6486ee1358a4ee546e3ee6c1860a6",
+    "n_records_local": 480,
+    "n_records_full": 32717,
+    "n_questions": 480,
+    "sha256": "8349c95196cf26a340e46a695b4e4fd829480248cb531fade9bfb1b726419653",
+    "by_type": {
+      "score": 480
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "Held-out block of 120 prompt_ids (seed 0, 10 prompts removed because their text occurs in the training t2i sources), up to 4 generators per prompt, 480 images. Element targets = 3-vote share; t2i_elem keeps unanimous elements only, t2i_elem_soft the split votes (Brier only). Score target = vote histogram over 5 levels. Prompt ids in t2i_align_heldout_prompts.json (exclude from any EvalMuse training use). BSD-3."
+  },
+  "ui_input": {
+    "file": "evals/data/image/ui_input.jsonl",
+    "hf_id": "mllmTeam/MobileViews",
+    "hf_config": "MobileViews_Screenshots_ViewHierarchies/Parquets",
+    "hf_split": "parquet",
+    "hf_revision": "c734715eb90a8f3ac0c80973f93ee63950e5a8c8",
+    "n_records_local": 800,
+    "n_records_full": null,
+    "n_questions": 800,
+    "sha256": "49fea5d6b4386ce56ca1ea3ac84e062b713a9dd1fc721aecf83ae142528af0fd",
+    "by_type": {
+      "noul": 800
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "Rule labels from the view hierarchy (visible + on-screen + non-empty bounds; >= 15 visible nodes; screens with AlertDialog ids or Dialog/Popup classes skipped; per-app near-duplicates removed by dHash<=2; <= 3 screens per app per set; classes balanced 50/50). Toggle whitelist ['AppCompatCheckBox', 'CheckBox', 'MaterialCheckBox', 'MaterialSwitch', 'Switch', 'SwitchCompat', 'SwitchMaterial']; screens with other checkables (tabs, radio, CheckedTextView) skipped; screens where a toggle or input box is covered >=50% by a later-drawn leaf (dropdown, overlay) skipped. Input negatives exclude WebView screens and search/hint text. seed=0; row groups: MobileViews_150001-291197.parquet#214, MobileViews_400000-522301.parquet#221, MobileViews_0-150000.parquet#231, MobileViews_400000-522301.parquet#191, MobileViews_0-150000.parquet#253, MobileViews_0-150000.parquet#4, MobileViews_400000-522301.parquet#72, MobileViews_0-150000.parquet#175, MobileViews_0-150000.parquet#109, MobileViews_0-150000.parquet#34, MobileViews_150001-291197.parquet#179, MobileViews_400000-522301.parquet#117, MobileViews_150001-291197.parquet#20, MobileViews_150001-291197.parquet#226, MobileViews_400000-522301.parquet#163, MobileViews_400000-522301.parquet#147, MobileViews_0-150000.parquet#168, MobileViews_400000-522301.parquet#4, MobileViews_0-150000.parquet#152, MobileViews_150001-291197.parquet#1, MobileViews_0-150000.parquet#92, MobileViews_0-150000.parquet#54, MobileViews_0-150000.parquet#211, MobileViews_150001-291197.parquet#140, MobileViews_300000-400000.parquet#2, MobileViews_0-150000.parquet#25, MobileViews_400000-522301.parquet#192, MobileViews_0-150000.parquet#278, MobileViews_150001-291197.parquet#72, MobileViews_300000-400000.parquet#26, MobileViews_400000-522301.parquet#96, MobileViews_400000-522301.parquet#183, MobileViews_150001-291197.parquet#83, MobileViews_150001-291197.parquet#116, MobileViews_150001-291197.parquet#68, MobileViews_300000-400000.parquet#12. MIT; screenshots belong to the apps."
+  },
+  "ui_toggle": {
+    "file": "evals/data/image/ui_toggle.jsonl",
+    "hf_id": "mllmTeam/MobileViews",
+    "hf_config": "MobileViews_Screenshots_ViewHierarchies/Parquets",
+    "hf_split": "parquet",
+    "hf_revision": "c734715eb90a8f3ac0c80973f93ee63950e5a8c8",
+    "n_records_local": 800,
+    "n_records_full": null,
+    "n_questions": 800,
+    "sha256": "e289f460bc0d1c0b7340bcfa8c622cb2bc7ab307d4bab1b2e6c8ee69d6771454",
+    "by_type": {
+      "noul": 800
+    },
+    "license": "commercial-ok",
+    "lang": "en",
+    "notes": "Rule labels from the view hierarchy (visible + on-screen + non-empty bounds; >= 15 visible nodes; screens with AlertDialog ids or Dialog/Popup classes skipped; per-app near-duplicates removed by dHash<=2; <= 3 screens per app per set; classes balanced 50/50). Toggle whitelist ['AppCompatCheckBox', 'CheckBox', 'MaterialCheckBox', 'MaterialSwitch', 'Switch', 'SwitchCompat', 'SwitchMaterial']; screens with other checkables (tabs, radio, CheckedTextView) skipped; screens where a toggle or input box is covered >=50% by a later-drawn leaf (dropdown, overlay) skipped. Input negatives exclude WebView screens and search/hint text. seed=0; row groups: MobileViews_150001-291197.parquet#214, MobileViews_400000-522301.parquet#221, MobileViews_0-150000.parquet#231, MobileViews_400000-522301.parquet#191, MobileViews_0-150000.parquet#253, MobileViews_0-150000.parquet#4, MobileViews_400000-522301.parquet#72, MobileViews_0-150000.parquet#175, MobileViews_0-150000.parquet#109, MobileViews_0-150000.parquet#34, MobileViews_150001-291197.parquet#179, MobileViews_400000-522301.parquet#117, MobileViews_150001-291197.parquet#20, MobileViews_150001-291197.parquet#226, MobileViews_400000-522301.parquet#163, MobileViews_400000-522301.parquet#147, MobileViews_0-150000.parquet#168, MobileViews_400000-522301.parquet#4, MobileViews_0-150000.parquet#152, MobileViews_150001-291197.parquet#1, MobileViews_0-150000.parquet#92, MobileViews_0-150000.parquet#54, MobileViews_0-150000.parquet#211, MobileViews_150001-291197.parquet#140, MobileViews_300000-400000.parquet#2, MobileViews_0-150000.parquet#25, MobileViews_400000-522301.parquet#192, MobileViews_0-150000.parquet#278, MobileViews_150001-291197.parquet#72, MobileViews_300000-400000.parquet#26, MobileViews_400000-522301.parquet#96, MobileViews_400000-522301.parquet#183, MobileViews_150001-291197.parquet#83, MobileViews_150001-291197.parquet#116, MobileViews_150001-291197.parquet#68, MobileViews_300000-400000.parquet#12. MIT; screenshots belong to the apps."
+  },
+  "vl_rewardbench": {
+    "file": "evals/data/image/vl_rewardbench.jsonl",
+    "hf_id": "MMInstruction/VL-RewardBench",
+    "hf_config": "default",
+    "hf_split": "test",
+    "hf_revision": "0e6e62701eba92818a69ce95af0ed7aa0648b176",
+    "n_records_local": 1247,
+    "n_records_full": 1247,
+    "by_type": {
+      "choice": 1247
+    },
+    "license": "non-commercial",
+    "lang": "en",
+    "notes": "human_ranking [0,1] = first response preferred. Upstream order is 1,226:21 in favour of the first response, so the pair is swapped for ~half the rows by a stable hash of the id (meta.swapped). License: HF tag says MIT but the card says 'Research use only ... restricted by the license agreements of GPT-4o and Claude' -> non-commercial."
+  }
+}

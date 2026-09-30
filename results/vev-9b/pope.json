@@ -1,0 +1,25 @@
+{
+  "set": "pope",
+  "model": "vev-9b",
+  "records_sha256": "d3732c255b33597f2fb54e5d85a8653db77ca99d540e02ac71879cf5629a3158",
+  "n": 9000,
+  "metrics": {
+    "n_records": 9000,
+    "n_questions": 9000,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.8971111111111111,
+    "macro_f1": 0.896527351642521,
+    "brier": 0.16016528547692518,
+    "nll": 0.2823767877434271,
+    "ece": 0.03551497629939364,
+    "ece_maxprob": 0.03551497629939364,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.8075283380351618,
+    "confidence_distinct": 5163
+  }
+}

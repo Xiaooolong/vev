@@ -1,0 +1,25 @@
+{
+  "set": "jevbench",
+  "model": "vev-4b",
+  "records_sha256": "c05c93a92cf7693ba0cdabf1bfde24ba1416ec3bd3c8e637f11863070749e365",
+  "n": 231,
+  "metrics": {
+    "n_records": 231,
+    "n_questions": 231,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.7662337662337663,
+    "macro_f1": 0.6357796655668996,
+    "brier": 0.29512932279253734,
+    "nll": 0.502057259504473,
+    "ece": 0.06044578857983309,
+    "ece_maxprob": 0.0347693535051756,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.84170328520611,
+    "confidence_distinct": 231
+  }
+}

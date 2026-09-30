@@ -1,0 +1,25 @@
+{
+  "set": "judgekit",
+  "model": "vev-9b",
+  "records_sha256": "9580456dc885c929f876d0cef6ad499e19d0797430013cf4c33bb49c0fb84859",
+  "n": 130,
+  "metrics": {
+    "n_records": 130,
+    "n_questions": 130,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.9384615384615385,
+    "macro_f1": 0.9252128757412407,
+    "brier": 0.10433349101994484,
+    "nll": 0.18000871407916064,
+    "ece": 0.07035521475168374,
+    "ece_maxprob": 0.026382664533761827,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.875,
+    "confidence_distinct": 130
+  }
+}

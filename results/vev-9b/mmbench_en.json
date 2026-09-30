@@ -1,0 +1,25 @@
+{
+  "set": "mmbench_en",
+  "model": "vev-9b",
+  "records_sha256": "6706ad178e390de0f25e8e1965f3971015eca6ff7aeb6f79e3bb04397794dc1f",
+  "n": 1164,
+  "metrics": {
+    "n_records": 1164,
+    "n_questions": 1164,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.9020618556701031,
+    "macro_f1": 0.8993031493851988,
+    "brier": 0.14221336723533876,
+    "nll": 0.28480915931328254,
+    "ece": 0.054683179704457796,
+    "ece_maxprob": 0.024383857846260078,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.9147869674185464,
+    "confidence_distinct": 1161
+  }
+}

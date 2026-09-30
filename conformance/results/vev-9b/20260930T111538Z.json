@@ -1,0 +1,353 @@
+{
+  "target": "vev-9b",
+  "base_url": "http://127.0.0.1:8540",
+  "model": "jev-latest",
+  "started": "2026-09-30T11:15:34.418541+00:00",
+  "observations": {
+    "sdk.python.version": "0.7.1",
+    "sdk.python.answers": {
+      "is_urgent": 0.9858250617980957,
+      "department": {
+        "choice": "billing",
+        "confidence": 0.5217468440532684,
+        "probabilities": {
+          "billing": 0.681164562702179,
+          "technical": 0.3096676468849182,
+          "sales": 0.009167748503386974
+        }
+      },
+      "frustration": {
+        "score": 1.8463495075702667,
+        "confidence": 0.7731336653232574
+      }
+    },
+    "sdk.python.models": "<typesafe_sdk._core.client.sync.models.Models object at 0x155552883b60>",
+    "langchain.answers": {
+      "is_urgent": 0.9978442192077637,
+      "department": "billing",
+      "frustration": 1.8463495075702667
+    },
+    "determinism.max_delta": 0.0,
+    "determinism.distinct_outputs": 1,
+    "determinism.latencies_ms": [
+      106,
+      104,
+      108,
+      103,
+      104
+    ],
+    "err.missing_questions.status": 422,
+    "err.missing_questions.body": {
+      "detail": [
+        {
+          "type": "missing",
+          "loc": [
+            "body",
+            "questions"
+          ],
+          "msg": "Field required",
+          "input": {
+            "state": "Help! My payouts have been failing for 3 days. I already emailed support twice and nobody answered. If this is not fixed by tomorrow I am closing my account.",
+            "model": "jev-latest"
+          }
+        }
+      ]
+    },
+    "err.empty_questions.status": 422,
+    "err.empty_questions.body": {
+      "detail": [
+        {
+          "type": "too_short",
+          "loc": [
+            "body",
+            "questions"
+          ],
+          "msg": "Dictionary should have at least 1 item after validation, not 0",
+          "input": {},
+          "ctx": {
+            "field_type": "Dictionary",
+            "min_length": 1,
+            "actual_length": 0
+          }
+        }
+      ]
+    },
+    "err.unknown_type.status": 400,
+    "err.unknown_type.body": {
+      "detail": {
+        "error_type": "invalid_request_error",
+        "message": "questions.q.type: unknown question type 'rank'; expected one of ['noul', 'choice', 'score']"
+      }
+    },
+    "err.choice_zero.status": 400,
+    "err.choice_zero.body": {
+      "detail": {
+        "error_type": "invalid_request_error",
+        "message": "questions.q.criteria: choice needs at least 1 option"
+      }
+    },
+    "err.choice_no_criteria.status": 422,
+    "err.choice_no_criteria.body": {
+      "detail": [
+        {
+          "type": "value_error",
+          "loc": [
+            "body",
+            "questions",
+            "q"
+          ],
+          "msg": "Value error, choice questions require `criteria` as an object of label -> description",
+          "input": {
+            "type": "choice",
+            "instructions": "Pick."
+          },
+          "ctx": {
+            "error": {}
+          }
+        }
+      ]
+    },
+    "err.score_one_level.status": 200,
+    "err.score_one_level.body": {
+      "model": "vev-9b",
+      "answers": {
+        "q": {
+          "type": "score",
+          "score": 0.0,
+          "confidence": 1.0,
+          "probabilities": {
+            "0": 1.0
+          },
+          "legend": {
+            "0": "only"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 111,
+        "output_tokens": 35
+      }
+    },
+    "err.score_eleven.status": 400,
+    "err.score_eleven.body": {
+      "detail": {
+        "error_type": "invalid_request_error",
+        "message": "questions.q.criteria: too many score levels (11); this model supports at most 10"
+      }
+    },
+    "err.choice_256.status": 400,
+    "err.choice_256.body": {
+      "detail": {
+        "error_type": "invalid_request_error",
+        "message": "questions.q.criteria: too many choices (256); this model supports at most 255"
+      }
+    },
+    "err.unknown_model.status": 400,
+    "err.unknown_model.body": {
+      "detail": {
+        "error_type": "api_usage_error",
+        "message": "Unknown model: no-such-model-xyz"
+      }
+    },
+    "err.malformed_json.status": 422,
+    "err.malformed_json.body": {
+      "detail": [
+        {
+          "type": "json_invalid",
+          "loc": [
+            "body",
+            29
+          ],
+          "msg": "JSON decode error",
+          "input": {},
+          "ctx": {
+            "error": "Expecting property name enclosed in double quotes"
+          }
+        }
+      ]
+    },
+    "err.wrong_key.status": 200,
+    "err.wrong_key.body": {
+      "model": "vev-9b",
+      "answers": {
+        "is_urgent": {
+          "type": "noul",
+          "noul": 0.9858250617980957
+        }
+      },
+      "usage": {
+        "input_tokens": 111,
+        "output_tokens": 32
+      }
+    },
+    "err.body_shape": {
+      "detail": {
+        "error_type": "invalid_request_error",
+        "message": "questions.q.criteria: choice needs at least 1 option"
+      }
+    },
+    "isolation.batched_vs_separate.deltas": {
+      "is_urgent": 0.0,
+      "department": 0.0,
+      "frustration": 0.0,
+      "refund": 0.0,
+      "tone": 0.0
+    },
+    "isolation.batched_vs_separate.max": 0.0,
+    "isolation.question_order.max": 0.0,
+    "isolation.visibility": {
+      "alone": 0.021831298246979713,
+      "with_secret_sibling": 0.021831298246979713,
+      "secret_in_state": 0.9318981766700745
+    },
+    "models.status": 200,
+    "models.body": {
+      "models": [
+        {
+          "name": "vev-9b",
+          "description": "Zero-training baseline: Qwen/Qwen3.5-9B read directly from next-token logits over constrained answer tokens (choice letters, Yes/No, level digits). One forward pass per question, no decoding. confidence = (p_max - 1/K) / (1 - 1/K). output_tokens is informational only.",
+          "release_date": "2026-09-23T00:00:00Z",
+          "limits": {
+            "max_images": 8,
+            "max_image_pixels": 1048576,
+            "max_state_tokens": 32768,
+            "max_request_tokens": 65536,
+            "max_score_levels": 10,
+            "max_choice_options": 255
+          },
+          "aliases": [
+            "vev-latest",
+            "jev-latest",
+            "latest"
+          ],
+          "temperatures": {
+            "choice": 1.0,
+            "noul": 1.0,
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "healthz.status": 200,
+    "three_types.status": 200,
+    "three_types.latency_ms": 104,
+    "three_types.body": {
+      "model": "vev-9b",
+      "answers": {
+        "is_urgent": {
+          "type": "noul",
+          "noul": 0.9858250617980957
+        },
+        "department": {
+          "type": "choice",
+          "choice": "billing",
+          "confidence": 0.5217468440532684,
+          "probabilities": {
+            "billing": 0.681164562702179,
+            "technical": 0.3096676468849182,
+            "sales": 0.009167748503386974
+          }
+        },
+        "frustration": {
+          "type": "score",
+          "score": 1.8463495075702667,
+          "confidence": 0.7731336653232574,
+          "probabilities": {
+            "0": 0.0024062988813966513,
+            "1": 0.14883795380592346,
+            "2": 0.8487557768821716
+          },
+          "legend": {
+            "0": "Calm",
+            "1": "Frustrated",
+            "2": "Very angry"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 308,
+        "output_tokens": 271
+      }
+    },
+    "request_id_header": "req_2b99f09e782441878dc1f8d12b2199b0",
+    "alias.jev-latest.status": 200,
+    "alias.jev-latest.model_echo": "vev-9b",
+    "model_missing.status": 422,
+    "state_object.status": 200,
+    "state_array.status": 200,
+    "state_null.status": 422,
+    "state_null.body": {
+      "detail": [
+        {
+          "type": "value_error",
+          "loc": [
+            "body",
+            "state"
+          ],
+          "msg": "Value error, state must not be null",
+          "input": null,
+          "ctx": {
+            "error": {}
+          }
+        }
+      ]
+    },
+    "missing_instructions.status": 200,
+    "missing_instructions.body": {
+      "model": "vev-9b",
+      "answers": {
+        "is_urgent": {
+          "type": "noul",
+          "noul": 0.9408044815063477
+        }
+      },
+      "usage": {
+        "input_tokens": 102,
+        "output_tokens": 32
+      }
+    },
+    "noul_no_criteria.status": 200,
+    "structured_criteria.status": 200,
+    "choice_single.status": 200,
+    "choice_single.body": {
+      "model": "vev-9b",
+      "answers": {
+        "only": {
+          "type": "choice",
+          "choice": "a",
+          "confidence": 1.0,
+          "probabilities": {
+            "a": 1.0
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 108,
+        "output_tokens": 26
+      }
+    },
+    "choice_fifty.status": 200,
+    "choice_fifty.latency_ms": 45,
+    "choice_fifty.top": "technical",
+    "score_ten.status": 200,
+    "many_questions.status": 200,
+    "many_questions.latency_ms": 797,
+    "image_object.status": 200,
+    "image_object.body": {
+      "model": "vev-9b",
+      "answers": {
+        "has_square": {
+          "type": "noul",
+          "noul": 0.9052219986915588
+        }
+      },
+      "usage": {
+        "input_tokens": 144,
+        "output_tokens": 31
+      }
+    },
+    "image_object.supports_images": true
+  },
+  "finished": "2026-09-30T11:15:38.238798+00:00",
+  "exit_status": 0
+}

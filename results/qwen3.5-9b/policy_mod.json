@@ -1,0 +1,25 @@
+{
+  "set": "policy_mod",
+  "model": "qwen3.5-9b",
+  "records_sha256": "0015a6f74ad20677b7dfe2e97c311c19711ef871169d08f7a084d8c88ad30a86",
+  "n": 659,
+  "metrics": {
+    "n_records": 659,
+    "n_questions": 659,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.6661608497723824,
+    "macro_f1": 0.5112594390507011,
+    "brier": 0.5581728577234499,
+    "nll": 1.1174054362802024,
+    "ece": 0.2640691694050281,
+    "ece_maxprob": 0.2640691694050281,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.7486539656243528,
+    "confidence_distinct": 653
+  }
+}

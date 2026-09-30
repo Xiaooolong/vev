@@ -1,0 +1,25 @@
+{
+  "set": "kev_transfer_v4",
+  "model": "vev-4b",
+  "records_sha256": "c2e382f0e18e4f3b106cb8b5350c80125222f44d8dd2e1f9991267eaa03d4e2e",
+  "n": 1528,
+  "metrics": {
+    "n_records": 1528,
+    "n_questions": 1528,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.7761780104712042,
+    "macro_f1": 0.639012020472584,
+    "brier": 0.3045593549895472,
+    "nll": 0.555259176235291,
+    "ece": 0.06470254125838697,
+    "ece_maxprob": 0.04878093830111109,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.8130750569509778,
+    "confidence_distinct": 1477
+  }
+}

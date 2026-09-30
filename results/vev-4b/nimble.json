@@ -1,0 +1,25 @@
+{
+  "set": "nimble",
+  "model": "vev-4b",
+  "records_sha256": "97718b460aa62e546fd898f1a8ff16bfc85917cdbb93e383edcc85ff721d521a",
+  "n": 324,
+  "metrics": {
+    "n_records": 324,
+    "n_questions": 324,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.7067901234567902,
+    "macro_f1": 0.5274882362840979,
+    "brier": 0.4106192157734781,
+    "nll": 0.7008613667622104,
+    "ece": 0.08338603485459956,
+    "ece_maxprob": 0.10787555979518797,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.722040910135601,
+    "confidence_distinct": 324
+  }
+}

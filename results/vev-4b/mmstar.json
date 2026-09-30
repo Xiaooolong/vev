@@ -1,0 +1,25 @@
+{
+  "set": "mmstar",
+  "model": "vev-4b",
+  "records_sha256": "31d9170e7d8fc3d6024eea76c629bfe5c906ddb2bac84f038af0fe178e1c4172",
+  "n": 1498,
+  "metrics": {
+    "n_records": 1498,
+    "n_questions": 1498,
+    "order_flip_rate": null,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.6268357810413885,
+    "macro_f1": 0.6247088070786723,
+    "brier": 0.48808255603313044,
+    "nll": 0.8701997267395668,
+    "ece": 0.09325595159609153,
+    "ece_maxprob": 0.06185702428480332,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.7234278463938915,
+    "confidence_distinct": 1483
+  }
+}

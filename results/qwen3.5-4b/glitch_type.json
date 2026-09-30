@@ -1,0 +1,25 @@
+{
+  "set": "glitch_type",
+  "model": "qwen3.5-4b",
+  "records_sha256": "fd79e12359914af0c13c73605e751f2e7ad57a8a8e215ae610bfa7cdde2f1268",
+  "n": 607,
+  "metrics": {
+    "n_records": 607,
+    "n_questions": 607,
+    "order_flip_rate": 0.22240527182866557,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": null,
+    "jitter_max_dp": null,
+    "jitter_flip_rate": null,
+    "negation_gap": null,
+    "accuracy": 0.700164744645799,
+    "macro_f1": 0.5401570862768823,
+    "brier": 0.4002815731286648,
+    "nll": 0.7333608324444302,
+    "ece": 0.20193321223052105,
+    "ece_maxprob": 0.07832409370279392,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.7643180349062701,
+    "confidence_distinct": 607
+  }
+}

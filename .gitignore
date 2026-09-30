@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+.env
+.pytest_cache/
+.ruff_cache/
+evals/data/
+data/build/
+data/raw/
+data/images/
+conformance/results/*/
+!conformance/results/vev-4b/
+!conformance/results/vev-9b/
+runs/

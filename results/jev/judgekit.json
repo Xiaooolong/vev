@@ -1,0 +1,22 @@
+{
+  "set": "judgekit",
+  "model": "jev",
+  "records_sha256": "9580456dc885c929f876d0cef6ad499e19d0797430013cf4c33bb49c0fb84859",
+  "n": 130,
+  "metrics": {
+    "n_records": 130,
+    "n_questions": 130,
+    "order_flip_rate": 0.015384615384615385,
+    "batched_vs_separate_max_dp": null,
+    "repeat_max_dp": 0.09,
+    "negation_gap": null,
+    "accuracy": 0.9615384615384616,
+    "macro_f1": 0.9633087500734558,
+    "brier": 0.05134307692307692,
+    "nll": 0.08573187995070194,
+    "ece": 0.05407692307692358,
+    "ece_noise_floor": 0.0,
+    "auroc_confidence": 0.9696,
+    "confidence_distinct": 28
+  }
+}

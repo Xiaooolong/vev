@@ -1,0 +1,15 @@
+name: Client compatibility
+description: A client or SDK written for /v1/systemone fails against Vev
+body:
+  - type: input
+    attributes:
+      label: Client and version
+      description: e.g. typesafe-sdk 0.7.1
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Call and error
+      description: The code you ran and what it returned.
+    validations:
+      required: true
