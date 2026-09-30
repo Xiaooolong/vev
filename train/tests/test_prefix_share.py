@@ -59,7 +59,7 @@ CKPT = os.environ.get("VEV_TEST_CKPT")
 
 @pytest.mark.skipif(not CKPT or not torch.cuda.is_available() or not Path(CKPT or ".").is_dir(),
                     reason="set VEV_TEST_CKPT=<checkpoint dir> (needs CUDA)")
-def test_prefix_share_matches_per_row_fp32():
+def test_batched_questions_match_single_questions_fp32():
     from vev.model import CheckpointEngine
 
     eng = CheckpointEngine(CKPT, dtype="fp32")
@@ -71,13 +71,22 @@ def test_prefix_share_matches_per_row_fp32():
     def probs(r):
         return {k: [a["noul"]] if a["type"] == "noul" else list(a["probabilities"].values()) for k, a in r.answers.items()}
 
-    eng.prefix_min_tokens = 10**9
-    old = eng.run(state, qs)
-    eng.prefix_min_tokens = 0
-    new = eng.run(state, qs)
-    assert new.input_tokens == old.input_tokens and new.extensions["tokens"] == old.extensions["tokens"]
-    po, pn = probs(old), probs(new)
+    def gap(a, b):
+        return max(abs(x - y) for k in a for x, y in zip(a[k], b[k]))
+
+    def alone(prefix_min_tokens):
+        eng.prefix_min_tokens = prefix_min_tokens
+        return {k: probs(eng.run(state, {k: q}))[k] for k, q in qs.items()}
+
+    def together(batch_prefix_min_tokens, questions=qs):
+        eng.batch_prefix_min_tokens = batch_prefix_min_tokens
+        return probs(eng.run(state, questions))
+
+    single_shared, single_rows = alone(0), alone(10**9)
+    batch_shared, batch_rows = together(0), together(10**9)
+    assert gap(batch_shared, single_shared) <= 1e-4
+    assert gap(batch_rows, single_rows) <= 1e-4
     # the cached and the full-row forward are different kernel paths: at most 1e-4 on vev-4b, 2.5e-4 on vev-9b
-    assert max(abs(x - y) for k in po for x, y in zip(po[k], pn[k])) <= 1e-3
-    alone = probs(eng.run(state, {"tone": qs["tone"]}))["tone"]
-    assert alone == pn["tone"]  # the shared prefix depends on the state only: exact isolation
+    assert gap(batch_shared, batch_rows) <= 1e-3
+    reordered = together(0, dict(reversed(list(qs.items()))))
+    assert reordered == batch_shared  # rows are ordered by (length, name), not by request order
