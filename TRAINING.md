@@ -34,9 +34,14 @@ What the flags do:
 - `--anchor-kl 0.3`: on every training row, a KL term keeps the adapted answer distribution close to the base
   model's. This limits drift on question types that are not in the training data.
 - `--anchor-build ... --anchor-weight 2`: an extra set of 10,123 unlabeled rows used only for that KL term, in
-  question shapes the training data does not cover (for example generic instructions such as "Text
-  classification benchmark."). It is published as a dataset next to the models.
+  question shapes the training data does not cover (for example generic instructions such as "Classify the
+  text." or options listed without descriptions). It is published as the dataset
+  [CountingSheep/vev-anchor-v3](https://huggingface.co/datasets/CountingSheep/vev-anchor-v3).
 - `--limit 100000`: 100,000 training records sampled from the 716,789 in the build.
+
+Everything else uses the defaults in `train/train.py`, including a Brier loss term (weight 0.1). The build applies
+the augmentations recorded in `augment_config` of `data/manifest/v1-research.json`: options are shuffled on every
+row, and negated questions, distractor hints and injected instructions are added to a fraction of rows.
 
 The full argument list of each run is in `train_args` inside the released `vev_pointer.json`.
 
@@ -56,7 +61,7 @@ public sources: 431,449 image records and 331,371 text records, 620,975 English 
 is converted into typed questions by the scripts in `data/sources/`. The license of each source was checked by
 hand; the evidence and quotes are in `data/licenses.json`.
 
-Six sources are research-only or non-commercial and eleven state no license, which is why the weights are released
+Six sources are research-only or non-commercial and eleven have no clear license for their data (tier unknown), which is why the weights are released
 under CC BY-NC 4.0. `data.build --allow commercial-ok` builds a mixture from the permissive sources only; no model
 has been trained on it yet.
 
@@ -95,7 +100,7 @@ has been trained on it yet.
 | plotqa | image | 16,555 | commercial-ok | CC BY 4.0 (data); code MIT |
 | sst5 | text | 8,878 | unknown | unspecified |
 | stsb | text | 5,998 | unknown | unspecified (GLUE: refer to original licenses) |
-| sugarcrepe | image | 0 | commercial-ok | MIT |
+| sugarcrepe | image | 0 | commercial-ok | MIT (all records removed by deduplication against evaluation images) |
 | textvqa | image | 20,630 | commercial-ok | CC BY 4.0 (annotations); images Open Images (listed CC BY 2.0) |
 | tnews | text | 33,048 | unknown | unspecified |
 | trec | text | 6,029 | unknown | unspecified |
@@ -108,7 +113,7 @@ has been trained on it yet.
 ## What cannot be rebuilt exactly
 
 - The anchor set `anchor-v3` combines three parts. Two of them come from builders that are not in this
-  repository: synthetic gate questions whose states were written by DeepSeek (deepseek-flash, used under DeepSeek's
+  repository: synthetic judgment requests whose states were written by DeepSeek (deepseek-flash, used under DeepSeek's
   terms, which allow training on outputs) and a short-question set. Use the published copy of `anchor-v3`.
 - Sources were downloaded between 22 and 24 September 2026 and most are not pinned to a revision. The
   `raw_sha256` of every converted source is in `data/manifest/v1-research.json`, so a rebuild can be checked, but

@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir .
 
 EXPOSE 8009
 ENTRYPOINT ["vev", "serve", "--host", "0.0.0.0", "--port", "8009"]
-CMD ["--model", "OWNER/vev-4b"]
+CMD ["--model", "CountingSheep/vev-4b"]

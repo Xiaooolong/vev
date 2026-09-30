@@ -41,7 +41,7 @@ vev = "vev.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/Xiaooolong/vev"
-Models = "https://huggingface.co/OWNER"
+Models = "https://huggingface.co/CountingSheep"
 Issues = "https://github.com/Xiaooolong/vev/issues"
 
 [tool.hatch.version]

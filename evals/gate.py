@@ -43,7 +43,7 @@ def per_question(path: Path, recs: dict) -> tuple[dict, str | None]:
             qq, t, p = r["questions"][nm], r["targets"][nm], q["pred"]
             if qq["type"] == "noul":
                 p, t = float(p), float(t)
-                out[(e["id"], nm)] = (float((p > 0.5) == (t > 0.5)), 2 * (p - t) ** 2)
+                out[(e["id"], nm)] = (float((p >= 0.5) == (t >= 0.5)), 2 * (p - t) ** 2)   # ties count as "true", as in evals.metrics
                 continue
             labs = list(qq["criteria"]) if qq["type"] == "choice" else [str(i) for i in range(len(qq["criteria"]))]
             pd, td = dict(p), dict(t)

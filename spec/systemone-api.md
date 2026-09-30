@@ -4,7 +4,7 @@ Version 0.1, 2026-09-23. The authoritative definition of this project's server A
 
 ## 1. Compatibility
 
-- Any text-only client written with the official `typesafe-sdk` (Python), `@typesafe-ai/sdk` (JS), `langchain-typesafe`, jeview or judgekit works by pointing its base URL at this server, without changing a line of code.
+- Any text-only client written with the official `typesafe-sdk` (Python), `@typesafe-ai/sdk` (JS), `langchain-typesafe`, jeview or judgekit works after pointing its base URL at this server.
 - The default response has exactly the official field set. Extension fields appear only when the client explicitly asks for them (§7).
 - Images go inside `state` as a reserved object (§4), so to a client a request with images is just "one more object in the state".
 
