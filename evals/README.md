@@ -90,9 +90,33 @@ Confidence: choice/score use the response's `confidence`; noul uses `max(p, 1−
 
 ## Commands
 
+First convert the sets. Each converter downloads its upstream source at a pinned revision and writes
+`evals/data/{text,image}/<set>.jsonl`; `--limit 0` converts every record. The sha256 of a converted file should match
+`records_sha256` in `results/<model>/<set>.json`, which is how the published numbers are tied to their data.
+
 ```bash
 pip install -e ".[dev]"
 
+# text sets
+python -m evals.datasets.text_judgekit --out evals/data/text/judgekit.jsonl
+python -m evals.datasets.text_jevbench --out evals/data/text/jevbench.jsonl
+python -m evals.datasets.text_nimble --out evals/data/text/nimble.jsonl
+python -m evals.datasets.text_kev_transfer_v4 --out evals/data/text/kev_transfer_v4.jsonl
+
+# image sets reported in the README
+python -m evals.datasets.image_mmbench_en --out evals/data/image/mmbench_en.jsonl --limit 0
+python -m evals.datasets.image_pope --out evals/data/image/pope.jsonl --limit 0
+python -m evals.datasets.image_mmstar --out evals/data/image/mmstar.jsonl --limit 0
+python -m evals.datasets.image_policy_mod --out-dir evals/data/image --limit 0     # LlavaGuard is gated: accept its terms on Hugging Face first
+python -m evals.datasets.image_game_spec --out-dir evals/data/image --limit 0     # game_glitch, game_clip
+python -m evals.datasets.image_ui_state --out-dir evals/data/image --row-groups 90 --per-set 400 --limit 0   # ui_toggle, ui_input
+python -m evals.datasets.image_t2i_align --out-dir evals/data/image --prompts 120 --per-prompt 4 --limit 0   # t2i_elem
+```
+
+The published t2i sets were converted with `--exclude-prompts <file>`, a list of the prompts that occur in the
+training data, so a conversion without it gives a different file (and sha256).
+
+```bash
 # run one set
 python -m evals.run --records evals/data/image/mmstar.jsonl \
   --base-url http://127.0.0.1:8009 --api-key local --model jev-latest \

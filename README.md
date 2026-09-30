@@ -17,12 +17,19 @@ pip install git+https://github.com/Xiaooolong/vev
 vev serve --model CountingSheep/vev-4b          # downloads the weights on first start, listens on 127.0.0.1:8009
 ```
 
-Vev needs Python 3.11 or newer and an NVIDIA GPU; CPU and Apple Silicon are untested. In bf16, `vev-4b` takes about
-10 GB of GPU memory once loaded and `vev-9b` about 19 GB; long states and images need more on top.
+Vev needs Python 3.11 or newer, an NVIDIA GPU and a CUDA build of PyTorch; CPU and Apple Silicon are untested. On
+Windows, pip installs a CPU-only PyTorch by default, so install PyTorch from [pytorch.org](https://pytorch.org/get-started/locally/)
+first. Tested with torch 2.8.0, transformers 5.17.0 and peft 0.21.0. In bf16, `vev-4b` takes about 10 GB of GPU
+memory once loaded and `vev-9b` about 19 GB; long states and images need more on top.
 
-The server handles one request at a time; concurrent requests wait in a queue. Each question is one forward pass, so
-latency grows with the number of questions: on one H800, `vev-4b` takes 43 ms for one question and 383 ms for ten
-(`conformance/results/vev-4b/curves.json`).
+- `--model CountingSheep/vev-4b-lora` downloads only the adapter (130 MB) and applies it to `Qwen/Qwen3.5-4B`, which
+  is reused if it is already in your Hugging Face cache.
+- `--revision v0.1.0` pins the weights to this release.
+
+`vev serve` is a single local process that handles one request at a time; concurrent requests wait in a queue. Each
+question is one forward pass, so latency grows with the number of questions: on one H800, `vev-4b` takes 43 ms for
+one question and 383 ms for ten (`conformance/results/vev-4b/curves.json`). For more throughput, run one process per
+GPU behind a load balancer.
 
 Docker:
 
@@ -52,17 +59,31 @@ print(resp.answers["team"].probabilities)   # {"shipping": 0.97, "billing": 0.03
 ```
 
 Images are a Vev extension; the official API takes text only. Put them in the state as an `image` object with a
-data URL:
+data URL. The state can be any JSON object:
 
-```bash
-curl -s http://127.0.0.1:8009/v1/systemone -H 'Content-Type: application/json' -d '{
-  "model": "vev-latest",
-  "state": {"screen": {"image": {"url": "data:image/png;base64,iVBORw0..."}}},
-  "questions": {"error": {"type": "noul", "instructions": "Does the screen show an error message?"}}
-}'
+```python
+import base64
+
+url = "data:image/png;base64," + base64.b64encode(open("screen.png", "rb").read()).decode()
+resp = client.system_one(
+    state={"app": "checkout", "screen": {"image": {"url": url}}},
+    questions={"error": Noul(instructions="Does the screen show an error message?")},
+)
 ```
 
-The full request format, limits and error codes are in [spec/systemone-api.md](spec/systemone-api.md).
+Without the HTTP server, for example to score a large file offline, use the engine directly:
+
+```python
+from vev.model import CheckpointEngine
+
+engine = CheckpointEngine("CountingSheep/vev-4b")
+result = engine.run({"ticket": "My kettle never arrived."},
+                    {"refund": {"type": "noul", "instructions": "Is the customer asking for a refund?"}})
+print(result.answers["refund"]["noul"])
+```
+
+The full request format, limits and error codes are in [spec/systemone-api.md](spec/systemone-api.md); section 10
+describes the prompt and how the answer probabilities are read, for use with other inference engines.
 
 ## Models
 

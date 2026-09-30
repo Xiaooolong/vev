@@ -13,9 +13,12 @@ pip install git+https://github.com/Xiaooolong/vev
 vev serve --model CountingSheep/vev-4b          # 首次启动会下载权重，监听 127.0.0.1:8009
 ```
 
-需要 Python 3.11 及以上和 NVIDIA GPU；CPU 和 Apple Silicon 没有测过。bf16 下，`vev-4b` 加载后约占 10 GB 显存，`vev-9b` 约 19 GB；状态很长或带图片时还要再多一些。
+需要 Python 3.11 及以上、NVIDIA GPU 和 CUDA 版的 PyTorch；CPU 和 Apple Silicon 没有测过。Windows 上 pip 默认装的是 CPU 版 PyTorch，请先按 [pytorch.org](https://pytorch.org/get-started/locally/) 的说明安装。测试过的版本：torch 2.8.0、transformers 5.17.0、peft 0.21.0。bf16 下，`vev-4b` 加载后约占 10 GB 显存，`vev-9b` 约 19 GB；状态很长或带图片时还要再多一些。
 
-服务端一次只处理一个请求，并发请求会排队等待。每个问题做一次前向计算，所以延迟随问题数增长：单张 H800 上，`vev-4b` 1 个问题 43 ms，10 个问题 383 ms（见 `conformance/results/vev-4b/curves.json`）。
+- `--model CountingSheep/vev-4b-lora` 只下载 adapter（130 MB），加载时套到 `Qwen/Qwen3.5-4B` 上；本地 Hugging Face 缓存里已有这个基座的话会直接复用。
+- `--revision v0.1.0` 把权重固定在这个版本。
+
+`vev serve` 是一个本地进程，一次处理一个请求，并发请求会排队等待。每个问题做一次前向计算，所以延迟随问题数增长：单张 H800 上，`vev-4b` 1 个问题 43 ms，10 个问题 383 ms（见 `conformance/results/vev-4b/curves.json`）。需要更高吞吐时，每张 GPU 起一个进程，前面加负载均衡。
 
 用 Docker：
 
@@ -44,17 +47,30 @@ print(resp.answers["urgent"].noul)          # "是"的概率：vev-4b 给出 0.9
 print(resp.answers["team"].probabilities)   # {"shipping": 0.97, "billing": 0.03}
 ```
 
-传图片是 Vev 自己加的扩展，官方接口只收文本。图片放在状态里，写成带 data URL 的 `image` 对象：
+传图片是 Vev 自己加的扩展，官方接口只收文本。图片放在状态里，写成带 data URL 的 `image` 对象；状态可以是任意 JSON 对象：
 
-```bash
-curl -s http://127.0.0.1:8009/v1/systemone -H 'Content-Type: application/json' -d '{
-  "model": "vev-latest",
-  "state": {"screen": {"image": {"url": "data:image/png;base64,iVBORw0..."}}},
-  "questions": {"error": {"type": "noul", "instructions": "Does the screen show an error message?"}}
-}'
+```python
+import base64
+
+url = "data:image/png;base64," + base64.b64encode(open("screen.png", "rb").read()).decode()
+resp = client.system_one(
+    state={"app": "checkout", "screen": {"image": {"url": url}}},
+    questions={"error": Noul(instructions="Does the screen show an error message?")},
+)
 ```
 
-完整的请求格式、限制和错误码见 [spec/systemone-api.md](spec/systemone-api.md)（英文）。
+不起 HTTP 服务、直接在 Python 里调用（比如离线给一大批数据打分）：
+
+```python
+from vev.model import CheckpointEngine
+
+engine = CheckpointEngine("CountingSheep/vev-4b")
+result = engine.run({"ticket": "My kettle never arrived."},
+                    {"refund": {"type": "noul", "instructions": "Is the customer asking for a refund?"}})
+print(result.answers["refund"]["noul"])
+```
+
+完整的请求格式、限制和错误码见 [spec/systemone-api.md](spec/systemone-api.md)（英文）；其中第 10 节写了 prompt 模板和答案概率的读法，想接到其他推理框架上可以照着做。
 
 ## 模型
 

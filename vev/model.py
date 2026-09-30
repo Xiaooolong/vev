@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import copy
 import json
+import logging
 import re
 import time
 from pathlib import Path
@@ -23,6 +24,7 @@ from vev.state import ImageSlot, InvalidRequest, render_desc, serialize_state
 from vev.tokens import count_output_tokens, count_state_tokens
 
 MARKER = "vev.json"
+log = logging.getLogger("vev")
 _SPECIAL_RE = re.compile(r"<\|([A-Za-z0-9_]+)\|>")
 
 
@@ -160,17 +162,17 @@ class VevModel(nn.Module):
         (out / MARKER).write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def resolve_checkpoint(ckpt: str | Path) -> Path:
-    """A local checkpoint directory, or a Hugging Face repo id downloaded to the local cache."""
+def resolve_checkpoint(ckpt: str | Path, revision: str | None = None) -> Path:
+    """A local checkpoint directory, or a Hugging Face repo id (at `revision`) downloaded to the local cache."""
     p = Path(ckpt)
     if (p / MARKER).is_file():
         return p
     from huggingface_hub import snapshot_download
 
-    return Path(snapshot_download(str(ckpt)))
+    return Path(snapshot_download(str(ckpt), revision=revision))
 
 
-def is_checkpoint(ckpt: str | Path) -> bool:
+def is_checkpoint(ckpt: str | Path, revision: str | None = None) -> bool:
     """True for a directory or Hugging Face repo that carries vev.json."""
     if (Path(ckpt) / MARKER).is_file():
         return True
@@ -179,10 +181,12 @@ def is_checkpoint(ckpt: str | Path) -> bool:
     from huggingface_hub import file_exists, try_to_load_from_cache
 
     try:
-        if isinstance(try_to_load_from_cache(str(ckpt), MARKER), str):  # works offline
+        if isinstance(try_to_load_from_cache(str(ckpt), MARKER, revision=revision), str):  # works offline
             return True
-        return file_exists(str(ckpt), MARKER)
-    except Exception:
+        return file_exists(str(ckpt), MARKER, revision=revision)
+    except Exception as e:
+        log.warning("could not check whether %s is a Vev checkpoint (%s: %s); loading it as a base model",
+                    ckpt, type(e).__name__, e)
         return False
 
 
@@ -191,10 +195,10 @@ def base_source(ckpt: Path, meta: dict[str, Any]) -> str:
     return str(ckpt) if meta["base"] == "." else meta["base"]
 
 
-def load_checkpoint(ckpt: str | Path, dtype: torch.dtype, device: torch.device,
-                    attn_implementation: str | None = None) -> tuple[VevModel, dict[str, Any], Path]:
+def load_checkpoint(ckpt: str | Path, dtype: torch.dtype, device: torch.device, attn_implementation: str | None = None,
+                    revision: str | None = None) -> tuple[VevModel, dict[str, Any], Path]:
     """A checkpoint written by VevModel.save (base id + adapter/) or a merged release (base "."), in eval mode."""
-    path = resolve_checkpoint(ckpt)
+    path = resolve_checkpoint(ckpt, revision)
     meta = json.loads((path / MARKER).read_text(encoding="utf-8"))
     model = VevModel(base_source(path, meta), dtype=dtype, attn_implementation=attn_implementation)
     if (path / "adapter").exists():
@@ -244,12 +248,12 @@ class CheckpointEngine:
     depends on the state alone, so a question's answer does not depend on the other questions in the request."""
 
     def __init__(self, ckpt: str, dtype: str = "bf16", device: str = "cuda", attn_implementation: str | None = None,
-                 prefix_min_tokens: int = 4096):
+                 prefix_min_tokens: int = 4096, revision: str | None = None):
         from transformers import AutoProcessor
 
         windows_sdpa_workaround()
         self.device = torch.device(device)
-        self.model, self.meta, path = load_checkpoint(ckpt, DTYPES[dtype], self.device, attn_implementation)
+        self.model, self.meta, path = load_checkpoint(ckpt, DTYPES[dtype], self.device, attn_implementation, revision)
         self.base_id = self.meta.get("base_model") or self.meta["base"]
         self.processor = AutoProcessor.from_pretrained(base_source(path, self.meta))
         self.tok = self.processor.tokenizer

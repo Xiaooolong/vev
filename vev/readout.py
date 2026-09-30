@@ -151,12 +151,13 @@ def warmup(engine) -> None:
 
 
 class Engine:
-    def __init__(self, model_id: str, dtype: str = "bf16", device: str = "cuda"):
+    def __init__(self, model_id: str, dtype: str = "bf16", device: str = "cuda", revision: str | None = None):
         windows_sdpa_workaround()
         self.device = torch.device(device)
-        self.processor = AutoProcessor.from_pretrained(model_id)
+        self.processor = AutoProcessor.from_pretrained(model_id, revision=revision)
         self.tok = self.processor.tokenizer
-        self.model = AutoModelForImageTextToText.from_pretrained(model_id, dtype=DTYPES[dtype]).to(self.device).eval()
+        self.model = AutoModelForImageTextToText.from_pretrained(model_id, dtype=DTYPES[dtype], revision=revision)
+        self.model = self.model.to(self.device).eval()
         self.merge = self.processor.image_processor.merge_size
         self.labels = LabelTokens(self.tok)
 

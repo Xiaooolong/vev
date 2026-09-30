@@ -183,8 +183,8 @@ Status codes and body shapes follow the official API as observed on 2026-09-23 (
 | 401 | key checking enabled and the key does not match | `{"error_type":"authentication_error","message"}` | same wording as official |
 | 500 | anything else | `{"error_type":"internal_error","message"}` | — |
 
-Vev never returns 429 or 529: the server processes one request at a time, and concurrent requests wait in a queue
-without a limit or timeout. Vev always uses the object shape `{"error_type","message"}` for 400, with `message` pointing at the exact path (`questions.<name>.<field>`, or which image in `state.<path>`).
+Vev never returns 429 or 529: a `vev serve` process handles one request at a time, and concurrent requests wait in
+a queue without a limit or timeout. For more throughput, run one process per GPU behind a load balancer. Vev always uses the object shape `{"error_type","message"}` for 400, with `message` pointing at the exact path (`questions.<name>.<field>`, or which image in `state.<path>`).
 
 ## 9. GET /v1/models
 

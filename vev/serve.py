@@ -127,9 +127,9 @@ def create_app(engine: Engine, model_name: str, hf_id: str, allow_remote_images:
                 return resp
         try:
             resp = await call_next(request)
-        except Exception as e:
-            log.exception("unhandled error")
-            resp = err(500, "internal_error", f"{type(e).__name__}: {e}")
+        except Exception:
+            log.exception("unhandled error in %s", rid)
+            resp = err(500, "internal_error", f"Internal server error; see the server log for request {rid}")
         resp.headers["x-typesafe-request-id"] = rid
         return resp
 
@@ -177,6 +177,7 @@ def main(argv: list[str] | None = None) -> None:
                                  "behind a /v1/systemone-compatible HTTP API.")
     ap.add_argument("--model", required=True,
                     help="Vev checkpoint (local directory or Hugging Face repo id), or a Qwen3.5 model id for zero-shot use")
+    ap.add_argument("--revision", default=None, help="Hugging Face revision of --model (branch, tag or commit), e.g. v0.1.0")
     ap.add_argument("--name", default=None, help="served model id; default derived from --model")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8009)
@@ -190,14 +191,20 @@ def main(argv: list[str] | None = None) -> None:
     a = ap.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    import torch
+
+    if a.device.startswith("cuda") and not torch.cuda.is_available():
+        raise SystemExit(f"--device {a.device} but this torch build has no CUDA ({torch.__version__}). Install a CUDA "
+                         "build of PyTorch (see https://pytorch.org/get-started/locally/) or pass --device cpu.")
     from vev.model import CheckpointEngine, is_checkpoint
 
-    if is_checkpoint(a.model):
-        engine = CheckpointEngine(a.model, dtype=a.dtype, device=a.device, prefix_min_tokens=a.prefix_min_tokens)
+    if is_checkpoint(a.model, a.revision):
+        engine = CheckpointEngine(a.model, dtype=a.dtype, device=a.device, prefix_min_tokens=a.prefix_min_tokens,
+                                  revision=a.revision)
         name = a.name or "vev-" + os.path.basename(os.path.normpath(a.model)).lower().removeprefix("vev-")
         hf_id = engine.base_id
     else:
-        engine = Engine(a.model, dtype=a.dtype, device=a.device)
+        engine = Engine(a.model, dtype=a.dtype, device=a.device, revision=a.revision)
         name = a.name or "zeroshot-" + a.model.split("/")[-1].lower()
         hf_id = a.model
     if not a.no_warmup:
