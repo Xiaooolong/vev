@@ -91,7 +91,8 @@ The text sets are [judgekit](https://github.com/lexingtonhibiki/judgekit) (Chine
 | kev transfer-v4 | 1528 | 0.802 | 0.776 | 0.781 | 0.854 |
 
 kev-4B was run locally with the same harness. Jev was queried through TypeSafe's API (`jev-latest`, 23–24 September
-2026). Against kev-4B, Vev-4B is better on judgekit and Vev-9B on judgekit and JevBench; both Vev models are
+2026); no Jev outputs were used for training.
+Against kev-4B, Vev-4B is better on judgekit and Vev-9B on judgekit and JevBench; both Vev models are
 2–3 points behind on kev's own test set, and nimble is n.s. for both. Jev is significantly ahead of both Vev models
 on nimble (18–22 points) and kev transfer-v4 (7–8 points), and ahead of Vev-4B on JevBench; Vev-9B's 3.9-point gap
 on JevBench is n.s. On judgekit Vev-4B ties Jev and Vev-9B is 2.3 points lower (n.s.).

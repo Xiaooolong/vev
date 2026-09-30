@@ -83,7 +83,8 @@ curl -s http://127.0.0.1:8009/v1/systemone -H 'Content-Type: application/json' -
 | nimble | 324 | 0.735 | 0.707 | 0.747 | 0.923 |
 | kev transfer-v4 | 1528 | 0.802 | 0.776 | 0.781 | 0.854 |
 
-kev-4B 用同一套脚本在本地跑；Jev 通过 TypeSafe 的 API 调用（`jev-latest`，2026 年 9 月 23–24 日）。和 kev-4B
+kev-4B 用同一套脚本在本地跑；Jev 通过 TypeSafe 的 API 调用（`jev-latest`，2026 年 9 月 23–24 日）；训练没有用到任何 Jev 的输出。
+和 kev-4B
 比，Vev-4B 在 judgekit 上显著更好，Vev-9B 在 judgekit 和 JevBench 上显著更好；在 kev 自己的测试集上两个 Vev
 都落后 2–3 个点；nimble 上两者差异都不显著。Jev 在 nimble（差 18–22 个点）和 kev transfer-v4（差 7–8 个点）上
 显著领先两个 Vev，在 JevBench 上显著领先 Vev-4B；Vev-9B 在 JevBench 上低 3.9 个点，不显著。judgekit 上 Vev-4B
