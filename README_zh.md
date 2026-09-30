@@ -1,12 +1,12 @@
 # Vev
 
+[![English](https://img.shields.io/badge/English-555?style=for-the-badge)](README.md) [![简体中文](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-0969da?style=for-the-badge)](README_zh.md)
+
 [![ci](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml/badge.svg)](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev-v01-6abd3e17303828e10c49dc65)
 
 Vev 是一个开放权重的判断模型。输入一段状态（文本、JSON、图片或混合）和一组带类型的问题（是/否、单选、分档打分），它在一次前向计算里给出每个候选答案的概率，不生成文本。服务端的请求和响应格式与 TypeSafe 的 `/v1/systemone` 接口一致（[TypeSafe 文档](https://docs.typesafe.ai/concepts/system-one.md)），为那个接口写的客户端改一下 base URL 就能接 Vev。
 
 当前是 v0.1 研究预览版。模型权重只许非商业使用，见[许可](#许可)。
-
-[English README](README.md)
 
 ## 快速上手
 
