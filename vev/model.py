@@ -79,6 +79,29 @@ def encode_row(processor, text: str, images: list[Image.Image]) -> dict[str, Any
     return row
 
 
+def encode_rows(processor, texts: list[str], images: list[Image.Image]) -> list[dict[str, Any]]:
+    """encode_row for several prompts that contain the same images: the image processor runs once. The other rows get
+    the image placeholders expanded the way the processor does (the k-th <|image_pad|> becomes grid_k / merge² copies)
+    and reuse the first row's pixel_values and image_grid_thw."""
+    first = encode_row(processor, texts[0], images)
+    if not images or len(texts) == 1:
+        return [first] + [encode_row(processor, x, images) for x in texts[1:]]
+    token = processor.image_token
+    counts = [int(g.prod()) // processor.image_processor.merge_size ** 2 for g in first["image_grid_thw"]]
+    rows = [first]
+    for text in texts[1:]:
+        parts = text.split(token)
+        if len(parts) != len(counts) + 1:
+            raise RuntimeError("image placeholders do not match the images")
+        expanded = parts[0] + "".join(token * c + rest for c, rest in zip(counts, parts[1:]))
+        enc = processor(text=[expanded], return_tensors="pt")
+        row: dict[str, Any] = {k: v[0] for k, v in enc.items()}
+        row["pixel_values"], row["image_grid_thw"] = first["pixel_values"], first["image_grid_thw"]
+        row["decide"] = int(row["input_ids"].shape[0]) - 1
+        rows.append(row)
+    return rows
+
+
 def collate_rows(rows: list[dict[str, Any]], pad_id: int) -> tuple[dict[str, torch.Tensor], list[int]]:
     """Right-pad encoded rows into one batch; pixel_values / image_grid_thw are concatenated in row order (the model
     matches image placeholders to grid entries sequentially across the batch)."""
@@ -223,10 +246,10 @@ def common_prefix_len(seqs: list[list[int]]) -> int:
     return n
 
 
-def fork_cache(cache):
-    """Copy of a prefilled hybrid cache that one question continues independently. Attention K/V are only ever
-    replaced via torch.cat, never written in place, so they are shared; DeltaNet conv and recurrent states are
-    updated in place, so they are cloned."""
+def fork_cache(cache, n: int = 1):
+    """Copy of a prefilled hybrid cache that n questions (batch rows) continue independently. Attention K/V are only
+    ever replaced via torch.cat, never written in place, so they are shared (expanded to n rows); DeltaNet conv and
+    recurrent states are updated in place, so they are copied."""
     new = copy.copy(cache)
     new.layers = []
     for layer in cache.layers:
@@ -237,15 +260,22 @@ def fork_cache(cache):
         for states in (getattr(lay, "conv_states", None), getattr(lay, "recurrent_states", None)):
             for i, t in (states or {}).items():
                 if t is not None:
-                    states[i] = t.clone()
+                    states[i] = t.clone() if n == 1 else t.repeat(n, *([1] * (t.dim() - 1)))
+        if n > 1 and isinstance(getattr(layer, "keys", None), torch.Tensor):
+            lay.keys = layer.keys.expand(n, *layer.keys.shape[1:])
+            lay.values = layer.values.expand(n, *layer.values.shape[1:])
         new.layers.append(lay)
     return new
 
 
 class CheckpointEngine:
-    """Serving backend for a Vev checkpoint, one row per question. For states of at least prefix_min_tokens tokens
-    the state prefix is prefilled once and every question continues from a copy of that cache; the prefix length
-    depends on the state alone, so a question's answer does not depend on the other questions in the request."""
+    """Serving backend for a Vev checkpoint, one row per question.
+
+    A single question runs alone (for states of at least prefix_min_tokens tokens, from a prefilled state cache).
+    Several questions run as one batch: short text-only states as right-padded whole rows; longer states and states
+    with images are prefilled once, and the question suffixes continue from copies of that cache as a right-padded
+    batch. Batches are split into chunks that fit the free GPU memory. Rows are ordered by (length, name), so the
+    order of the questions in a request does not change what is computed."""
 
     def __init__(self, ckpt: str, dtype: str = "bf16", device: str = "cuda", attn_implementation: str | None = None,
                  prefix_min_tokens: int = 4096, revision: str | None = None):
@@ -261,6 +291,9 @@ class CheckpointEngine:
         self.labels = LabelTokens(self.tok)
         self.autocast_dtype = DTYPES[dtype] if dtype != "fp32" else None
         self.prefix_min_tokens = prefix_min_tokens
+        self.batch_prefix_min_tokens = 1024  # several questions: share the state prefix from this many state tokens
+        self.max_batch_tokens = 32768  # padded tokens per forward pass
+        self.cache_memory_fraction = 0.5  # of the free GPU memory, for the per-row copies of the state cache
         self.image_pad_id = self.tok.convert_tokens_to_ids("<|image_pad|>")
 
     def _autocast(self):
@@ -339,9 +372,11 @@ class CheckpointEngine:
             allow_remote: bool = False, max_state_tokens: int = 32768, max_request_tokens: int = 65536) -> Result:
         t0 = time.perf_counter()
         segments, images = serialize_state(state, max_images=max_images, max_pixels=max_pixels, allow_remote=allow_remote)
-        rows = {}
+        names = list(questions)
+        encoded = encode_rows(self.processor, [render_row(self.processor, segments, questions[k], self.labels)
+                                               for k in names], images)
+        rows = dict(zip(names, encoded))
         for name, q in questions.items():
-            rows[name] = encode_row(self.processor, render_row(self.processor, segments, q, self.labels), images)
             rows[name]["answer_ids"] = self.labels.answer_ids(q)
         first = next(iter(rows.values()))
         state_text, state_image = count_state_tokens(self.tok, segments, first, self.merge)
@@ -355,10 +390,14 @@ class CheckpointEngine:
         if input_tokens > max_request_tokens:
             raise InvalidRequest(400, "invalid_request_error", f"request is {input_tokens} tokens (max {max_request_tokens})")
         t1 = time.perf_counter()
-        if state_tokens >= self.prefix_min_tokens:
+        if len(rows) == 1 and state_tokens >= self.prefix_min_tokens:
             logits = dict(zip(rows, self._logits_shared(segments, list(rows.values()))))
-        else:
+        elif len(rows) == 1:
             logits = {name: self._logits(r) for name, r in rows.items()}
+        elif images or state_tokens >= self.batch_prefix_min_tokens:
+            logits = self._logits_shared_batched(segments, rows)
+        else:
+            logits = self._logits_rows_batched(rows)
         answers = {name: make_answer(q, torch.softmax(logits[name], dim=0).tolist()) for name, q in questions.items()}
         t2 = time.perf_counter()
         return Result(
@@ -373,5 +412,96 @@ class CheckpointEngine:
             },
         )
 
+    @staticmethod
+    def _order(rows: dict[str, dict[str, Any]], start: int = 0) -> list[str]:
+        return sorted(rows, key=lambda k: (int(rows[k]["input_ids"].shape[0]) - start, k))
+
+    @staticmethod
+    def _chunks(names: list[str], length: dict[str, int], fits) -> list[list[str]]:
+        """Consecutive chunks of names (sorted by length), each as large as fits(count, max_length) allows."""
+        out: list[list[str]] = []
+        for k in names:
+            if out and fits(len(out[-1]) + 1, max(length[x] for x in out[-1] + [k])):
+                out[-1].append(k)
+            else:
+                out.append([k])
+        return out
+
+    def _readout(self, h: torch.Tensor, chunk: list[str], decide: list[int], rows) -> dict[str, torch.Tensor]:
+        ids = [rows[k]["answer_ids"] for k in chunk]
+        zs = self.model.readout(h, decide, ids)
+        flat = torch.cat([z.float() for z in zs]).cpu()
+        return dict(zip(chunk, flat.split([len(i) for i in ids])))
+
+    @torch.inference_mode()
+    def _logits_rows_batched(self, rows: dict[str, dict[str, Any]]) -> dict[str, torch.Tensor]:
+        order = self._order(rows)
+        length = {k: int(rows[k]["input_ids"].shape[0]) for k in order}
+        out: dict[str, torch.Tensor] = {}
+        for chunk in self._chunks(order, length, lambda b, s: b * s <= self.max_batch_tokens):
+            batch, decide = collate_rows([rows[k] for k in chunk], self.tok.pad_token_id)
+            batch = {k: v.to(self.device) for k, v in batch.items()}
+            with self._autocast():
+                h = self.model.hidden(batch)
+                out.update(self._readout(h, chunk, decide, rows))
+        return out
+
+    @staticmethod
+    def _cache_bytes(cache) -> tuple[int, int]:
+        """(attention K/V bytes, DeltaNet conv + recurrent state bytes) of a batch-1 cache."""
+        kv = state = 0
+        for layer in cache.layers:
+            for x in (getattr(layer, "keys", None), getattr(layer, "values", None)):
+                if isinstance(x, torch.Tensor):
+                    kv += x.numel() * x.element_size()
+            for states in (getattr(layer, "conv_states", None), getattr(layer, "recurrent_states", None)):
+                for x in (states or {}).values():
+                    if isinstance(x, torch.Tensor):
+                        state += x.numel() * x.element_size()
+        return kv, state
+
+    @torch.inference_mode()
+    def _logits_shared_batched(self, segments: list, rows: dict[str, dict[str, Any]]) -> dict[str, torch.Tensor]:
+        from transformers import DynamicCache
+
+        bb, dev = self.model.backbone, self.device
+        n = self._prefix_len(segments, list(rows.values()))
+        order = self._order(rows)
+        pos = {k: self._positions(rows[k]) for k in order}
+        first = rows[order[0]]
+        pre = {"input_ids": first["input_ids"][None, :n], "attention_mask": torch.ones(1, n, dtype=torch.long),
+               "position_ids": pos[order[0]][:, None, :n]}
+        if first.get("pixel_values") is not None:
+            pre["pixel_values"], pre["image_grid_thw"] = first["pixel_values"], first["image_grid_thw"]
+        out: dict[str, torch.Tensor] = {}
+        with self._autocast():
+            cache = DynamicCache(config=bb.config)
+            bb(**{k: v.to(dev) for k, v in pre.items()}, past_key_values=cache, use_cache=True)
+            kv, state = self._cache_bytes(cache)
+            per_token = kv / max(1, n)
+            budget = (torch.cuda.mem_get_info(dev)[0] * self.cache_memory_fraction if dev.type == "cuda" else float("inf"))
+            length = {k: int(rows[k]["input_ids"].shape[0]) - n for k in order}
+
+            def fits(b: int, s: int) -> bool:
+                return b * s <= self.max_batch_tokens and b * (per_token * (n + s) + state) <= budget
+
+            for chunk in self._chunks(order, length, fits):
+                b, s = len(chunk), max(length[k] for k in chunk)
+                dims = pos[chunk[0]].shape[0]
+                ids = torch.full((b, s), self.tok.pad_token_id, dtype=first["input_ids"].dtype)
+                mask = torch.zeros((b, n + s), dtype=torch.long)
+                p = torch.zeros((dims, b, s), dtype=pos[chunk[0]].dtype)
+                for i, k in enumerate(chunk):
+                    x = rows[k]["input_ids"][n:]
+                    ids[i, : x.shape[0]] = x
+                    mask[i, : n + x.shape[0]] = 1
+                    p[:, i, : x.shape[0]] = pos[k][:, n:]
+                h = bb(input_ids=ids.to(dev), attention_mask=mask.to(dev), position_ids=p.to(dev),
+                       past_key_values=fork_cache(cache, b), use_cache=True).last_hidden_state
+                out.update(self._readout(h, chunk, [rows[k]["decide"] - n for k in chunk], rows))
+        return out
+
     def warmup(self) -> None:
         warmup(self)
+        many = {f"q{i}": {"type": "noul", "instructions": f"Is item {i} mentioned?", "criteria": None} for i in range(64)}
+        self.run("warmup: items 1, 2 and 3.", many)

@@ -67,3 +67,34 @@ def test_render_row_ends_at_the_answer_position():
     row = encode_row(proc, text, images)
     assert row["decide"] == int(row["input_ids"].shape[0]) - 1
     assert labels.answer_ids(q) == [labels.ids["A"], labels.ids["B"], labels.ids["C"]]
+
+
+@pytest.mark.skipif(os.environ.get("VEV_TEST_TOKENIZER") is None, reason="set VEV_TEST_TOKENIZER=<hf id> to run")
+def test_encode_rows_matches_encode_row_with_an_image():
+    import base64
+    import io
+
+    from PIL import Image
+    from transformers import AutoProcessor
+
+    from vev.model import encode_row, encode_rows, render_row
+    from vev.readout import LabelTokens
+    from vev.state import serialize_state
+
+    proc = AutoProcessor.from_pretrained(os.environ["VEV_TEST_TOKENIZER"])
+    labels = LabelTokens(proc.tokenizer)
+    buf = io.BytesIO()
+    Image.new("RGB", (700, 500), (10, 120, 200)).save(buf, format="PNG")
+    url = "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+    state = {"a": {"image": {"url": url}}, "note": "two images", "b": {"image": {"url": url}}}
+    segments, images = serialize_state(state)
+    qs = [{"type": "noul", "instructions": "Is it blue?"},
+          {"type": "choice", "instructions": "Which?", "criteria": {"x": "first", "y": None}},
+          {"type": "score", "instructions": "How much?", "criteria": ["low", "high"]}]
+    texts = [render_row(proc, segments, q, labels) for q in qs]
+    fast = encode_rows(proc, texts, images)
+    for text, got in zip(texts, fast):
+        want = encode_row(proc, text, images)
+        assert set(got) == set(want)
+        for k, v in want.items():
+            assert (torch.equal(got[k], v) if isinstance(v, torch.Tensor) else got[k] == v), k

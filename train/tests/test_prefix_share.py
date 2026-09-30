@@ -29,6 +29,31 @@ def test_fork_cache_isolates_branches():
     assert att.keys.shape == (1, 2, 3, 4) and f.layers[0].keys.shape == (1, 2, 4, 4) and cache.layers[1] is lin
 
 
+def test_fork_cache_n_rows():
+    att, lin = DynamicLayer(), LinearAttentionLayer()
+    att.update(torch.ones(1, 2, 3, 4), torch.ones(1, 2, 3, 4))
+    lin.update_conv_state(torch.ones(1, 5, 4), conv_kernel_size=4)
+    lin.update_recurrent_state(torch.ones(1, 2, 4, 4))
+    cache = DynamicCache()
+    cache.layers = [att, lin]
+    f = fork_cache(cache, 3)
+    assert f.layers[0].keys.shape == (3, 2, 3, 4) and f.layers[1].recurrent_states[0].shape == (3, 2, 4, 4)
+    f.layers[1].update_recurrent_state(torch.zeros(3, 2, 4, 4))
+    f.layers[0].update(torch.zeros(3, 2, 2, 4), torch.zeros(3, 2, 2, 4))
+    assert f.layers[0].keys.shape == (3, 2, 5, 4)
+    assert lin.recurrent_states[0].eq(1).all() and att.keys.shape == (1, 2, 3, 4)
+
+
+def test_chunks_respect_the_budget_and_keep_order():
+    from vev.model import CheckpointEngine
+
+    names = ["a", "b", "c", "d", "e"]
+    length = {"a": 10, "b": 20, "c": 30, "d": 40, "e": 90}
+    chunks = CheckpointEngine._chunks(names, length, lambda b, s: b * s <= 100)
+    assert chunks == [["a", "b", "c"], ["d"], ["e"]]
+    assert [k for c in chunks for k in c] == names
+
+
 CKPT = os.environ.get("VEV_TEST_CKPT")
 
 
