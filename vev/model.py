@@ -18,7 +18,7 @@ import torch.nn.functional as F
 from PIL import Image
 from torch import nn
 
-from vev.readout import (DTYPES, SYSTEM_PROMPT, LabelTokens, Result, make_answer, warmup, windows_sdpa_workaround)
+from vev.readout import DTYPES, SYSTEM_PROMPT, LabelTokens, Result, make_answer, warmup, windows_sdpa_workaround
 from vev.state import ImageSlot, InvalidRequest, render_desc, serialize_state
 from vev.tokens import count_output_tokens, count_state_tokens
 
