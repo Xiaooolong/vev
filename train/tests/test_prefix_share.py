@@ -78,15 +78,16 @@ def test_batched_questions_match_single_questions_fp32():
         eng.prefix_min_tokens = prefix_min_tokens
         return {k: probs(eng.run(state, {k: q}))[k] for k, q in qs.items()}
 
-    def together(batch_prefix_min_tokens, questions=qs):
-        eng.batch_prefix_min_tokens = batch_prefix_min_tokens
+    def together(share_min_saved_tokens, questions=qs):
+        eng.share_min_saved_tokens = share_min_saved_tokens
         return probs(eng.run(state, questions))
 
     single_shared, single_rows = alone(0), alone(10**9)
     batch_shared, batch_rows = together(0), together(10**9)
-    assert gap(batch_shared, single_shared) <= 1e-4
-    assert gap(batch_rows, single_rows) <= 1e-4
-    # the cached and the full-row forward are different kernel paths: at most 1e-4 on vev-4b, 2.5e-4 on vev-9b
+    # fp32 is not bit-exact across kernel paths and batch shapes (the DeltaNet Triton kernels): the two single-question
+    # paths already differ by about 1.4e-4 on vev-4b and 2.5e-4 on vev-9b; a real bug shows up above 1e-2
+    assert gap(batch_shared, single_shared) <= 1e-3
+    assert gap(batch_rows, single_rows) <= 1e-3
     assert gap(batch_shared, batch_rows) <= 1e-3
     reordered = together(0, dict(reversed(list(qs.items()))))
     assert reordered == batch_shared  # rows are ordered by (length, name), not by request order

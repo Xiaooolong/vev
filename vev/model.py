@@ -279,9 +279,9 @@ class CheckpointEngine:
     """Serving backend for a Vev checkpoint, one row per question.
 
     A single question runs alone (for states of at least prefix_min_tokens tokens, from a prefilled state cache).
-    Several questions run as one batch: short text-only states as right-padded whole rows; longer states and states
-    with images are prefilled once, and the question suffixes continue from copies of that cache as a right-padded
-    batch. Batches are split into chunks that fit the free GPU memory. Rows are ordered by (length, name), so the
+    Several questions run as one batch. When whole rows would recompute a long state many times over, and always for
+    states with images, the state is prefilled once and the question suffixes continue from copies of that cache as a
+    right-padded batch; otherwise the whole rows are right-padded into one batch. Batches are split into chunks that fit the free GPU memory. Rows are ordered by (length, name), so the
     order of the questions in a request does not change what is computed."""
 
     def __init__(self, ckpt: str, dtype: str = "bf16", device: str = "cuda", attn_implementation: str | None = None,
@@ -298,7 +298,9 @@ class CheckpointEngine:
         self.labels = LabelTokens(self.tok)
         self.autocast_dtype = DTYPES[dtype] if dtype != "fp32" else None
         self.prefix_min_tokens = prefix_min_tokens
-        self.batch_prefix_min_tokens = 1024  # several questions: share the state prefix from this many state tokens
+        # several questions: share the state prefix when whole rows would recompute the state at least this many times
+        # over, in tokens ((questions - 1) x state tokens); otherwise batch whole rows
+        self.share_min_saved_tokens = 2048
         self.max_batch_tokens = 32768  # padded tokens per forward pass
         self.cache_memory_fraction = 0.5  # of the free GPU memory, for the per-row copies of the state cache
         self.image_pad_id = self.tok.convert_tokens_to_ids("<|image_pad|>")
@@ -401,7 +403,7 @@ class CheckpointEngine:
             logits = dict(zip(rows, self._logits_shared(segments, list(rows.values()))))
         elif len(rows) == 1:
             logits = {name: self._logits(r) for name, r in rows.items()}
-        elif images or state_tokens >= self.batch_prefix_min_tokens:
+        elif images or (len(rows) - 1) * state_tokens >= self.share_min_saved_tokens:
             logits = self._logits_shared_batched(segments, rows)
         else:
             logits = self._logits_rows_batched(rows)
