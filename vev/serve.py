@@ -194,8 +194,9 @@ def main(argv: list[str] | None = None) -> None:
     import torch
 
     if a.device.startswith("cuda") and not torch.cuda.is_available():
-        raise SystemExit(f"--device {a.device} but this torch build has no CUDA ({torch.__version__}). Install a CUDA "
-                         "build of PyTorch (see https://pytorch.org/get-started/locally/) or pass --device cpu.")
+        why = "no GPU is visible" if torch.version.cuda else "this is a CPU-only build"
+        raise SystemExit(f"--device {a.device}, but CUDA is not available to torch {torch.__version__} ({why}). Install a "
+                         "CUDA build of PyTorch (https://pytorch.org/get-started/locally/) or pass --device cpu.")
     from vev.model import CheckpointEngine, is_checkpoint
 
     if is_checkpoint(a.model, a.revision):
