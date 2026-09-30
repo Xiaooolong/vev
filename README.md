@@ -1,8 +1,6 @@
 # Vev
 
-[![English](https://img.shields.io/badge/English-0969da?style=for-the-badge)](README.md) [![简体中文](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-555?style=for-the-badge)](README_zh.md)
-
-[![ci](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml/badge.svg)](https://github.com/Xiaooolong/vev/actions/workflows/ci.yml) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev-v01-6abd3e17303828e10c49dc65)
+[![English](https://img.shields.io/badge/lang-English-blue)](README.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red)](README_zh.md) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev-v01-6abd3e17303828e10c49dc65)
 
 Vev is a judgment model with open weights. You send it a state (text, JSON, images, or a mix) and a set of typed questions
 (yes/no, multiple choice, or a graded score), and it returns a probability for every answer in one forward pass,
