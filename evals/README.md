@@ -6,7 +6,7 @@ Runs the same evaluations against any `/v1/systemone` implementation. The model 
 
 ```
 evals/
-├─ README.md            this file: record format and directory conventions (all code follows it)
+├─ README.md            this file: record format and directory conventions
 ├─ schema.py            record format validation
 ├─ metrics.py           metrics
 ├─ client.py            HTTP client: concurrency, retries, inlines image.path as a data URL
@@ -24,6 +24,9 @@ evals/
 │   └─ images/<set>/<id>.<ext>
 └─ tests/               unit tests on synthetic data
 ```
+
+Some converted sets (ccbench, cmmmu, hallusionbench, mjbench, mmbench_cn, mmmu, vl_rewardbench) have no results in
+the README. They are converted so that `data/dedup.py` can keep their images and texts out of the training data.
 
 ## Record format
 

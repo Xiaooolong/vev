@@ -1,4 +1,4 @@
-"""Gridding: group raw records by meta.grid_id, derive noul questions, sample question sets. Contract: data/README.md."""
+"""Gridding: group raw records by meta.grid_id, derive noul questions, sample question sets. See data/README.md."""
 import json
 import random
 import re

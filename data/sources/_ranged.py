@@ -35,7 +35,7 @@ def retry(fn, tries: int = 8):
     for k in range(tries):
         try:
             return fn()
-        except (requests.RequestException, OSError) as e:  # the proxy drops TLS connections now and then
+        except (requests.RequestException, OSError) as e:  # retry transient connection errors
             if k == tries - 1:
                 raise
             print(f"  retry after {type(e).__name__}: {str(e)[:120]}", file=sys.stderr, flush=True)
@@ -43,7 +43,7 @@ def retry(fn, tries: int = 8):
 
 
 def get_range(url: str, start: int, end: int, chunk: int = 4 << 20) -> bytes:
-    """Bytes [start, end) of url, in chunks (long single responses get cut off by the proxy)."""
+    """Bytes [start, end) of url, in chunks (long single responses are sometimes cut off)."""
     local = local_for_url(url)
     if local is not None:
         with local.open("rb") as fh:
@@ -90,7 +90,7 @@ def fetch(url: str, name: str | None = None) -> Path:
         CACHE.mkdir(parents=True, exist_ok=True)
         t0 = time.time()
 
-        data = get_range(url, 0, size)  # chunked: one long response gets cut off by the proxy
+        data = get_range(url, 0, size)  # chunked: one long response is sometimes cut off
         tmp = dest.with_suffix(dest.suffix + ".part")
         tmp.write_bytes(data)
         tmp.replace(dest)

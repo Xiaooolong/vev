@@ -54,7 +54,7 @@ def test_score_one_level(post):
 def test_score_eleven_levels(post):
     r = post(STATE_TICKET, {"q": {"type": "score", "instructions": "Rate.", "criteria": [f"l{i}" for i in range(11)]}})
     _rec("err.score_eleven", r)
-    # official API caps at 10 and answers 400; kev and this project accept up to 255
+    # the official API and Vev cap at 10 levels and answer 400
     assert r.status_code in (200, 400, 422)
 
 

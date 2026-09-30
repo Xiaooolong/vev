@@ -1,5 +1,6 @@
-"""anchor-v3 = anchor-v1 + anchor-short (half A; its builder is not shipped) + the bare-label short rows again with a generic instruction that does not
-state the task (wording deliberately differs from every eval set).
+"""anchor-v3 = anchor-v1 + anchor-short (one of its two halves; the builders of both are not in this repository) + the
+bare-label short rows again with a generic instruction that does not state the task (wording deliberately differs
+from every eval set).
 
     python -m data.anchor.add_generic --v1 data/build/anchor-v1/train.jsonl --short data/build/anchor-short-v1/train.jsonl \
         --out data/build/anchor-v3/train.jsonl"""

@@ -167,14 +167,6 @@
     "checked": "2026-09-23",
     "notes": "web.stanford.edu/~yukez/visual7w redirects; ai.stanford.edu/~yukez/visual7w/ has no license text; toolkit repo MIT covers code; HF visual7w 404. Visual Genome is CC BY 4.0 (visualgenome.org/about) but nothing says that covers the Visual7W release. Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
   },
-  "mmt_bench": {
-    "tier": "unknown",
-    "license": "HF YAML MIT only; no license on GitHub",
-    "evidence_url": "https://huggingface.co/datasets/Kaining/MMT-Bench",
-    "quote": "license: mit",
-    "checked": "2026-09-23",
-    "notes": "Only the YAML field; card body has no license text. GitHub OpenGVLab/MMT-Bench: API license=null, no LICENSE file, README silent. Questions are built on images from many existing third-party datasets whose licenses are not propagated."
-  },
   "mme_realworld": {
     "tier": "non-commercial",
     "license": "academic research only (HF YAML says Apache-2.0)",
@@ -214,14 +206,6 @@
     "quote": "MIT License (GitHub API spdx_id: MIT)",
     "checked": "2026-09-23",
     "notes": "All images are COCO-2017 val set, so every item is dropped by dedup rule 3 (COCO val exclusion). Images are MS-COCO (Flickr photos); COCO does not own image copyright, each image carries its own Flickr CC license (mix of BY / BY-SA / BY-NC / BY-NC-SA / BY-ND / BY-NC-ND etc.), use must follow Flickr terms. cocodataset.org terms page not fetchable this session (JS page); image-side statement taken from foilunitn.github.io."
-  },
-  "seetrue": {
-    "tier": "commercial-ok",
-    "license": "CC BY 4.0",
-    "evidence_url": "https://huggingface.co/datasets/yonatanbitton/SeeTRUE",
-    "quote": "The dataset is under the CC-By 4.0 license. ... SeeTRUE contains a single split: TEST, and should not be used for training.",
-    "checked": "2026-09-23",
-    "notes": "License permits training, but the authors explicitly ask that it not be used for training (eval-only intent). Images: COCO, DrawBench, EditBench, generated images. Consider treating as held-out."
   },
   "foil_coco": {
     "tier": "commercial-ok",
@@ -326,22 +310,6 @@
     "quote": "The datasets are licensed under a Creative Commons Attribution 4.0 International License.",
     "checked": "2026-09-23",
     "notes": "Web/app screenshots of third-party sites."
-  },
-  "procgen": {
-    "tier": "commercial-ok",
-    "license": "Apache-2.0",
-    "evidence_url": "https://huggingface.co/datasets/EpicPinkPenguin/procgen",
-    "quote": "license: apache-2.0",
-    "checked": "2026-09-23",
-    "notes": "Frames rendered from OpenAI Procgen environments by PPO agents; no third-party image rights."
-  },
-  "alfred": {
-    "tier": "commercial-ok",
-    "license": "MIT",
-    "evidence_url": "https://github.com/askforalfred/alfred",
-    "quote": "MIT License",
-    "checked": "2026-09-23",
-    "notes": "Repo MIT covers code and dataset release. Frames rendered in AI2-THOR 2.1.0, whose assets have their own license (not verified this session)."
   },
   "multi_benchmark": {
     "tier": "unknown",

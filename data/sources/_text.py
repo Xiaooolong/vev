@@ -1,4 +1,4 @@
-"""Shared loop for the text_* converters: stream an HF split, convert rows, seeded sample, write. Contract: data/README.md."""
+"""Shared loop for the text_* converters: stream an HF split, convert rows, seeded sample, write. See data/README.md."""
 import random
 import time
 
@@ -9,7 +9,7 @@ def _retry(fn, tries=6):
     for k in range(tries):
         try:
             return fn()
-        except Exception:  # the local proxy drops connections now and then
+        except Exception:  # transient network errors
             if k == tries - 1:
                 raise
             time.sleep(5 * (k + 1))

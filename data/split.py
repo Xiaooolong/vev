@@ -1,4 +1,4 @@
-"""train / calibration / validation split by a stable hash of grid_id. Contract: data/README.md."""
+"""train / calibration / validation split by a stable hash of grid_id. See data/README.md."""
 import collections
 import hashlib
 

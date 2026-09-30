@@ -7,7 +7,6 @@ whole clusters are resampled instead of questions. Verdict per set:
   FAIL  accuracy CI upper < 0 (significantly worse), or accuracy point drop > --max-drop points (only when
         n >= --min-n; below that the point drop is noise), or Brier CI lower > 0 (significantly worse calibration)
   PASS  otherwise (reported as 'better' when the accuracy CI lower > 0).
-The old rule (point accuracy >= reference) is printed alongside.
 Both result files must have been produced on the same records file (records_sha256), which must be the one on disk;
 otherwise ids may silently pair different questions. --allow-sha-mismatch downgrades that to a warning.
 --ref entries are directories searched in order for <set>.json."""
@@ -99,13 +98,13 @@ def main(argv=None) -> None:
     a = ap.parse_args(argv)
     rng = random.Random(a.seed)
     lines = [f"# Release gate: {a.model} (reference = zero-shot; FAIL = accuracy significantly worse, or a drop > {a.max_drop:g} points (n >= {a.min_n}), or Brier significantly worse)", "",
-             "| set | n | clusters | ref acc | acc | Δacc | 95% CI | ref Brier | Brier | ΔBrier 95% CI | better/worse | verdict | old rule |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+             "| set | n | clusters | ref acc | acc | Δacc | 95% CI | ref Brier | Brier | ΔBrier 95% CI | better/worse | verdict |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     fails = []
     for s in a.sets:
         mp, rp = Path(a.model) / f"{s}.json", find_ref(a.ref, s)
         if not mp.exists() or rp is None:
-            lines.append(f"| {s} | - | missing result (model {mp.exists()} / ref {rp is not None}) ||||||||||||")
+            lines.append(f"| {s} | - | missing result (model {mp.exists()} / ref {rp is not None}) |||||||||||")
             continue
         rf = record_file(s)
         recs = {}
@@ -118,7 +117,7 @@ def main(argv=None) -> None:
         if not (sha_m == sha_r == sha_disk):
             msg = f"[gate] {s}: records_sha256 differs (model {str(sha_m)[:8]} / ref {str(sha_r)[:8]} / on disk {sha_disk[:8]}); ids may pair different questions"
             if not a.allow_sha_mismatch:
-                lines.append(f"| {s} | - | sha mismatch ({str(sha_m)[:8]} / {str(sha_r)[:8]} / on disk {sha_disk[:8]}); pass --allow-sha-mismatch to compare anyway ||||||||||||")
+                lines.append(f"| {s} | - | sha mismatch ({str(sha_m)[:8]} / {str(sha_r)[:8]} / on disk {sha_disk[:8]}); pass --allow-sha-mismatch to compare anyway |||||||||||")
                 print(msg, file=sys.stderr)
                 fails.append(s)
                 continue
@@ -126,7 +125,7 @@ def main(argv=None) -> None:
         keys = sorted(set(m) & set(r))
         n = len(keys)
         if n == 0:
-            lines.append(f"| {s} | 0 | no shared questions ||||||||||||")
+            lines.append(f"| {s} | 0 | no shared questions |||||||||||")
             fails.append(s)
             continue
         da = [m[k][0] - r[k][0] for k in keys]
@@ -153,11 +152,10 @@ def main(argv=None) -> None:
             verdict += " (small n, CI only)"
         if why:
             fails.append(s)
-        old = "PASS" if acc_m >= acc_r else "FAIL"
         up, dn = sum(x > 0 for x in da), sum(x < 0 for x in da)
         ncl = f"{len(set(cl))}" if cl else "per-question"
         lines.append(f"| {s} | {n} | {ncl} | {acc_r:.3f} | {acc_m:.3f} | {mean_a * 100:+.1f} | [{alo * 100:+.1f}, {ahi * 100:+.1f}] | {br_r:.3f} | {br_m:.3f} | "
-                     f"[{blo:+.3f}, {bhi:+.3f}] | {up}/{dn} | {verdict} | {old} |")
+                     f"[{blo:+.3f}, {bhi:+.3f}] | {up}/{dn} | {verdict} |")
     lines += ["", f"Result: {'all sets pass' if not fails else 'FAIL: ' + ', '.join(fails)}",
               "", "clusters = number of clusters when resampling whole meta.cluster groups; \"per-question\" = questions resampled individually."]
     text = "\n".join(lines) + "\n"

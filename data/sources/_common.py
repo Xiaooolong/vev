@@ -1,4 +1,4 @@
-"""Shared helpers for the training-data converters (data/sources/*). Contract: data/README.md."""
+"""Shared helpers for the training-data converters (data/sources/*). See data/README.md."""
 import argparse
 import collections
 import hashlib

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use Vev, please cite it as below."
-title: "Vev: an open judgment model for text and images"
+title: "Vev: an open-weight judgment model for text and images"
 type: software
 authors:
   - family-names: Wang

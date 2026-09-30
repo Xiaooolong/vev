@@ -1,4 +1,4 @@
-"""Load-time code augmentations (never written to disk). Contract: data/README.md, section "Augmentation"."""
+"""Load-time code augmentations (never written to disk). See data/README.md, section "Augmentation"."""
 import copy
 import random
 import re
@@ -9,7 +9,7 @@ DEFAULT_CONFIG = {
     "p": {"wrap": 0.30, "shuffle": 1.0, "abstain": 0.15, "nonsense": 0.05, "long_state": 0.10,
           "negation": 0.20, "trap": 0.10, "injection": 0.05},
     # plain-string states get re-shaped so the model sees the same content as a document, a ticket
-    # object, a message list, a bare array or a context field (kev wraps states randomly for the same reason)
+    # object, a message list, a bare array or a context field
     "wrap_shapes": ["document", "ticket", "messages", "list", "context"],
     "score_reverse": 0.5,
     "abstain_delete": 0.5,

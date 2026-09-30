@@ -1,4 +1,4 @@
-"""COCO per-image license map for build.py --coco-licenses. Contract: data/README.md, section "License tiers".
+"""COCO per-image license map for build.py --coco-licenses. See data/README.md, section "License tiers".
 
 Reads the images[] table (id, file_name, license) of COCO annotation files and writes
 {"<image id>": license_id, "<file_name>": license_id}. Any annotation file with that table works;

@@ -1,8 +1,8 @@
 """Local-first access to Hugging Face dataset files.
 
-On the cluster, whole-file downloads through hf_hub_download are fast and reliable while HTTP range reads get
-cut off constantly. With VEV_HF_LOCAL=1 every helper that would range-read an HF file first downloads it into
-the HF cache (HF_HOME) and serves bytes from disk. Off by default so slow local development keeps streaming.
+Where HTTP range reads are unreliable but whole-file downloads work, set VEV_HF_LOCAL=1: every helper that would
+range-read an HF file first downloads it into the HF cache (HF_HOME) and serves bytes from disk. Off by default,
+so the converters stream only the parts they need.
 """
 
 from __future__ import annotations

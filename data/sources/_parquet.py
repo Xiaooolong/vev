@@ -29,7 +29,7 @@ def _retry(fn, tries: int = 4):
     for k in range(tries):
         try:
             return fn()
-        except Exception:  # network hiccups through the proxy are common at 150 KB/s
+        except Exception:  # transient network errors
             if k == tries - 1:
                 raise
             time.sleep(5 * (k + 1))
@@ -37,8 +37,8 @@ def _retry(fn, tries: int = 4):
 
 class ChunkedFile(io.RawIOBase):
     """Seekable read-only view of an HF file that fetches in CHUNK-sized range requests, each retried on its own.
-    Through the local proxy, long single GETs get cut near the end ("peer closed connection") and restart from 0;
-    small ranges make a drop cost one chunk."""
+    Long single GETs are sometimes cut near the end ("peer closed connection") and restart from 0; small ranges make
+    a dropped connection cost one chunk."""
     CHUNK = 2 << 20
 
     def __init__(self, fs, path: str, size: int | None = None):

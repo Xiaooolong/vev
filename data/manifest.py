@@ -1,4 +1,4 @@
-"""Build manifest: data/manifest/<version>.json. Contract: data/README.md, section "Manifest"."""
+"""Build manifest: data/manifest/<version>.json. See data/README.md, section "Manifest"."""
 import collections
 import datetime
 import hashlib

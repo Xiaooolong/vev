@@ -1,4 +1,4 @@
-"""CLI: data/raw -> data/build/<version>/ + data/manifest/<version>.json. Contract: data/README.md."""
+"""CLI: data/raw -> data/build/<version>/ + data/manifest/<version>.json. See data/README.md."""
 import argparse
 import collections
 import json

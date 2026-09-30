@@ -8,29 +8,27 @@ Both models are LoRA fine-tunes of the base model with the same settings; only `
 
 ```bash
 # 1. Build the training mixture (downloads the 42 sources; see data/README.md)
-python -m data.sources.text_all
-python -m data.sources.image_group1_all
-python -m data.sources.image_group2_all
-python -m data.sources.image_group3_all
+python -m data.sources.run_parallel --jobs 8
 python -m data.build --version v1-research --allow commercial-ok,non-commercial,unknown
 
-# 2. Train
+# 2. Train (anchor-v3 from Hugging Face, see below)
+hf download CountingSheep/vev-anchor-v3 --repo-type dataset --local-dir data/build/anchor-v3
 python -m train.train \
   --build data/build/v1-research --base Qwen/Qwen3.5-4B --out runs/vev-4b \
-  --prior --head-lr 0 --lr 5e-5 --max-steps 2500 --limit 100000 \
-  --micro-tokens 16384 --accum 4 --anchor-kl 0.3 \
-  --anchor-build data/build/anchor-v3 --anchor-weight 2 \
-  --eval-every 250 --eval-rows 1000 --save-every 250 --workers 8
+  --max-steps 2500 --limit 100000 --anchor-kl 0.3 \
+  --anchor-build data/build/anchor-v3 --anchor-weight 2
 
 # 3. Export the release forms (merged weights and adapter)
 python -m train.export_release --ckpt runs/vev-4b/export --name vev-4b --out release
 ```
 
+The answer probabilities are the language model's own next-token logits over the answer tokens, read with the
+same prompt as the zero-shot base model. LoRA (rank 16 on all linear layers of the language model; vision tower and
+LM head frozen) shifts those logits. Everything not on the command line uses the defaults in `train/train.py`
+(learning rate 5e-5, 16,384-token micro-batches, 4 accumulation steps, a Brier loss term with weight 0.1).
+
 What the flags do:
 
-- `--prior --head-lr 0`: the answer probabilities come from the language model's own next-token logits over the
-  answer tokens. No classifier head is trained; LoRA (rank 16 on all linear layers of the language model, vision
-  tower frozen) shifts those logits.
 - `--anchor-kl 0.3`: on every training row, a KL term keeps the adapted answer distribution close to the base
   model's. This limits drift on question types that are not in the training data.
 - `--anchor-build ... --anchor-weight 2`: an extra set of 10,123 unlabeled rows used only for that KL term, in
@@ -39,11 +37,16 @@ What the flags do:
   [CountingSheep/vev-anchor-v3](https://huggingface.co/datasets/CountingSheep/vev-anchor-v3).
 - `--limit 100000`: 100,000 training records sampled from the 716,789 in the build.
 
-Everything else uses the defaults in `train/train.py`, including a Brier loss term (weight 0.1). The build applies
-the augmentations recorded in `augment_config` of `data/manifest/v1-research.json`: options are shuffled on every
-row, and negated questions, distractor hints and injected instructions are added to a fraction of rows.
+The build applies the augmentations recorded in `augment_config` of `data/manifest/v1-research.json`: options are
+shuffled on every row, and negated questions, distractor hints and injected instructions are added to a fraction of
+rows.
 
-The full argument list of each run is in `train_args` inside the released `vev_pointer.json`.
+The full argument list of each run is in `train_args` inside the released `vev.json`. The release runs used an
+earlier version of `train/train.py`, whose model carried a zero-initialised pointer head that was never trained
+(`--prior --head-lr 0` in `train_args`); it adds exactly zero to the logits, so the current code computes the same
+readout without it. In that version the LM head of Qwen3.5-9B, which is not tied to the input embeddings, was left
+trainable. It was not exported, so `vev-9b` uses the original LM head; the current code freezes it, so a rerun of
+the 9B recipe will not match the release exactly.
 
 ## Environment
 

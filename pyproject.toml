@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "vev-ai"
 dynamic = ["version"]
-description = "Open judgment model for text and images, served behind a /v1/systemone-compatible API"
+description = "Open-weight judgment model for text and images, served behind a /v1/systemone-compatible API"
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]

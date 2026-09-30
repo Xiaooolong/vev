@@ -1,4 +1,4 @@
-"""Decontamination against held-out eval sets: image dHash, text MinHash, COCO val ids. Contract: data/README.md."""
+"""Decontamination against held-out eval sets: image dHash, text MinHash, COCO val ids. See data/README.md."""
 import base64
 import io
 import json

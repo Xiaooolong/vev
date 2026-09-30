@@ -1,9 +1,11 @@
-"""Run image/text converters in parallel (one subprocess per source), skipping sources that already have output.
+"""Run the converters of all 42 training sources in parallel (one subprocess per source), skipping sources that
+already have output.
 
-    python -m data.sources.run_parallel --groups group1,group2,group3 --jobs 10 --limit 30000
+    python -m data.sources.run_parallel --jobs 8
+    python -m data.sources.run_parallel --only boolq,trec --limit 300
 
-Each source writes data/raw/<bucket>/<src>.jsonl and a log under data/raw/_logs/<src>.log. A source is
-skipped when its output exists and is non-empty (delete the file to force a re-run).
+Each source writes data/raw/<text|image>/<src>.jsonl and a log under data/raw/_logs/<src>.log. A source is skipped
+when its output exists and is non-empty (delete the file or pass --force to re-run it).
 """
 
 from __future__ import annotations
@@ -17,17 +19,14 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent
 
-GROUPS = {
-    "text": ("text", ["banking77", "boolq", "ag_news", "mnli", "sst5", "yelp", "trec", "dbpedia14",
-                      "amazon_reviews_multi_en", "imdb", "clinc150", "stsb", "ocnli", "tnews", "afqmc"]),
-    "group1": ("image", ["vqav2_yesno", "vqav2_mc", "aokvqa", "ai2d", "visual7w", "nlvr2", "vsr", "textvqa",
-                         "plotqa", "naturalbench", "mmt_bench", "mme_realworld"]),
-    "group2": ("image", ["imagereward", "hpdv2", "llava_critic", "agiqa3k", "genai_bench", "sugarcrepe",
-                         "seetrue", "foil_coco", "charxiv"]),
-    "group3": ("image", ["androidcontrol", "amex", "gui_odyssey", "guicourse", "procgen", "alfred",
-                         "multi_benchmark", "cmm_math", "gaokao_mm", "coco_cn"]),
+SOURCES = {
+    "text": ["banking77", "boolq", "ag_news", "mnli", "sst5", "yelp", "trec", "dbpedia14", "amazon_reviews_multi_en",
+             "imdb", "clinc150", "stsb", "ocnli", "tnews", "afqmc"],
+    "image": ["vqav2_yesno", "vqav2_mc", "aokvqa", "ai2d", "visual7w", "nlvr2", "vsr", "textvqa", "plotqa",
+              "naturalbench", "mme_realworld", "imagereward", "hpdv2", "llava_critic", "agiqa3k", "genai_bench",
+              "sugarcrepe", "foil_coco", "charxiv", "androidcontrol", "amex", "gui_odyssey", "guicourse",
+              "multi_benchmark", "cmm_math", "gaokao_mm", "coco_cn"],
 }
-DEFAULT_EXCLUDE = {"alfred", "seetrue"}  # alfred needs a 100 GB 7z; seetrue is test-only per its authors
 
 
 def run_one(bucket: str, src: str, limit: int, seed: int, log_dir: Path) -> tuple[str, int, float, int]:
@@ -44,26 +43,18 @@ def run_one(bucket: str, src: str, limit: int, seed: int, log_dir: Path) -> tupl
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--groups", default="group1,group2,group3")
-    ap.add_argument("--only", default="", help="comma-separated sources (overrides --groups)")
-    ap.add_argument("--exclude", default=",".join(sorted(DEFAULT_EXCLUDE)))
+    ap.add_argument("--only", default="", help="comma-separated sources")
     ap.add_argument("--jobs", type=int, default=8)
     ap.add_argument("--limit", type=int, default=30000)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--force", action="store_true", help="re-run sources that already have output")
     a = ap.parse_args()
 
-    exclude = {s.strip() for s in a.exclude.split(",") if s.strip()}
-    todo: list[tuple[str, str]] = []
-    if a.only:
-        wanted = {s.strip() for s in a.only.split(",") if s.strip()}
-        for bucket, names in GROUPS.values():
-            todo += [(bucket, s) for s in names if s in wanted]
-    else:
-        for g in a.groups.split(","):
-            bucket, names = GROUPS[g.strip()]
-            todo += [(bucket, s) for s in names]
-    todo = [(b, s) for b, s in todo if s not in exclude]
+    wanted = {s.strip() for s in a.only.split(",") if s.strip()}
+    todo = [(bucket, s) for bucket, names in SOURCES.items() for s in names if not wanted or s in wanted]
+    unknown = wanted - {s for _, s in todo}
+    if unknown:
+        raise SystemExit(f"unknown sources: {sorted(unknown)}")
 
     log_dir = DATA_DIR / "raw" / "_logs"
     log_dir.mkdir(parents=True, exist_ok=True)
