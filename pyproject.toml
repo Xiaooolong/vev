@@ -11,7 +11,7 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [{ name = "Xiaolong Wang" }]
-keywords = ["llm", "classification", "calibration", "vision-language", "qwen", "system-one"]
+keywords = ["decision-model", "jev", "systemone", "classification", "vision-language", "qwen"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
@@ -43,7 +43,7 @@ vev = "vev.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/Xiaooolong/vev"
-Models = "https://huggingface.co/CountingSheep"
+Models = "https://huggingface.co/collections/CountingSheep/vev-6abd3e17303828e10c49dc65"
 Issues = "https://github.com/Xiaooolong/vev/issues"
 
 [tool.hatch.version]
