@@ -81,27 +81,30 @@ def encode_row(processor, text: str, images: list[Image.Image]) -> dict[str, Any
 
 def encode_rows(processor, texts: list[str], images: list[Image.Image]) -> list[dict[str, Any]]:
     """encode_row for several prompts that contain the same images. The first row goes through the full processor; the
-    others are tokenized in one call, with the image placeholders expanded the way the processor does (the k-th
-    <|image_pad|> becomes grid_k / merge² copies) and the first row's pixel_values and image_grid_thw reused, so the
-    image processor runs once."""
+    others are tokenized in one call with a single <|image_pad|> per image, and each placeholder position is then
+    repeated grid_k / merge² times in every field, which is what the processor's expansion produces. The first row's
+    pixel_values and image_grid_thw are reused, so the image processor runs once."""
     first = encode_row(processor, texts[0], images)
     if len(texts) == 1:
         return [first]
-    rest = texts[1:]
+    enc = processor(text=texts[1:])
+    counts = []
     if images:
-        token = processor.image_token
         counts = [int(g.prod()) // processor.image_processor.merge_size ** 2 for g in first["image_grid_thw"]]
-        expanded = []
-        for text in rest:
-            parts = text.split(token)
-            if len(parts) != len(counts) + 1:
-                raise RuntimeError("image placeholders do not match the images")
-            expanded.append(parts[0] + "".join(token * c + tail for c, tail in zip(counts, parts[1:])))
-        rest = expanded
-    enc = processor(text=rest)
+    pad_id = processor.image_token_id
     rows = [first]
-    for i in range(len(rest)):
-        row: dict[str, Any] = {k: torch.tensor(enc[k][i], dtype=first[k].dtype) for k in enc.keys()}
+    for i in range(len(texts) - 1):
+        ids = enc["input_ids"][i]
+        where = [p for p, x in enumerate(ids) if x == pad_id]
+        if len(where) != len(counts):
+            raise RuntimeError("image placeholders do not match the images")
+        row: dict[str, Any] = {}
+        for k in enc.keys():
+            seq, out, last = enc[k][i], [], 0
+            for p, c in zip(where, counts):
+                out += seq[last:p] + [seq[p]] * c
+                last = p + 1
+            row[k] = torch.tensor(out + seq[last:], dtype=first[k].dtype)
         if images:
             row["pixel_values"], row["image_grid_thw"] = first["pixel_values"], first["image_grid_thw"]
         row["decide"] = int(row["input_ids"].shape[0]) - 1
