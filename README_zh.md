@@ -18,7 +18,7 @@ vev serve --model CountingSheep/vev-4b          # 首次启动会下载权重，
 - `--model CountingSheep/vev-4b-lora` 只下载 adapter（130 MB），加载时套到 `Qwen/Qwen3.5-4B` 上；本地 Hugging Face 缓存里已有这个基座的话会直接复用。
 - `--revision v0.1.0` 把权重固定在这个版本。
 
-`vev serve` 是一个本地进程，一次处理一个请求，并发请求会排队等待。每个问题做一次前向计算，所以延迟随问题数增长：单张 H800 上，`vev-4b` 1 个问题 43 ms，10 个问题 383 ms（见 `conformance/results/vev-4b/curves.json`）。需要更高吞吐时，每张 GPU 起一个进程，前面加负载均衡。
+一次请求里的所有问题合成一个 batch 计算。单张 H800 上，`vev-4b` 对一段短文本问 1 个问题 38 ms，10 个 58 ms，100 个 232 ms；带一张 1 MP 图片时，1 个问题 78 ms，25 个 143 ms（见 `conformance/results/vev-4b/curves.json`）。`vev serve` 是一个本地进程，一次处理一个请求，并发请求会排队等待；需要更高吞吐时，每张 GPU 起一个进程，前面加负载均衡。
 
 用 Docker：
 
@@ -83,7 +83,7 @@ print(result.answers["refund"]["noul"])
 
 ## 结果
 
-下面的数字都是全量集上的正确率，用 `evals/` 里的评测脚本测得。两个系统对比时，在同一批题上做配对 bootstrap 检验（95% 区间），区间包含 0 的记为不显著；图片集按图片整组重采样，同一张图上的题一起抽。每个集的完整指标（含 Brier 分数和校准误差）在 [results/](results/)。`results/` 里有、下面表里没有的集是开发时做诊断用的。
+下面的数字都是全量集上的正确率，用 `evals/` 里的评测脚本测得。两个系统对比时，在同一批题上做配对 bootstrap 检验（95% 区间），区间包含 0 的记为不显著；图片集按图片整组重采样，同一张图上的题一起抽。下面的结果是用 0.1.0 版算的，那时每个问题单独做一次前向；0.1.1 对只含一个问题的请求给出逐位相同的概率。多个问题合批计算时，概率最多变动百分之几（p99 0.025），首选答案变化的题不超过 0.8%，表中所有显著性结论都不变（在全部 14 个集上、每次请求另加 5 个和 50 个问题实测）。每个集的完整指标（含 Brier 分数和校准误差）在 [results/](results/)。`results/` 里有、下面表里没有的集是开发时做诊断用的。
 
 对比对象：[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev) 是 TypeSafe 的托管判断模型；[kev-4B](https://github.com/jaredpalmer/kev) 是基于 4B Qwen 的开源判断模型。文本评测集是 [judgekit](https://github.com/lexingtonhibiki/judgekit)（中文）、[JevBench](https://github.com/fstandhartinger/jevbench)（公开子集）、[nimble](https://github.com/bespokelabsai/nimble)，以及 kev 自己的留出测试集 transfer-v4。
 
@@ -141,6 +141,8 @@ vev-4b 在 game_glitch、vev-9b 在 t2i_elem 上比各自的基座低约 3 个�
 - Jev 在 nimble 和 kev transfer-v4 上比 Vev 准（分别高 18–22 和 7–8 个点），在 JevBench 上比 vev-4b 准。
 - 答案会受选项顺序影响。把选项倒过来排，JevBench 和 kev transfer-v4 上首选答案会变的题，vev-9b 占 13%，vev-4b 占 17%；kev-4B 是 10–12%，Jev 不到 4%。微调让这两个集上的比例下降了（基座模型是 19–25%）。nimble 上 9B 从 33% 降到 9%，4B 反而从 19% 升到 21%。
 - 需要多步推理的判断，不如基座模型先思考再回答。在一个内部场景集上（未公开），基座的思考模式比 Vev 的单次读出准 4–8 个点；在我们试过的大多数公开集上，单次读出和思考模式一样准或更准。
+- 一个问题和别的问题一起问时，概率会比单独问变动百分之几以内（批量前向在 bf16 下的舍入差异）；只含一个问题的请求不受影响。
+- 长状态从批量里得到的加速有限：7k token 的状态下，100 个问题的耗时是 1 个问题的 3.8 倍。接近 32k token 上限的状态，`vev-9b` 在 24 GB 显卡上放不下。
 - 在“这里有没有问题”这类二分类问题上，基座模型和 Vev 都倾向于答“没有”，标出问题的次数比标注里少。
 - 图片判断集是我们自己从公开数据转换的，不是公认的评测基准。
 - “兼容”指请求和响应的格式与 `/v1/systemone` 一致，不代表 Vev 的行为和 Jev 一样。

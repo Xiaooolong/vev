@@ -153,12 +153,12 @@ Probabilities are not quantized (the official API quantizes to 0.01; this server
 
 | Guarantee | Content | Verified by |
 |---|---|---|
-| question isolation | on the same state, N questions sent in one request vs. one at a time differ by ≤ 1e-4 in every probability (fp32 inference); the `instructions`/`criteria` of one question have no effect on the answers to the others | conformance "isolation" group |
-| determinism | the same request sent again gives bit-identical probabilities | conformance "determinism" group |
-| no generation | the server does no autoregressive decoding; each question is one forward pass over its own row (state + question), so latency grows linearly with the number of questions: vev-4b on one H800, 1 question 43 ms, 10 questions 383 ms, 100 questions 3.75 s. For states of at least 4,096 tokens the state is prefilled once and shared by the questions | `conformance/curves.py`, measured in `conformance/results/vev-*/curves.json` |
+| question isolation | the content of one question is never visible to another; a request with a single question is computed exactly as in 0.1.0. The questions of a request are computed together as one batch, and in bf16 the batch shape changes the floating-point rounding, so the same question asked alone and together with others differs slightly: over the 14 evaluation sets, both model sizes and 5 or 50 other questions per request, p99 ≤ 0.025 in probability, largest seen 0.10, top answer changed on at most 0.8% of questions | conformance "isolation" group (default tolerance 0.05); the evaluation sets, see README, Results |
+| question order | the order of the questions in a request does not change any answer, bit for bit | conformance "isolation" group |
+| determinism | the same request sent again gives bit-identical probabilities, also after a server restart on the same hardware and software | conformance "determinism" group |
+| no generation | the server does no autoregressive decoding. The questions of a request run as one batch: the state is computed once (for short text states, the whole rows are batched instead), and the questions are split into chunks that fit the free GPU memory. vev-4b on one H800, short state: 1 question 38 ms, 10 questions 58 ms, 100 questions 232 ms; 7k-token state: 1 question 280 ms, 100 questions 1.07 s; one 1 MP image: 1 question 78 ms, 25 questions 143 ms | `conformance/curves.py`, measured in `conformance/results/vev-*/curves.json` |
 | option order | not guaranteed to be invariant; the model card reports the flip rate after reversing the options | eval suite |
-| cold start | at startup the server warms up with one request carrying an image and three questions, so the first external request is not slow (the official Python SDK times out after 10 s) | conformance "clients" group, run as the first test |
-| isolation and precision | question isolation ≤ 1e-4 holds at the server's default precision (bf16), not only fp32 | conformance "isolation" group, run at default precision |
+| cold start | at startup the server warms up with an image request and a 64-question request, so the first external request is not slow (the official Python SDK times out after 10 s). The first request with a state length or batch shape not seen before can take longer while GPU kernels are tuned (up to about 5 s for a 7k-token state with 100 questions) | conformance "clients" group, run as the first test; `first_ms` in `curves.json` |
 
 ## 7. Extensions
 
@@ -248,6 +248,6 @@ the question is sanitized first so it cannot produce special tokens: `<|name|>` 
 The answer is read from the next-token logits at the last position of the prompt, taken only at the answer tokens:
 `A`, `B`, … for choice (after `Z` come two-letter labels such as `AA`, keeping only those the tokenizer encodes as
 one token), `Yes` and `No` for noul, `0` … `9` for score. A softmax over these logits gives the probabilities;
-`noul` is the probability of `Yes`. One forward pass per question, no sampling.
+`noul` is the probability of `Yes`. No sampling. The server computes the questions of a request as a batch (§6), which gives the same probabilities up to bf16 rounding.
 
 Behaviour of the official API observed with the conformance suite is recorded in `conformance/README.md`.

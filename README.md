@@ -26,10 +26,10 @@ memory once loaded and `vev-9b` about 19 GB; long states and images need more on
   is reused if it is already in your Hugging Face cache.
 - `--revision v0.1.0` pins the weights to this release.
 
-`vev serve` is a single local process that handles one request at a time; concurrent requests wait in a queue. Each
-question is one forward pass, so latency grows with the number of questions: on one H800, `vev-4b` takes 43 ms for
-one question and 383 ms for ten (`conformance/results/vev-4b/curves.json`). For more throughput, run one process per
-GPU behind a load balancer.
+All questions of a request run as one batch. On one H800, `vev-4b` answers 1 question about a short text in 38 ms,
+10 in 58 ms and 100 in 232 ms; with a 1 MP image, 1 question takes 78 ms and 25 take 143 ms
+(`conformance/results/vev-4b/curves.json`). `vev serve` is a single local process that handles one request at a
+time; concurrent requests wait in a queue. For more throughput, run one process per GPU behind a load balancer.
 
 Docker:
 
@@ -101,6 +101,10 @@ probabilities; it does not add a separate classifier head.
 All numbers below are accuracy on the full sets, measured with the harness in `evals/`. Where two systems are
 compared, the difference is tested with a paired bootstrap over the same questions (95% interval); "n.s." marks
 differences whose interval includes zero; for the image sets, questions that share an image are resampled together.
+The results were computed with version 0.1.0, which ran one forward pass per question; 0.1.1 gives the same
+probabilities, bit for bit, for requests with one question. When several questions are batched, probabilities move by
+up to a few hundredths (p99 0.025) and the top answer changes on at most 0.8% of questions; no significance verdict in
+the tables changes (measured on all 14 sets with 5 and 50 extra questions per request).
 Per-set metrics, including Brier score and calibration error, are in [results/](results/). Sets in `results/` that
 are not in the tables below were used for diagnostics during development.
 
@@ -175,6 +179,10 @@ is significant.
 - Judgments that need several steps of reasoning are weaker than the base model's own answer when it may think
   first. On one internal scenario set (not released), the base model in thinking mode was 4–8 points more accurate
   than Vev's single pass. On most of the public sets we tried, the single pass was as accurate or better.
+- Asking a question together with others moves its probabilities by up to a few hundredths compared with asking it
+  alone (bf16 rounding in the batched forward pass). Requests with a single question are unaffected.
+- Long states gain little from batching: with a 7k-token state, 100 questions take 3.8 times as long as one. A
+  state near the 32k-token limit does not fit on a 24 GB GPU with `vev-9b`.
 - On binary "is something wrong here?" questions both the base models and Vev lean towards "no": they flag
   problems less often than the labels say.
 - The image judgment sets are our own conversions of public data, not established benchmarks.

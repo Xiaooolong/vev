@@ -1,78 +1,180 @@
 {
   "target": "vev-4b",
-  "base_url": "http://127.0.0.1:8528",
+  "base_url": "http://127.0.0.1:8291",
   "model": "jev-latest",
-  "measured": "2026-09-30T11:08:20.743089+00:00",
+  "measured": "2026-10-01T04:01:11.785025+00:00",
   "latency_vs_questions": {
     "1": {
-      "p50_ms": 42.7,
-      "min_ms": 40.9,
-      "max_ms": 45.5,
+      "p50_ms": 37.5,
+      "min_ms": 36.8,
+      "max_ms": 37.8,
+      "first_ms": 44.7,
       "input_tokens": 144,
       "n": 5
     },
     "5": {
-      "p50_ms": 198.2,
-      "min_ms": 195.2,
-      "max_ms": 208.1,
+      "p50_ms": 40.5,
+      "min_ms": 40.1,
+      "max_ms": 41.1,
+      "first_ms": 74.9,
       "input_tokens": 475,
       "n": 5
     },
     "10": {
-      "p50_ms": 383.1,
-      "min_ms": 379.3,
-      "max_ms": 388.3,
+      "p50_ms": 57.5,
+      "min_ms": 57.1,
+      "max_ms": 58.0,
+      "first_ms": 81.5,
       "input_tokens": 870,
       "n": 5
     },
     "25": {
-      "p50_ms": 961.6,
-      "min_ms": 950.7,
-      "max_ms": 966.8,
+      "p50_ms": 127.8,
+      "min_ms": 127.1,
+      "max_ms": 131.6,
+      "first_ms": 149.7,
       "input_tokens": 2095,
       "n": 5
     },
     "50": {
-      "p50_ms": 1909.3,
-      "min_ms": 1884.9,
-      "max_ms": 1948.6,
+      "p50_ms": 140.3,
+      "min_ms": 138.9,
+      "max_ms": 142.9,
+      "first_ms": 222.0,
       "input_tokens": 4145,
       "n": 5
     },
     "100": {
-      "p50_ms": 3754.8,
-      "min_ms": 3730.3,
-      "max_ms": 3840.9,
+      "p50_ms": 232.2,
+      "min_ms": 231.3,
+      "max_ms": 240.7,
+      "first_ms": 256.9,
       "input_tokens": 8220,
+      "n": 5
+    }
+  },
+  "latency_vs_questions_long_state": {
+    "1": {
+      "p50_ms": 280.0,
+      "min_ms": 278.1,
+      "max_ms": 285.8,
+      "first_ms": 342.3,
+      "input_tokens": 6933,
+      "n": 5
+    },
+    "5": {
+      "p50_ms": 306.3,
+      "min_ms": 303.7,
+      "max_ms": 306.5,
+      "first_ms": 335.8,
+      "input_tokens": 7264,
+      "n": 5
+    },
+    "10": {
+      "p50_ms": 333.7,
+      "min_ms": 330.9,
+      "max_ms": 337.3,
+      "first_ms": 344.1,
+      "input_tokens": 7659,
+      "n": 5
+    },
+    "25": {
+      "p50_ms": 448.8,
+      "min_ms": 446.7,
+      "max_ms": 460.7,
+      "first_ms": 464.9,
+      "input_tokens": 8884,
+      "n": 5
+    },
+    "50": {
+      "p50_ms": 658.7,
+      "min_ms": 654.0,
+      "max_ms": 670.2,
+      "first_ms": 669.2,
+      "input_tokens": 10934,
+      "n": 5
+    },
+    "100": {
+      "p50_ms": 1073.8,
+      "min_ms": 1065.9,
+      "max_ms": 1111.1,
+      "first_ms": 4758.8,
+      "input_tokens": 15009,
+      "n": 5
+    }
+  },
+  "latency_vs_questions_image": {
+    "1": {
+      "p50_ms": 77.8,
+      "min_ms": 75.9,
+      "max_ms": 78.3,
+      "first_ms": 118.7,
+      "input_tokens": 1099,
+      "n": 5
+    },
+    "5": {
+      "p50_ms": 116.7,
+      "min_ms": 115.4,
+      "max_ms": 119.3,
+      "first_ms": 121.1,
+      "input_tokens": 1430,
+      "n": 5
+    },
+    "10": {
+      "p50_ms": 120.2,
+      "min_ms": 118.8,
+      "max_ms": 120.3,
+      "first_ms": 120.0,
+      "input_tokens": 1825,
+      "n": 5
+    },
+    "25": {
+      "p50_ms": 143.2,
+      "min_ms": 142.9,
+      "max_ms": 144.4,
+      "first_ms": 142.9,
+      "input_tokens": 3050,
+      "n": 5
+    },
+    "50": {
+      "p50_ms": 204.0,
+      "min_ms": 203.4,
+      "max_ms": 205.8,
+      "first_ms": 203.4,
+      "input_tokens": 5100,
       "n": 5
     }
   },
   "latency_vs_state_words": {
     "60": {
-      "p50_ms": 117.8,
-      "min_ms": 117.0,
-      "max_ms": 119.6,
+      "p50_ms": 38.8,
+      "min_ms": 38.7,
+      "max_ms": 39.1,
+      "first_ms": 45.8,
       "input_tokens": 322,
       "n": 5
     },
     "500": {
-      "p50_ms": 125.6,
-      "min_ms": 122.8,
-      "max_ms": 132.2,
+      "p50_ms": 65.8,
+      "min_ms": 65.4,
+      "max_ms": 66.8,
+      "first_ms": 68.7,
       "input_tokens": 825,
       "n": 5
     },
     "2000": {
-      "p50_ms": 231.3,
-      "min_ms": 229.5,
-      "max_ms": 279.4,
+      "p50_ms": 129.5,
+      "min_ms": 128.6,
+      "max_ms": 132.3,
+      "first_ms": 149.1,
       "input_tokens": 2540,
       "n": 5
     },
     "6000": {
-      "p50_ms": 413.7,
-      "min_ms": 410.8,
-      "max_ms": 559.9,
+      "p50_ms": 294.9,
+      "min_ms": 294.2,
+      "max_ms": 309.4,
+      "first_ms": 294.4,
       "input_tokens": 7111,
       "n": 5
     }

@@ -90,7 +90,7 @@ def model_card(name: str, hf_id: str) -> dict[str, Any]:
         "name": name,
         "description": (
             f"{name} (base {hf_id}): answers are read from next-token logits over constrained answer tokens "
-            "(choice letters, Yes/No, level digits). One forward pass per question, no decoding. "
+            "(choice letters, Yes/No, level digits). The questions of a request run as one batch, no decoding. "
             "confidence = (p_max - 1/K) / (1 - 1/K). output_tokens is informational only."
         ),
         "release_date": "2026-10-01T00:00:00Z",

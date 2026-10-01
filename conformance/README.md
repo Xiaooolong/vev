@@ -23,7 +23,7 @@ SO_TARGET=jev-official SO_BASE_URL=https://api.typesafe.ai SO_API_KEY=$TYPESAFE_
 SO_TARGET=vev-4b SO_BASE_URL=http://127.0.0.1:8009 python conformance/curves.py
 ```
 
-`SO_ISOLATION_TOL` and `SO_DETERMINISM_TOL` default to 1e-4 and 0, which is what this project's server must meet. The official Jev API quantizes probabilities to 0.01, returns four different outputs for the same request sent five times (max difference 0.02 in our runs), and differs by up to 0.03 between batched and separate requests. Against it, loosen the tolerances to 0.05 / 0.02; otherwise the isolation and determinism groups always fail. Failed runs still record their observations.
+`SO_ISOLATION_TOL` and `SO_DETERMINISM_TOL` default to 0.05 and 0. Vev computes the questions of a request as one batch, which in bf16 moves a probability by up to a few hundredths compared with asking it alone (see the spec, §6), and repeats a request bit for bit. The official Jev API quantizes probabilities to 0.01 and returns different outputs for the same request (max difference 0.02 in our runs); against it, set `SO_DETERMINISM_TOL=0.02`.
 
 ## Environment variables
 

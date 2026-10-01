@@ -9,7 +9,7 @@ Runs against any implementation over plain HTTP. Configure the target with env v
     SO_RESULTS_DIR       default conformance/results
     SO_SUPPORTS_IMAGES   1 = the target is expected to *see* images (our server); 0 = text-only
     SO_EXPECT_AUTH       1 = the target rejects a wrong key with 401
-    SO_ISOLATION_TOL     max |dp| allowed between batched and separate questions, default 1e-4
+    SO_ISOLATION_TOL     max |dp| allowed between batched and separate questions, default 0.05
     SO_DETERMINISM_TOL   max |dp| allowed between repeated identical requests, default 0
     SO_TIMEOUT           per-request timeout seconds, default 120
     SO_STUB              1 = the target is conformance/stub_server.py: skip checks that need a real model
@@ -39,7 +39,7 @@ TARGET = os.environ.get("SO_TARGET", "unnamed")
 RESULTS_DIR = Path(os.environ.get("SO_RESULTS_DIR", str(Path(__file__).parent / "results")))
 SUPPORTS_IMAGES = os.environ.get("SO_SUPPORTS_IMAGES", "0") == "1"
 EXPECT_AUTH = os.environ.get("SO_EXPECT_AUTH", "0") == "1"
-ISOLATION_TOL = float(os.environ.get("SO_ISOLATION_TOL", "1e-4"))
+ISOLATION_TOL = float(os.environ.get("SO_ISOLATION_TOL", "0.05"))
 DETERMINISM_TOL = float(os.environ.get("SO_DETERMINISM_TOL", "0"))
 TIMEOUT = float(os.environ.get("SO_TIMEOUT", "120"))
 STUB = os.environ.get("SO_STUB", "0") == "1"
