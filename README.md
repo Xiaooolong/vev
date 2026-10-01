@@ -39,8 +39,8 @@ resp = client.system_one(
 The step question gets a less certain answer than the other two, which is what the probabilities are for: the
 progress bar shows both "Payment" and "Review".
 
-This is v0.1, a research preview. The weights are for non-commercial use only, and on most text sets Vev is less accurate
-than Jev. Read [how far to trust it](#how-far-to-trust-it) before relying on the probabilities.
+This is v0.1, a research preview. The weights are for non-commercial use only, and on most text sets Vev is less
+accurate than Jev; see [limitations](#limitations).
 
 ## Get started
 
@@ -133,29 +133,10 @@ judgment sets we converted from labelled public data ([details](#detailed-result
 | Bugs in game screenshots | glitch / object clipping (VideoGameQA-Bench) | 0.613 / 0.671 | 0.626 / 0.729 |
 
 UI-state questions are the most accurate; policy checks, generated-image checks and the harder visual benchmarks
-are mid-range; game bugs are too weak to rely on. These numbers describe these data sets, not yours: check Vev on a
-labelled sample of your own questions first (next section).
-
-## How far to trust it
-
-**Against the alternatives.** On text, Jev is ahead by 7–8 points on kev transfer-v4 and 18–22 points on nimble,
-and ahead of `vev-4b` on JevBench; the two tie on judgekit. Against kev-4B, an open 4B decision model, Vev is ahead
-on judgekit (both sizes) and JevBench (`vev-9b`), 2–3 points behind on kev's own test set, and level on nimble.
-Jev's API takes text only.
-
-**Probabilities.** The probabilities rank answers well but are not exact frequencies. Expected calibration error
-ranges from 0.01 to 0.14 depending on the task (Jev: 0.04–0.07 on the text sets), and on "is something wrong here?"
-questions Vev says "no" more often than the labels do. If you act on a threshold, choose it on your own labelled
-data: write a few hundred examples in the [record format](evals/README.md) and run `python -m evals.run` against
-your server; it reports accuracy, calibration, and accuracy among the most confident answers at each coverage level.
-
-**Option order.** Reversing the order of the options changes the top answer on 13% (`vev-9b`) and 17% (`vev-4b`)
-of JevBench and kev transfer-v4 questions, against 10–12% for kev-4B and under 4% for Jev. Keep the option order
-fixed in your application.
-
-**Several questions in one request.** Asking a question together with others moves its probabilities by up to a
-few hundredths compared with asking it alone (bf16 rounding in the batched forward pass; p99 0.025) and changes the
-top answer on at most 0.8% of questions. The same request always returns the same answer.
+are mid-range; game bugs are too weak to rely on. These numbers describe these data sets, not yours. To check Vev
+on your own questions, write a few hundred labelled examples in the [record format](evals/README.md) and run
+`python -m evals.run` against your server; it reports accuracy, calibration, and accuracy among the most confident
+answers at each coverage level.
 
 ## Detailed results
 
@@ -205,7 +186,7 @@ Bold marks a significant improvement, italics a significant drop. The one regres
 
 Public vision benchmarks mostly ask questions about an image. Vev is meant for judging an image against a stated
 rule, so we built judgment sets from human-labelled public data. The converters are in `evals/datasets/`; the
-converted data is not redistributed.
+converted data is not redistributed. Jev's API takes text only, so there is no Jev column here.
 
 | Set | What is judged | n | Qwen3.5-4B | vev-4b | Qwen3.5-9B | vev-9b |
 |---|---|---|---|---|---|---|
@@ -221,9 +202,19 @@ is significant.
 
 ## Limitations
 
+- The probabilities rank answers well but are not exact frequencies: expected calibration error ranges from 0.01
+  to 0.14 depending on the task (Jev: 0.04–0.07 on the text sets). On "is something wrong here?" questions Vev
+  says "no" more often than the labels do. If you act on a threshold, choose it on your own labelled data
+  ([how](#what-it-can-do)).
+- Reversing the order of the options changes the top answer on 13% (`vev-9b`) and 17% (`vev-4b`) of JevBench and
+  kev transfer-v4 questions, against 10–12% for kev-4B and under 4% for Jev. Keep the option order fixed in your
+  application.
 - Judgments that need several steps of reasoning are weaker than the base model's own answer when it may think
   first: on one internal scenario set (not released), by 4–8 points. On most public sets we tried, the single pass
   was as accurate or better.
+- A question asked together with others gets probabilities up to a few hundredths away from asking it alone (bf16
+  rounding; p99 0.025), and a different top answer on at most 0.8% of questions. The same request always returns
+  the same answer ([spec §6](spec/systemone-api.md#6-semantic-guarantees)).
 - Long texts gain little from batching: with a 7k-token text, 100 questions take 3.8 times as long as one. A text
   near the 32k-token limit does not fit on a 24 GB GPU with `vev-9b`. The first request with a new length or batch
   shape can take a few seconds while GPU kernels are tuned.
