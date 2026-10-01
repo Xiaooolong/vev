@@ -18,8 +18,8 @@ vev serve --model CountingSheep/vev-4b          # downloads the weights on first
 ```
 
 Vev needs Python 3.11 or newer, an NVIDIA GPU and a CUDA build of PyTorch; CPU and Apple Silicon are untested. On
-Windows, pip installs a CPU-only PyTorch by default, so install PyTorch from [pytorch.org](https://pytorch.org/get-started/locally/)
-first. Tested with torch 2.8.0, transformers 5.17.0 and peft 0.21.0. In bf16, `vev-4b` takes about 10 GB of GPU
+Windows, pip installs a CPU-only PyTorch by default, so install `torch` and `torchvision` together from
+[pytorch.org](https://pytorch.org/get-started/locally/) first (a `torchvision` built for another `torch` fails to load). Tested with torch 2.8.0, transformers 5.17.0 and peft 0.21.0. In bf16, `vev-4b` takes about 10 GB of GPU
 memory once loaded and `vev-9b` about 19 GB; long states and images need more on top.
 
 - `--model CountingSheep/vev-4b-lora` downloads only the adapter (130 MB) and applies it to `Qwen/Qwen3.5-4B`, which

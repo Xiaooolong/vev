@@ -13,7 +13,7 @@ pip install git+https://github.com/Xiaooolong/vev
 vev serve --model CountingSheep/vev-4b          # 首次启动会下载权重，监听 127.0.0.1:8009
 ```
 
-需要 Python 3.11 及以上、NVIDIA GPU 和 CUDA 版的 PyTorch；CPU 和 Apple Silicon 没有测过。Windows 上 pip 默认装的是 CPU 版 PyTorch，请先按 [pytorch.org](https://pytorch.org/get-started/locally/) 的说明安装。测试过的版本：torch 2.8.0、transformers 5.17.0、peft 0.21.0。bf16 下，`vev-4b` 加载后约占 10 GB 显存，`vev-9b` 约 19 GB；状态很长或带图片时还要再多一些。
+需要 Python 3.11 及以上、NVIDIA GPU 和 CUDA 版的 PyTorch；CPU 和 Apple Silicon 没有测过。Windows 上 pip 默认装的是 CPU 版 PyTorch，请先按 [pytorch.org](https://pytorch.org/get-started/locally/) 的说明把 `torch` 和 `torchvision` 一起装好（两者版本不配套时 `torchvision` 会加载失败）。测试过的版本：torch 2.8.0、transformers 5.17.0、peft 0.21.0。bf16 下，`vev-4b` 加载后约占 10 GB 显存，`vev-9b` 约 19 GB；状态很长或带图片时还要再多一些。
 
 - `--model CountingSheep/vev-4b-lora` 只下载 adapter（130 MB），加载时套到 `Qwen/Qwen3.5-4B` 上；本地 Hugging Face 缓存里已有这个基座的话会直接复用。
 - `--revision v0.1.0` 把权重固定在这个版本。
