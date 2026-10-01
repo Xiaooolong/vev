@@ -179,8 +179,7 @@ The base model, read the same way without fine-tuning (zero-shot), against Vev:
 | POPE | 9000 | 0.894 | *0.889* | 0.894 | 0.897 |
 | MMStar | 1498 | 0.544 | **0.627** | 0.608 | **0.674** |
 
-Bold marks a significant improvement, italics a significant drop. The one regression is vev-4b on POPE: accuracy is
-0.5 points lower (95% interval −0.9 to −0.1) and the Brier score 0.007 worse.
+Bold marks a significant improvement, italics a significant drop.
 
 ### Images
 
@@ -196,9 +195,6 @@ converted data is not redistributed. Jev's API takes text only, so there is no J
 | ui_toggle | Is there a switch turned on / off? (MobileViews) | 800 | 0.901 | **0.928** | 0.921 | 0.923 |
 | ui_input | Is there a text input field? (MobileViews) | 800 | 0.949 | 0.951 | 0.948 | 0.955 |
 | t2i_elem | Does the generated image show this prompt element? (EvalMuse) | 1027 | 0.690 | **0.715** | 0.733 | 0.703 |
-
-vev-4b on game_glitch and vev-9b on t2i_elem are about 3 points lower than their base models; neither difference
-is significant.
 
 ## Limitations
 
