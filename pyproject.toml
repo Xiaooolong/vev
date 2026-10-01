@@ -22,6 +22,7 @@ classifiers = [
 dependencies = [
   "torch>=2.8",
   "torchvision>=0.23",
+  "flash-linear-attention==0.5.2; sys_platform == 'linux'",
   "transformers>=5.17,<5.18",
   "peft>=0.21,<0.22",
   "accelerate>=1.10",

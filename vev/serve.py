@@ -197,6 +197,13 @@ def main(argv: list[str] | None = None) -> None:
         why = "no GPU is visible" if torch.version.cuda else "this is a CPU-only build"
         raise SystemExit(f"--device {a.device}, but CUDA is not available to torch {torch.__version__} ({why}). Install a "
                          "CUDA build of PyTorch (https://pytorch.org/get-started/locally/) or pass --device cpu.")
+    import importlib.util
+
+    if importlib.util.find_spec("fla") is None:
+        log.warning("flash-linear-attention is not installed: the DeltaNet layers use the PyTorch fallback, which is "
+                    "slower and gives probabilities slightly different from the published results")
+    else:
+        log.info("DeltaNet kernels: flash-linear-attention")
     from vev.model import CheckpointEngine, is_checkpoint
 
     if is_checkpoint(a.model, a.revision):

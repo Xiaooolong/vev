@@ -188,14 +188,19 @@ def jitter_state(state: Any, base_dir: Path, rng: random.Random) -> Any:
     return state
 
 
-def build_jobs(records: list[dict], perturb: set[str], base_dir: Path | None = None,
-               seed: int = 0) -> list[tuple[str, int, str | None, dict, Any]]:
-    """Each job is (kind, record index, question name, questions, state override or None)."""
+def build_jobs(records: list[dict], perturb: set[str], base_dir: Path | None = None, seed: int = 0,
+               one_per_request: bool = False) -> list[tuple[str, int, str | None, dict, Any]]:
+    """Each job is (kind, record index, question name, questions, state override or None). With one_per_request the
+    main answers come from one request per question ("main_part" jobs, merged per record)."""
     jobs = []
     rng = random.Random(seed)
     for ri, rec in enumerate(records):
         qs = rec["questions"]
-        jobs.append(("main", ri, None, qs, None))
+        if one_per_request and len(qs) > 1:
+            for name, q in qs.items():
+                jobs.append(("main_part", ri, name, {name: q}, None))
+        else:
+            jobs.append(("main", ri, None, qs, None))
         if "order" in perturb and any(q["type"] in ("choice", "score") for q in qs.values()):
             jobs.append(("order", ri, None, {k: reverse_question(q) for k, q in qs.items()}, None))
         if "separate" in perturb and len(qs) > 1:
@@ -236,7 +241,8 @@ def run(args: argparse.Namespace) -> dict:
     if unknown:
         raise SystemExit(f"[run] unknown --perturb values: {sorted(unknown)}")
 
-    jobs = build_jobs(records, perturb, base_dir=records_path.parent, seed=args.seed)
+    jobs = build_jobs(records, perturb, base_dir=records_path.parent, seed=args.seed,
+                      one_per_request=args.one_question_per_request)
     total, done, lock = len(jobs), [0], threading.Lock()
     step = max(1, total // 20)
 
@@ -258,6 +264,14 @@ def run(args: argparse.Namespace) -> dict:
     for (kind, ri, name, qs, _st), res in zip(jobs, results):
         if kind == "separate":
             by_record[ri]["separate"][name] = (qs, res)
+        elif kind == "main_part":
+            parts = by_record[ri].setdefault("main_parts", [])
+            parts.append(res)
+            if len(parts) == len(records[ri]["questions"]):
+                bad = next((r for r in parts if isinstance(r, Exception)), None)
+                merged = bad or {**parts[0], "answers": {k: v for r in parts for k, v in r.get("answers", {}).items()},
+                                 "latency_ms": sum(r["latency_ms"] for r in parts)}
+                by_record[ri]["main"] = (records[ri]["questions"], merged)
         else:
             by_record[ri][kind] = (qs, res)
 
@@ -365,6 +379,8 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--target", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--perturb", default="", help="comma-separated subset of " + ",".join(PERTURBATIONS))
+    ap.add_argument("--one-question-per-request", action="store_true",
+                    help="ask each question of a record in its own request (reproduces results of servers that did)")
     ap.add_argument("--concurrency", type=int, default=8)
     ap.add_argument("--limit", type=int, default=0, help="0 = all records")
     ap.add_argument("--sample", type=int, default=0, help="seeded random subset of this size after --limit; 0 = off")

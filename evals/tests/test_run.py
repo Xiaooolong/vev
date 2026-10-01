@@ -141,3 +141,11 @@ def test_invalid_records_abort(fake, tmp_path):
     )
     assert proc.returncode != 0 and "invalid" in proc.stderr
     assert fake.config.requests == []
+
+
+def test_one_question_per_request_gives_the_same_answers(fake, tmp_path):
+    records = write_records(tmp_path, n=3)
+    together = run_cli(fake, records, tmp_path / "a.json")
+    apart = run_cli(fake, records, tmp_path / "b.json", "--one-question-per-request")
+    assert [e["questions"] for e in apart["raw"]] == [e["questions"] for e in together["raw"]]
+    assert all(len(e["questions"]) == 3 and "error" not in e for e in apart["raw"])
