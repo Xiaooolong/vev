@@ -1,40 +1,40 @@
 {
   "target": "vev-4b",
-  "base_url": "http://127.0.0.1:8528",
+  "base_url": "http://127.0.0.1:8280",
   "model": "jev-latest",
-  "started": "2026-09-30T11:07:34.483414+00:00",
+  "started": "2026-10-01T04:07:25.956959+00:00",
   "observations": {
     "sdk.python.version": "0.7.1",
     "sdk.python.answers": {
-      "is_urgent": 0.9922194480895996,
+      "is_urgent": 0.9924546480178833,
       "department": {
         "choice": "billing",
-        "confidence": 0.7285274565219879,
+        "confidence": 0.7250461280345917,
         "probabilities": {
-          "billing": 0.8190183043479919,
-          "technical": 0.17976900935173035,
-          "sales": 0.0012127466034144163
+          "billing": 0.8166974186897278,
+          "technical": 0.18212002515792847,
+          "sales": 0.001182540669105947
         }
       },
       "frustration": {
-        "score": 1.8409405499696732,
-        "confidence": 0.7674369215965271
+        "score": 1.8420746624469757,
+        "confidence": 0.7687185704708099
       }
     },
-    "sdk.python.models": "<typesafe_sdk._core.client.sync.models.Models object at 0x155552883b60>",
+    "sdk.python.models": "<typesafe_sdk._core.client.sync.models.Models object at 0x1555528d7a10>",
     "langchain.answers": {
-      "is_urgent": 0.9911124110221863,
+      "is_urgent": 0.9909058809280396,
       "department": "billing",
-      "frustration": 1.8409405499696732
+      "frustration": 1.8420746624469757
     },
     "determinism.max_delta": 0.0,
     "determinism.distinct_outputs": 1,
     "determinism.latencies_ms": [
-      127,
-      125,
-      125,
-      121,
-      126
+      46,
+      45,
+      43,
+      40,
+      43
     ],
     "err.missing_questions.status": 422,
     "err.missing_questions.body": {
@@ -187,17 +187,17 @@
       }
     },
     "isolation.batched_vs_separate.deltas": {
-      "is_urgent": 0.0,
-      "department": 0.0,
-      "frustration": 0.0,
-      "refund": 0.0,
-      "tone": 0.0
+      "is_urgent": 0.000235,
+      "department": 0.002351,
+      "frustration": 0.000854,
+      "refund": 0.000239,
+      "tone": 0.005239
     },
-    "isolation.batched_vs_separate.max": 0.0,
+    "isolation.batched_vs_separate.max": 0.005239,
     "isolation.question_order.max": 0.0,
     "isolation.visibility": {
       "alone": 0.028092851862311363,
-      "with_secret_sibling": 0.028092851862311363,
+      "with_secret_sibling": 0.028246160596609116,
       "secret_in_state": 0.9767565727233887
     },
     "models.status": 200,
@@ -205,8 +205,8 @@
       "models": [
         {
           "name": "vev-4b",
-          "description": "Zero-training baseline: Qwen/Qwen3.5-4B read directly from next-token logits over constrained answer tokens (choice letters, Yes/No, level digits). One forward pass per question, no decoding. confidence = (p_max - 1/K) / (1 - 1/K). output_tokens is informational only.",
-          "release_date": "2026-09-23T00:00:00Z",
+          "description": "vev-4b (base Qwen/Qwen3.5-4B): answers are read from next-token logits over constrained answer tokens (choice letters, Yes/No, level digits). The questions of a request run as one batch, no decoding. confidence = (p_max - 1/K) / (1 - 1/K). output_tokens is informational only.",
+          "release_date": "2026-10-01T00:00:00Z",
           "limits": {
             "max_images": 8,
             "max_image_pixels": 1048576,
@@ -219,43 +219,38 @@
             "vev-latest",
             "jev-latest",
             "latest"
-          ],
-          "temperatures": {
-            "choice": 1.0,
-            "noul": 1.0,
-            "score": 1.0
-          }
+          ]
         }
       ]
     },
     "healthz.status": 200,
     "three_types.status": 200,
-    "three_types.latency_ms": 120,
+    "three_types.latency_ms": 42,
     "three_types.body": {
       "model": "vev-4b",
       "answers": {
         "is_urgent": {
           "type": "noul",
-          "noul": 0.9922194480895996
+          "noul": 0.9924546480178833
         },
         "department": {
           "type": "choice",
           "choice": "billing",
-          "confidence": 0.7285274565219879,
+          "confidence": 0.7250461280345917,
           "probabilities": {
-            "billing": 0.8190183043479919,
-            "technical": 0.17976900935173035,
-            "sales": 0.0012127466034144163
+            "billing": 0.8166974186897278,
+            "technical": 0.18212002515792847,
+            "sales": 0.001182540669105947
           }
         },
         "frustration": {
           "type": "score",
-          "score": 1.8409405499696732,
-          "confidence": 0.7674369215965271,
+          "score": 1.8420746624469757,
+          "confidence": 0.7687185704708099,
           "probabilities": {
-            "0": 0.004017400089651346,
-            "1": 0.15102465450763702,
-            "2": 0.8449579477310181
+            "0": 0.0037377492990344763,
+            "1": 0.15044990181922913,
+            "2": 0.8458123803138733
           },
           "legend": {
             "0": "Calm",
@@ -269,7 +264,7 @@
         "output_tokens": 273
       }
     },
-    "request_id_header": "req_31cf4068b1c347449de7a38747339f5d",
+    "request_id_header": "req_6ac93ac7ad86482e87fc42098b09b0e4",
     "alias.jev-latest.status": 200,
     "alias.jev-latest.model_echo": "vev-4b",
     "model_missing.status": 422,
@@ -327,11 +322,11 @@
       }
     },
     "choice_fifty.status": 200,
-    "choice_fifty.latency_ms": 53,
+    "choice_fifty.latency_ms": 55,
     "choice_fifty.top": "technical",
     "score_ten.status": 200,
     "many_questions.status": 200,
-    "many_questions.latency_ms": 861,
+    "many_questions.latency_ms": 118,
     "image_object.status": 200,
     "image_object.body": {
       "model": "vev-4b",
@@ -348,6 +343,6 @@
     },
     "image_object.supports_images": true
   },
-  "finished": "2026-09-30T11:07:39.174434+00:00",
+  "finished": "2026-10-01T04:07:28.113243+00:00",
   "exit_status": 0
 }
