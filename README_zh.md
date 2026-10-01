@@ -170,6 +170,6 @@ SO_BASE_URL=http://127.0.0.1:8009 SO_SUPPORTS_IMAGES=1 pytest conformance -q
   author = {Wang, Xiaolong},
   year   = {2026},
   url    = {https://github.com/Xiaooolong/vev},
-  version = {0.1.0}
+  version = {0.1.1}
 }
 ```

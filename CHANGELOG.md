@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.1 (unreleased)
+## 0.1.1 (2026-10-01)
 
 - The questions of a request run as one batch instead of one forward pass each. On one H800, 100 questions about a
   short text take 0.23 s instead of 3.75 s with `vev-4b`; images go through the image processor once per request.

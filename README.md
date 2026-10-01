@@ -217,6 +217,6 @@ Qwen3.5-9B, are Apache 2.0. [TRAINING.md](TRAINING.md) lists every training sour
   author = {Wang, Xiaolong},
   year   = {2026},
   url    = {https://github.com/Xiaooolong/vev},
-  version = {0.1.0}
+  version = {0.1.1}
 }
 ```
