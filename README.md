@@ -1,8 +1,14 @@
 # Vev
 
-[![English](https://img.shields.io/badge/lang-English-blue)](README.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red)](README_zh.md) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev-6abd3e17303828e10c49dc65)
+[![English](https://img.shields.io/badge/lang-English-blue)](README.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red)](README_zh.md) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev)
 
 **Jev-like decision models that can also see images.**
+
+<img src="docs/doom.webp" alt="vev-4b playing Doom in real time: the game on the left, the eight slice probabilities and the chosen action on the right.">
+
+vev-4b playing Doom in real time. A small harness cuts each frame into 8 vertical slices and asks Vev one yes/no
+question per slice in a single request ("does this slice show a monster?"); a fixed rule turns the answers into
+turning and firing. The game never waits for the model.
 
 Ask yes/no, multiple-choice or graded questions about a piece of text, a JSON record or a screenshot, and get a
 probability for every allowed answer back in about 40 ms. Nothing is generated, so the answer is always one of the

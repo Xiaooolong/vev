@@ -1,8 +1,12 @@
 # Vev
 
-[![English](https://img.shields.io/badge/lang-English-blue)](README.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red)](README_zh.md) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev-6abd3e17303828e10c49dc65)
+[![English](https://img.shields.io/badge/lang-English-blue)](README.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red)](README_zh.md) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-models%20%26%20data-yellow)](https://huggingface.co/collections/CountingSheep/vev)
 
 **像 Jev 一样做判断，而且能看图的决策模型。**
+
+<img src="docs/doom.webp" alt="vev-4b 实时玩 Doom：左边是游戏画面，右边是 8 个竖条的概率和选出的动作。">
+
+vev-4b 实时玩 Doom。一个简单的外围程序（harness）把每帧画面切成 8 个竖条，在一次请求里让 Vev 对每条回答一个是/否问题（"这一条里有没有怪？"），再由一条固定规则把答案变成转身和开枪。游戏不等模型。
 
 对一段文本、一条 JSON 记录或一张截图，问是/否、单选或打分的问题，约 40 毫秒拿回每个候选答案的概率。它不生成文本，所以答案一定落在你给定的选项里，也可以直接按概率设阈值。权重开放，跑在你自己的 GPU 上。
 
