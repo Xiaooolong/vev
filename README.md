@@ -6,8 +6,8 @@
 
 <img src="docs/doom.webp" alt="vev-4b playing Doom in real time: the game on the left, the eight slice probabilities and the chosen action on the right.">
 
-vev-4b playing Doom in real time. A small harness cuts each frame into 8 vertical slices and asks Vev one yes/no
-question per slice in a single request ("does this slice show a monster?"); a fixed rule turns the answers into
+vev-4b playing Doom in real time. On each look, a small harness cuts the screen into 8 vertical slices and asks Vev
+one yes/no question per slice in a single request ("does this slice show a monster?"); a fixed rule turns the answers into
 turning and firing. The game never waits for the model.
 
 Ask yes/no, multiple-choice or graded questions about a piece of text, a JSON record or a screenshot, and get a
