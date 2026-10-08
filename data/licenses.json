@@ -272,12 +272,12 @@
     "notes": "Plots are synthetically rendered from real-world statistics tables, so no third-party image copyright."
   },
   "charxiv": {
-    "tier": "unknown",
-    "license": "CC BY-SA 4.0 (annotations); charts copyright original arXiv authors",
-    "evidence_url": "https://github.com/princeton-nlp/CharXiv",
-    "quote": "The copyright of the charts belong to the original authors, where you can find the source in image_metadata_val.json and image_metadata_test.json",
-    "checked": "2026-09-23",
-    "notes": "HF princeton-nlp/CharXiv YAML cc-by-sa-4.0; code Apache-2.0. Chart images are not licensed by CharXiv; per-paper arXiv licenses vary (many use the default arXiv license, not reusable). Only val/test splits exist (benchmark)."
+    "tier": "non-commercial",
+    "license": "CC BY-SA 4.0 (questions); evaluation only, training forbidden by the dataset card",
+    "evidence_url": "https://huggingface.co/datasets/princeton-nlp/CharXiv",
+    "quote": "it is intended to be used to evaluate models only. You are **NOT** allowed to use it to train your models.",
+    "checked": "2026-10-09",
+    "notes": "HF princeton-nlp/CharXiv YAML cc-by-sa-4.0; code Apache-2.0. Chart images are not licensed by CharXiv; per-paper arXiv licenses vary (many use the default arXiv license, not reusable). Only val/test splits exist (benchmark). | 10-09: the HF card forbids training use; tier set to non-commercial so builds exclude it. v0.1 (v1-research) was trained on 2,570 CharXiv val records."
   },
   "androidcontrol": {
     "tier": "commercial-ok",
