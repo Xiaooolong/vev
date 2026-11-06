@@ -1,0 +1,1 @@
+{"time": "2026-11-05T23:00:37.347869+00:00", "event": "complete", "engine": "di_vev_vision:VevVision", "completed": 12210, "counts": {"ok": 12210}, "effective_image_budget": {"max_image_pixels": 1638400, "max_image_tokens": null, "rows_with_image_tokens": 0}, "elapsed_seconds": 1403.7}

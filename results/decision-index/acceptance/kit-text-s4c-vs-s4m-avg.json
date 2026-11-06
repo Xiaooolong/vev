@@ -1,0 +1,377 @@
+{
+ "kind": "text",
+ "new": "s4c",
+ "ref": "s4m-avg",
+ "dirs": {
+  "new": "results/decision-index/text/s4c-rt",
+  "ref": "results/decision-index/text/s4m-avg-rt"
+ },
+ "checkpoints": {
+  "new": "f1806db25df9c4e008e6717fc0d8b3d0cd37e597a081e844e508a0a73882bde5",
+  "ref": null
+ },
+ "rows": {
+  "new": 140620,
+  "ref": 140620,
+  "common": 140620,
+  "only_new": 0,
+  "only_ref": 0
+ },
+ "rows_answer_changed": 17621,
+ "rows_status_changed": 0,
+ "questions": 311916,
+ "questions_answer_changed": 20268,
+ "max_abs_probability_change": 0.9621400013566017,
+ "max_at": "22:POP909-chord-pitch-class:POP909:780:beat-154 chord chord_97",
+ "index": {
+  "new": 60.13,
+  "ref": 63.41,
+  "diff": -3.279999999999994
+ },
+ "per_benchmark": {
+  "ACOS": {
+   "rows": 1565,
+   "answer_changed": 523,
+   "status_changed": 0,
+   "skill_new": 0.3146,
+   "skill_ref": 0.3521,
+   "skill_diff": -0.03750000000000003
+  },
+  "ANLI": {
+   "rows": 3200,
+   "answer_changed": 309,
+   "status_changed": 0,
+   "skill_new": 0.568,
+   "skill_ref": 0.6068,
+   "skill_diff": -0.03880000000000006
+  },
+  "API-Bank": {
+   "rows": 508,
+   "answer_changed": 15,
+   "status_changed": 0,
+   "skill_new": 0.8214,
+   "skill_ref": 0.8415,
+   "skill_diff": -0.020100000000000007
+  },
+  "ARC-Challenge": {
+   "rows": 1172,
+   "answer_changed": 19,
+   "status_changed": 0,
+   "skill_new": 0.9237,
+   "skill_ref": 0.9237,
+   "skill_diff": 0.0
+  },
+  "ARC-Easy": {
+   "rows": 2376,
+   "answer_changed": 30,
+   "status_changed": 0,
+   "skill_new": 0.9731,
+   "skill_ref": 0.9759,
+   "skill_diff": -0.0028000000000000247
+  },
+  "Amazon ESCI": {
+   "rows": 5000,
+   "answer_changed": 360,
+   "status_changed": 0,
+   "skill_new": 0.4932,
+   "skill_ref": 0.4888,
+   "skill_diff": 0.004400000000000015
+  },
+  "BANKING77": {
+   "rows": 3080,
+   "answer_changed": 119,
+   "status_changed": 0,
+   "skill_new": 0.9029,
+   "skill_ref": 0.9059,
+   "skill_diff": -0.0030000000000000027
+  },
+  "BBH fixed-option tasks": {
+   "rows": 5507,
+   "answer_changed": 968,
+   "status_changed": 0,
+   "skill_new": 0.5949,
+   "skill_ref": 0.69,
+   "skill_diff": -0.09509999999999996
+  },
+  "BFCL": {
+   "rows": 1694,
+   "answer_changed": 18,
+   "status_changed": 0,
+   "skill_new": 0.953,
+   "skill_ref": 0.9578,
+   "skill_diff": -0.0048000000000000265
+  },
+  "BPoMP": {
+   "rows": 5000,
+   "answer_changed": 140,
+   "status_changed": 0,
+   "skill_new": 0.8788,
+   "skill_ref": 0.8875,
+   "skill_diff": -0.00869999999999993
+  },
+  "BRIGHT": {
+   "rows": 307,
+   "answer_changed": 42,
+   "status_changed": 0,
+   "skill_new": 0.334,
+   "skill_ref": 0.3276,
+   "skill_diff": 0.006400000000000017
+  },
+  "CLINC150+OOS": {
+   "rows": 5500,
+   "answer_changed": 230,
+   "status_changed": 0,
+   "skill_new": 0.928,
+   "skill_ref": 0.9313,
+   "skill_diff": -0.0032999999999999696
+  },
+  "CLadder": {
+   "rows": 5000,
+   "answer_changed": 573,
+   "status_changed": 0,
+   "skill_new": 0.5944,
+   "skill_ref": 0.5924,
+   "skill_diff": 0.0020000000000000018
+  },
+  "CRUXEval": {
+   "rows": 570,
+   "answer_changed": 84,
+   "status_changed": 0,
+   "skill_new": 0.4182,
+   "skill_ref": 0.3988,
+   "skill_diff": 0.01940000000000003
+  },
+  "ChessBench": {
+   "rows": 5000,
+   "answer_changed": 2531,
+   "status_changed": 0,
+   "skill_new": 0.1293,
+   "skill_ref": 0.1394,
+   "skill_diff": -0.010099999999999998
+  },
+  "ContractNLI": {
+   "rows": 123,
+   "answer_changed": 60,
+   "status_changed": 0,
+   "skill_new": 0.7722,
+   "skill_ref": 0.7805,
+   "skill_diff": -0.008299999999999974
+  },
+  "FinEntity": {
+   "rows": 979,
+   "answer_changed": 29,
+   "status_changed": 0,
+   "skill_new": 0.912,
+   "skill_ref": 0.9148,
+   "skill_diff": -0.0027999999999999137
+  },
+  "GPQA Diamond": {
+   "rows": 198,
+   "answer_changed": 41,
+   "status_changed": 0,
+   "skill_new": 0.2177,
+   "skill_ref": 0.2449,
+   "skill_diff": -0.027200000000000002
+  },
+  "GSM8K": {
+   "rows": 2638,
+   "answer_changed": 519,
+   "status_changed": 0,
+   "skill_new": 0.5937,
+   "skill_ref": 0.5972,
+   "skill_diff": -0.0034999999999999476
+  },
+  "HLE": {
+   "rows": 513,
+   "answer_changed": 96,
+   "status_changed": 0,
+   "skill_new": 0.0,
+   "skill_ref": 0.0,
+   "skill_diff": 0.0
+  },
+  "Habermas Machine": {
+   "rows": 1676,
+   "answer_changed": 237,
+   "status_changed": 0,
+   "skill_new": 0.4181,
+   "skill_ref": 0.425,
+   "skill_diff": -0.006899999999999962
+  },
+  "HellaSwag": {
+   "rows": 10042,
+   "answer_changed": 287,
+   "status_changed": 0,
+   "skill_new": 0.9088,
+   "skill_ref": 0.9121,
+   "skill_diff": -0.0032999999999999696
+  },
+  "HoVer claim verification": {
+   "rows": 4000,
+   "answer_changed": 146,
+   "status_changed": 0,
+   "skill_new": 0.7596,
+   "skill_ref": 0.7576,
+   "skill_diff": 0.0020000000000000018
+  },
+  "Home appliance simulator": {
+   "rows": 88,
+   "answer_changed": 47,
+   "status_changed": 0,
+   "skill_new": 0.4091,
+   "skill_ref": 0.8409,
+   "skill_diff": -0.43179999999999996
+  },
+  "Humicroedit": {
+   "rows": 2628,
+   "answer_changed": 271,
+   "status_changed": 0,
+   "skill_new": 0.2382,
+   "skill_ref": 0.274,
+   "skill_diff": -0.035800000000000026
+  },
+  "MMLU": {
+   "rows": 14042,
+   "answer_changed": 1118,
+   "status_changed": 0,
+   "skill_new": 0.6911,
+   "skill_ref": 0.698,
+   "skill_diff": -0.006899999999999906
+  },
+  "MMLU-Pro": {
+   "rows": 12032,
+   "answer_changed": 2086,
+   "status_changed": 0,
+   "skill_new": 0.5448,
+   "skill_ref": 0.5466,
+   "skill_diff": -0.0018000000000000238
+  },
+  "MuSR": {
+   "rows": 756,
+   "answer_changed": 82,
+   "status_changed": 0,
+   "skill_new": 0.3065,
+   "skill_ref": 0.3045,
+   "skill_diff": 0.0020000000000000018
+  },
+  "NLI4CT": {
+   "rows": 5500,
+   "answer_changed": 440,
+   "status_changed": 0,
+   "skill_new": 0.6268,
+   "skill_ref": 0.694,
+   "skill_diff": -0.06719999999999993
+  },
+  "New Yorker caption matching": {
+   "rows": 528,
+   "answer_changed": 52,
+   "status_changed": 0,
+   "skill_new": 0.6306,
+   "skill_ref": 0.6449,
+   "skill_diff": -0.01429999999999998
+  },
+  "POP909-CL": {
+   "rows": 2000,
+   "answer_changed": 210,
+   "status_changed": 0,
+   "skill_new": 0.79,
+   "skill_ref": 0.8008,
+   "skill_diff": -0.01079999999999992
+  },
+  "PhishNChips phishing decisions": {
+   "rows": 2000,
+   "answer_changed": 204,
+   "status_changed": 0,
+   "skill_new": 0.937,
+   "skill_ref": 0.938,
+   "skill_diff": -0.0009999999999998899
+  },
+  "RAGTruth response-level hallucination": {
+   "rows": 2700,
+   "answer_changed": 106,
+   "status_changed": 0,
+   "skill_new": 0.5623,
+   "skill_ref": 0.571,
+   "skill_diff": -0.00869999999999993
+  },
+  "RouterBench": {
+   "rows": 10000,
+   "answer_changed": 2621,
+   "status_changed": 0,
+   "skill_new": 0.5294,
+   "skill_ref": 0.5299,
+   "skill_diff": -0.000500000000000056
+  },
+  "SATA-Bench": {
+   "rows": 1650,
+   "answer_changed": 1243,
+   "status_changed": 0,
+   "skill_new": 0.1753,
+   "skill_ref": 0.454,
+   "skill_diff": -0.2787
+  },
+  "SGD/SGD-X": {
+   "rows": 2500,
+   "answer_changed": 178,
+   "status_changed": 0,
+   "skill_new": 0.0,
+   "skill_ref": 0.0,
+   "skill_diff": 0.0
+  },
+  "SimpleBench": {
+   "rows": 10,
+   "answer_changed": 2,
+   "status_changed": 0,
+   "skill_new": 0.16,
+   "skill_ref": 0.04,
+   "skill_diff": 0.12
+  },
+  "ToolRet": {
+   "rows": 1013,
+   "answer_changed": 242,
+   "status_changed": 0,
+   "skill_new": 0.5935,
+   "skill_ref": 0.614,
+   "skill_diff": -0.020499999999999963
+  },
+  "VAST": {
+   "rows": 3006,
+   "answer_changed": 182,
+   "status_changed": 0,
+   "skill_new": 0.6969,
+   "skill_ref": 0.708,
+   "skill_diff": -0.011099999999999999
+  },
+  "When2Call MCQ": {
+   "rows": 3652,
+   "answer_changed": 156,
+   "status_changed": 0,
+   "skill_new": 0.7952,
+   "skill_ref": 0.8255,
+   "skill_diff": -0.030299999999999994
+  },
+  "WinoGrande": {
+   "rows": 1267,
+   "answer_changed": 79,
+   "status_changed": 0,
+   "skill_new": 0.6496,
+   "skill_ref": 0.6638,
+   "skill_diff": -0.01419999999999999
+  },
+  "cfcolor": {
+   "rows": 5000,
+   "answer_changed": 660,
+   "status_changed": 0,
+   "skill_new": 0.4263,
+   "skill_ref": 0.4279,
+   "skill_diff": -0.0015999999999999903
+  },
+  "iSarcasmEval": {
+   "rows": 4600,
+   "answer_changed": 266,
+   "status_changed": 0,
+   "skill_new": 0.4212,
+   "skill_ref": 0.4131,
+   "skill_diff": 0.008099999999999996
+  }
+ }
+}

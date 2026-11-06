@@ -1,0 +1,443 @@
+{
+ "model": "vev-4b 0.2.0",
+ "protocol": "Decision Index board protocol: one process on one GPU, one request at a time, 10 untimed rows first; end-to-end wall time per row as the kit's vision runner records it (model_request_wall_ms, client-side image encoding included), engine evals/decision_index/vision_engine.py plus the server's timing extension. Server started with scripts/serve_board.sh. Times in ms.",
+ "sample": "1,294 public vision rows: up to 60 per (benchmark, image count), systematic over input length, plus all 574 two-image rows; latency weighted back to the public mix (see latency-rtx-pro-6000)",
+ "autotune_runs": "counted from TRITON_PRINT_AUTOTUNING=1 in the server log; kernels compiled = new entries in the Triton cache between /healthz answering and the end of the run",
+ "answers_vs_h800_reference": "same checkpoint, H800, before the warm-up change",
+ "runs": {
+  "h800_empty_cache_before": {
+   "gpu": "H800",
+   "triton_cache": "empty",
+   "code": "release-0.2 before vev/warmup.py",
+   "warmup_s": 62.581,
+   "start_to_healthy_s": 77.577757464,
+   "warmup_requests": [],
+   "autotune_runs_before_healthy": 11,
+   "autotune_runs_after_healthy": 2,
+   "kernels_compiled_after_healthy": 52,
+   "untimed_rows_ms": [
+    1490.9,
+    318.5,
+    7925.3,
+    104.4,
+    93.2,
+    370.1,
+    7977.0,
+    259.5,
+    209.6,
+    304.1
+   ],
+   "timed_rows": 1294,
+   "end_to_end_weighted": {
+    "n": 1294,
+    "median": 101.4,
+    "mean": 152.9,
+    "p80": 224.7,
+    "p95": 393.5,
+    "max": 610.9
+   },
+   "answers_vs_h800_reference": {
+    "rows": 1294,
+    "same_choice": 1294,
+    "same_choice_share": 1.0,
+    "max_abs_dp": 0.0,
+    "median_abs_dp": 0.0,
+    "p99_abs_dp": 0.0,
+    "rows_dp_over_0.01": 0,
+    "rows_with_different_input_tokens": 0
+   }
+  },
+  "h800_empty_cache": {
+   "gpu": "H800",
+   "triton_cache": "empty",
+   "code": "release-0.2 with vev/warmup.py",
+   "warmup_s": 114.9,
+   "start_to_healthy_s": 130.01643628,
+   "warmup_requests": [
+    {
+     "request": "text, ~100 tokens",
+     "input_tokens": 146,
+     "ms": 29866
+    },
+    {
+     "request": "text, ~2,500 tokens",
+     "input_tokens": 4982,
+     "ms": 7984
+    },
+    {
+     "request": "text, ~11,000 tokens",
+     "input_tokens": 11241,
+     "ms": 29826
+    },
+    {
+     "request": "text, ~15,000 tokens",
+     "input_tokens": 15327,
+     "ms": 8861
+    },
+    {
+     "request": "1 image, 0.3 MP",
+     "input_tokens": 716,
+     "ms": 297
+    },
+    {
+     "request": "1 image, 1.6 MP",
+     "input_tokens": 3316,
+     "ms": 7522
+    },
+    {
+     "request": "2 images, 1.6 MP each",
+     "input_tokens": 6548,
+     "ms": 7992
+    },
+    {
+     "request": "3 images, 1.6 MP each",
+     "input_tokens": 9766,
+     "ms": 8183
+    },
+    {
+     "request": "4 images, 1.6 MP each",
+     "input_tokens": 12984,
+     "ms": 8421
+    },
+    {
+     "request": "1 image, 1.6 MP, 3 questions",
+     "input_tokens": 1836,
+     "ms": 897
+    },
+    {
+     "request": "text, 2 questions",
+     "input_tokens": 204,
+     "ms": 785
+    },
+    {
+     "request": "text, 3 questions",
+     "input_tokens": 298,
+     "ms": 56
+    },
+    {
+     "request": "text, 4 questions",
+     "input_tokens": 392,
+     "ms": 779
+    },
+    {
+     "request": "text, 6 questions",
+     "input_tokens": 580,
+     "ms": 763
+    },
+    {
+     "request": "text, 8 questions",
+     "input_tokens": 768,
+     "ms": 774
+    },
+    {
+     "request": "text, 16 questions",
+     "input_tokens": 1532,
+     "ms": 782
+    },
+    {
+     "request": "text, 64 questions",
+     "input_tokens": 6140,
+     "ms": 937
+    }
+   ],
+   "autotune_runs_before_healthy": 22,
+   "autotune_runs_after_healthy": 0,
+   "kernels_compiled_after_healthy": 0,
+   "untimed_rows_ms": [
+    487.6,
+    312.5,
+    298.8,
+    95.6,
+    87.2,
+    364.8,
+    220.4,
+    240.3,
+    205.5,
+    298.7
+   ],
+   "timed_rows": 1294,
+   "end_to_end_weighted": {
+    "n": 1294,
+    "median": 97.7,
+    "mean": 150.1,
+    "p80": 220.9,
+    "p95": 383.5,
+    "max": 618.3
+   },
+   "answers_vs_h800_reference": {
+    "rows": 1294,
+    "same_choice": 1294,
+    "same_choice_share": 1.0,
+    "max_abs_dp": 0.0,
+    "median_abs_dp": 0.0,
+    "p99_abs_dp": 0.0,
+    "rows_dp_over_0.01": 0,
+    "rows_with_different_input_tokens": 0
+   }
+  },
+  "h800_filled_cache": {
+   "gpu": "H800",
+   "triton_cache": "filled by earlier runs",
+   "code": "release-0.2 with vev/warmup.py",
+   "warmup_s": 5.8,
+   "start_to_healthy_s": 23.217341489,
+   "warmup_requests": [
+    {
+     "request": "text, ~100 tokens",
+     "input_tokens": 146,
+     "ms": 989
+    },
+    {
+     "request": "text, ~2,500 tokens",
+     "input_tokens": 4982,
+     "ms": 216
+    },
+    {
+     "request": "text, ~11,000 tokens",
+     "input_tokens": 11241,
+     "ms": 678
+    },
+    {
+     "request": "text, ~15,000 tokens",
+     "input_tokens": 15327,
+     "ms": 873
+    },
+    {
+     "request": "1 image, 0.3 MP",
+     "input_tokens": 716,
+     "ms": 297
+    },
+    {
+     "request": "1 image, 1.6 MP",
+     "input_tokens": 3316,
+     "ms": 195
+    },
+    {
+     "request": "2 images, 1.6 MP each",
+     "input_tokens": 6548,
+     "ms": 342
+    },
+    {
+     "request": "3 images, 1.6 MP each",
+     "input_tokens": 9766,
+     "ms": 524
+    },
+    {
+     "request": "4 images, 1.6 MP each",
+     "input_tokens": 12984,
+     "ms": 735
+    },
+    {
+     "request": "1 image, 1.6 MP, 3 questions",
+     "input_tokens": 1836,
+     "ms": 188
+    },
+    {
+     "request": "text, 2 questions",
+     "input_tokens": 204,
+     "ms": 68
+    },
+    {
+     "request": "text, 3 questions",
+     "input_tokens": 298,
+     "ms": 53
+    },
+    {
+     "request": "text, 4 questions",
+     "input_tokens": 392,
+     "ms": 65
+    },
+    {
+     "request": "text, 6 questions",
+     "input_tokens": 580,
+     "ms": 64
+    },
+    {
+     "request": "text, 8 questions",
+     "input_tokens": 768,
+     "ms": 96
+    },
+    {
+     "request": "text, 16 questions",
+     "input_tokens": 1532,
+     "ms": 104
+    },
+    {
+     "request": "text, 64 questions",
+     "input_tokens": 6140,
+     "ms": 225
+    }
+   ],
+   "autotune_runs_before_healthy": 0,
+   "autotune_runs_after_healthy": 0,
+   "kernels_compiled_after_healthy": 0,
+   "untimed_rows_ms": [
+    478.8,
+    313.8,
+    302.7,
+    96.6,
+    86.9,
+    362.7,
+    218.4,
+    236.9,
+    209.2,
+    303.2
+   ],
+   "timed_rows": 50,
+   "end_to_end_weighted": {
+    "n": 50,
+    "median": 89.8,
+    "mean": 128.3,
+    "p80": 219.5,
+    "p95": 287.2,
+    "max": 400.9
+   },
+   "answers_vs_h800_reference": {
+    "rows": 50,
+    "same_choice": 50,
+    "same_choice_share": 1.0,
+    "max_abs_dp": 0.0,
+    "median_abs_dp": 0.0,
+    "p99_abs_dp": 0.0,
+    "rows_dp_over_0.01": 0,
+    "rows_with_different_input_tokens": 0
+   },
+   "timed_rows_note": "every 26th sample row only"
+  },
+  "rtx_pro_6000_empty_cache": {
+   "gpu": "RTX PRO 6000 Blackwell Server Edition (HF Jobs)",
+   "triton_cache": "empty",
+   "code": "release-0.2 with vev/warmup.py",
+   "warmup_s": 102.0,
+   "start_to_healthy_s": 111.1,
+   "warmup_requests": [
+    {
+     "request": "text, ~100 tokens",
+     "input_tokens": 146,
+     "ms": 27138
+    },
+    {
+     "request": "text, ~2,500 tokens",
+     "input_tokens": 4982,
+     "ms": 8058
+    },
+    {
+     "request": "text, ~11,000 tokens",
+     "input_tokens": 11241,
+     "ms": 16836
+    },
+    {
+     "request": "text, ~15,000 tokens",
+     "input_tokens": 15327,
+     "ms": 9395
+    },
+    {
+     "request": "1 image, 0.3 MP",
+     "input_tokens": 716,
+     "ms": 842
+    },
+    {
+     "request": "1 image, 1.6 MP",
+     "input_tokens": 3316,
+     "ms": 8219
+    },
+    {
+     "request": "2 images, 1.6 MP each",
+     "input_tokens": 6548,
+     "ms": 8353
+    },
+    {
+     "request": "3 images, 1.6 MP each",
+     "input_tokens": 9766,
+     "ms": 8843
+    },
+    {
+     "request": "4 images, 1.6 MP each",
+     "input_tokens": 12984,
+     "ms": 9049
+    },
+    {
+     "request": "1 image, 1.6 MP, 3 questions",
+     "input_tokens": 1836,
+     "ms": 806
+    },
+    {
+     "request": "text, 2 questions",
+     "input_tokens": 204,
+     "ms": 669
+    },
+    {
+     "request": "text, 3 questions",
+     "input_tokens": 298,
+     "ms": 51
+    },
+    {
+     "request": "text, 4 questions",
+     "input_tokens": 392,
+     "ms": 668
+    },
+    {
+     "request": "text, 6 questions",
+     "input_tokens": 580,
+     "ms": 667
+    },
+    {
+     "request": "text, 8 questions",
+     "input_tokens": 768,
+     "ms": 669
+    },
+    {
+     "request": "text, 16 questions",
+     "input_tokens": 1532,
+     "ms": 693
+    },
+    {
+     "request": "text, 64 questions",
+     "input_tokens": 6140,
+     "ms": 908
+    }
+   ],
+   "autotune_runs_before_healthy": 22,
+   "autotune_runs_after_healthy": 0,
+   "kernels_compiled_after_healthy": 0,
+   "untimed_rows_ms": [
+    705.5,
+    414.2,
+    360.6,
+    98.4,
+    90.1,
+    440.5,
+    273.1,
+    550.9,
+    260.1,
+    384.4
+   ],
+   "timed_rows": 1294,
+   "end_to_end_weighted": {
+    "n": 1294,
+    "median": 118.8,
+    "mean": 180.6,
+    "p80": 270.0,
+    "p95": 460.5,
+    "max": 724.8
+   },
+   "answers_vs_h800_reference": {
+    "rows": 1294,
+    "same_choice": 1289,
+    "same_choice_share": 0.99614,
+    "max_abs_dp": 0.06041,
+    "median_abs_dp": 0.001071,
+    "p99_abs_dp": 0.02216,
+    "rows_dp_over_0.01": 75,
+    "rows_with_different_input_tokens": 0
+   }
+  }
+ },
+ "rtx_pro_6000_answers_vs_run_before_the_change": {
+  "reference": "latency-rtx-pro-6000 (same machine type, empty cache, before the warm-up change)",
+  "rows_compared": 1294,
+  "same_choice": 1294,
+  "identical_probabilities": 1294,
+  "max_abs_dp": 0.0
+ }
+}

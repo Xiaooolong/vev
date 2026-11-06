@@ -1,0 +1,121 @@
+{
+ "kind": "vision",
+ "new": "s4c",
+ "ref": "s4m-avg",
+ "dirs": {
+  "new": "results/decision-index/vision-kit/s4c",
+  "ref": "results/decision-index/vision-kit/s4m-avg"
+ },
+ "checkpoints": {
+  "new": "f1806db25df9c4e008e6717fc0d8b3d0cd37e597a081e844e508a0a73882bde5",
+  "ref": null
+ },
+ "rows": {
+  "new": 12210,
+  "ref": 12210,
+  "common": 12210,
+  "only_new": 0,
+  "only_ref": 0
+ },
+ "rows_answer_changed": 1037,
+ "rows_status_changed": 0,
+ "questions": 12210,
+ "questions_answer_changed": 1037,
+ "max_abs_probability_change": 0.8254324453689248,
+ "max_at": "full_funsd:87594142_87594144:present:59 answer B",
+ "index": {
+  "new": 72.89747567262033,
+  "ref": 71.65928049124071,
+  "diff": 1.2381951813796235
+ },
+ "per_benchmark": {
+  "BLINK": {
+   "rows": 961,
+   "answer_changed": 88,
+   "status_changed": 0,
+   "skill_new": 0.7148610551751914,
+   "skill_ref": 0.6504228755537655,
+   "skill_diff": 0.06443817962142584
+  },
+  "CV-Bench": {
+   "rows": 2038,
+   "answer_changed": 71,
+   "status_changed": 0,
+   "skill_new": 0.7895390094842357,
+   "skill_ref": 0.7919674055286483,
+   "skill_diff": -0.002428396044412584
+  },
+  "CharXiv": {
+   "rows": 532,
+   "answer_changed": 45,
+   "status_changed": 0,
+   "skill_new": 0.7443609022556391,
+   "skill_ref": 0.7318295739348372,
+   "skill_diff": 0.012531328320801949
+  },
+  "InfographicVQA": {
+   "rows": 244,
+   "answer_changed": 3,
+   "status_changed": 0,
+   "skill_new": 0.9508196721311476,
+   "skill_ref": 0.9453551912568305,
+   "skill_diff": 0.005464480874317057
+  },
+  "KIE (CORD+FUNSD)": {
+   "rows": 2465,
+   "answer_changed": 71,
+   "status_changed": 0,
+   "skill_new": 0.9318751043579897,
+   "skill_ref": 0.9098346969443981,
+   "skill_diff": 0.02204040741359159
+  },
+  "MMMU-Pro vision": {
+   "rows": 1730,
+   "answer_changed": 388,
+   "status_changed": 0,
+   "skill_new": 0.33437427240595047,
+   "skill_ref": 0.32907048174783055,
+   "skill_diff": 0.005303790658119922
+  },
+  "Mind2Web": {
+   "rows": 973,
+   "answer_changed": 51,
+   "status_changed": 0,
+   "skill_new": 0.9164097293593696,
+   "skill_ref": 0.8876327509421035,
+   "skill_diff": 0.02877697841726612
+  },
+  "Moderation (Hateful Memes)": {
+   "rows": 1213,
+   "answer_changed": 97,
+   "status_changed": 0,
+   "skill_new": 0.4245671887881286,
+   "skill_ref": 0.4064303380049463,
+   "skill_diff": 0.01813685078318228
+  },
+  "R-Bench-M": {
+   "rows": 665,
+   "answer_changed": 161,
+   "status_changed": 0,
+   "skill_new": 0.27989171303955485,
+   "skill_ref": 0.2907204090840728,
+   "skill_diff": -0.010828696044517971
+  },
+  "RealWorldQA": {
+   "rows": 589,
+   "answer_changed": 39,
+   "status_changed": 0,
+   "skill_new": 0.6365317919075144,
+   "skill_ref": 0.653179190751445,
+   "skill_diff": -0.016647398843930628
+  },
+  "Winoground": {
+   "rows": 800,
+   "answer_changed": 23,
+   "status_changed": 0,
+   "skill_new": 0.7749999999999999,
+   "skill_ref": 0.7825,
+   "skill_diff": -0.007500000000000062
+  }
+ }
+}

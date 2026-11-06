@@ -1,0 +1,11 @@
+{
+ "model": "vev-4b 0.2.0 (served as vev-s4c-rel: the 0.2.0 weights with the release vev.json)",
+ "server": "vev serve from this repository at e49fa00 (branch release-0.2), one H800",
+ "kit": "decision-index 25c6ec7 (`decision_index vision pipeline`), engine evals/decision_index/vision_engine.py",
+ "workers": 4,
+ "engine": "di_vev_vision:VevVision",
+ "max_pixels": 1638400,
+ "image_resize": "images over 1638400 pixels are downscaled to fit (aspect kept, LANCZOS); smaller images are sent as their original bytes; the server's own image settings then apply",
+ "rows_sha256": "f5f1cfb5cd92ab48d4d14919dff9c56963f4bbbed483bdd45a4f102dba87c133",
+ "completed": "2026-11-05T23:00:37Z"
+}

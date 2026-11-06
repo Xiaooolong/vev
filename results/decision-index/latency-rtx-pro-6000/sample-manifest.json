@@ -1,0 +1,89 @@
+{
+  "method": "per (set, image count): systematic sample over H800 input tokens, seed 20261106; all BLINK two-image rows",
+  "per_group": 60,
+  "seed": 20261106,
+  "suite_rows": 12210,
+  "sample_rows": 1294,
+  "image_bytes": 502034306,
+  "h800_source": "results/decision-index/vision-kit/s4c/results.jsonl (official run, code-v021)",
+  "groups": [
+    {
+      "set": "full_blink",
+      "images": 1,
+      "suite_rows": 387,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_blink",
+      "images": 2,
+      "suite_rows": 574,
+      "sample_rows": 574
+    },
+    {
+      "set": "full_charxiv",
+      "images": 1,
+      "suite_rows": 532,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_cord",
+      "images": 1,
+      "suite_rows": 1522,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_cvbench",
+      "images": 1,
+      "suite_rows": 2038,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_funsd",
+      "images": 1,
+      "suite_rows": 943,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_hateful_memes",
+      "images": 1,
+      "suite_rows": 1213,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_infovqa",
+      "images": 1,
+      "suite_rows": 244,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_mind2web",
+      "images": 1,
+      "suite_rows": 973,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_mmmu_pro_vision",
+      "images": 1,
+      "suite_rows": 1730,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_rbench_m",
+      "images": 1,
+      "suite_rows": 665,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_realworldqa",
+      "images": 1,
+      "suite_rows": 589,
+      "sample_rows": 60
+    },
+    {
+      "set": "full_winoground",
+      "images": 1,
+      "suite_rows": 800,
+      "sample_rows": 60
+    }
+  ]
+}

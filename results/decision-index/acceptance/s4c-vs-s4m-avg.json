@@ -1,0 +1,1516 @@
+{
+ "new": "s4c",
+ "ref": "s4m-avg",
+ "new_dir": "results/decision-index/vision/s4c-prxv2",
+ "ref_dir": "results/decision-index/vision/s4m-avg-prxv2",
+ "reps": 2000,
+ "seed": 0,
+ "checkpoints": {
+  "new": {
+   "vision": "f1806db25df9c4e008e6717fc0d8b3d0cd37e597a081e844e508a0a73882bde5",
+   "text": "f1806db25df9c4e008e6717fc0d8b3d0cd37e597a081e844e508a0a73882bde5"
+  },
+  "ref": {
+   "vision": null,
+   "text": null
+  }
+ },
+ "files": {
+  "cvb_proxy_kit2": {
+   "records": "data/build/s4-cvb/proxy_kit_v2.jsonl",
+   "records_sha256": "af652de93a4cb4135980c8b86ba8e22d002abf33d485791ffef508bf6387d83e",
+   "rows": 998,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/cvb_proxy_kit2.json",
+    "records_file": "data/build/s4-cvb/proxy_kit_v2.jsonl",
+    "records_sha256": "af652de93a4cb4135980c8b86ba8e22d002abf33d485791ffef508bf6387d83e",
+    "n": 998,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/cvb_proxy_kit2.json",
+    "records_file": "data/build/s4-cvb/proxy_kit_v2.jsonl",
+    "records_sha256": "af652de93a4cb4135980c8b86ba8e22d002abf33d485791ffef508bf6387d83e",
+    "n": 998,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "cvb_proxy": {
+   "records": "data/build/s4-cvb/proxy.jsonl",
+   "records_sha256": "d1511303a48a974f45d1e2f2eca93cc98fecfc1de6ef1bf22cf1b4b48d7a7627",
+   "rows": 998,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/cvb_proxy.json",
+    "records_file": "data/build/s4-cvb/proxy.jsonl",
+    "records_sha256": "d1511303a48a974f45d1e2f2eca93cc98fecfc1de6ef1bf22cf1b4b48d7a7627",
+    "n": 998,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/cvb_proxy.json",
+    "records_file": "data/build/s4-cvb/proxy.jsonl",
+    "records_sha256": "d1511303a48a974f45d1e2f2eca93cc98fecfc1de6ef1bf22cf1b4b48d7a7627",
+    "n": 998,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "blink_proxy_kit2": {
+   "records": "data/build/s4-blink/proxy_kit_v2.jsonl",
+   "records_sha256": "eb04ee09c9f94b5d5143cca885cc51c9ee6e48809b12e8544a8a00516d6dbd96",
+   "rows": 784,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/blink_proxy_kit2.json",
+    "records_file": "data/build/s4-blink/proxy_kit_v2.jsonl",
+    "records_sha256": "eb04ee09c9f94b5d5143cca885cc51c9ee6e48809b12e8544a8a00516d6dbd96",
+    "n": 784,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/blink_proxy_kit2.json",
+    "records_file": "data/build/s4-blink/proxy_kit_v2.jsonl",
+    "records_sha256": "eb04ee09c9f94b5d5143cca885cc51c9ee6e48809b12e8544a8a00516d6dbd96",
+    "n": 784,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "blink_proxy": {
+   "records": "data/build/s4-blink/proxy.jsonl",
+   "records_sha256": "988c438db9f28e87753e1e85f97ebf3a072f8a2bb82d8dce5628a3f4772c0e9e",
+   "rows": 784,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/blink_proxy.json",
+    "records_file": "data/build/s4-blink/proxy.jsonl",
+    "records_sha256": "988c438db9f28e87753e1e85f97ebf3a072f8a2bb82d8dce5628a3f4772c0e9e",
+    "n": 784,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/blink_proxy.json",
+    "records_file": "data/build/s4-blink/proxy.jsonl",
+    "records_sha256": "988c438db9f28e87753e1e85f97ebf3a072f8a2bb82d8dce5628a3f4772c0e9e",
+    "n": 784,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "wino_proxy_kit2": {
+   "records": "data/build/s4-wino/proxy_kit_v2.jsonl",
+   "records_sha256": "9ed25795265f07ead8553efcb7a68bdbe165dcf004d024b9117b7c0ff0e42970",
+   "rows": 767,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/wino_proxy_kit2.json",
+    "records_file": "data/build/s4-wino/proxy_kit_v2.jsonl",
+    "records_sha256": "9ed25795265f07ead8553efcb7a68bdbe165dcf004d024b9117b7c0ff0e42970",
+    "n": 767,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/wino_proxy_kit2.json",
+    "records_file": "data/build/s4-wino/proxy_kit_v2.jsonl",
+    "records_sha256": "9ed25795265f07ead8553efcb7a68bdbe165dcf004d024b9117b7c0ff0e42970",
+    "n": 767,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "wino_proxy": {
+   "records": "data/build/s4-wino/proxy.jsonl",
+   "records_sha256": "fa7f3e2ce5edf1d7551371cce295715ad42d29a9a0bb923bc5dda8ca104b7023",
+   "rows": 767,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/wino_proxy.json",
+    "records_file": "data/build/s4-wino/proxy.jsonl",
+    "records_sha256": "fa7f3e2ce5edf1d7551371cce295715ad42d29a9a0bb923bc5dda8ca104b7023",
+    "n": 767,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/wino_proxy.json",
+    "records_file": "data/build/s4-wino/proxy.jsonl",
+    "records_sha256": "fa7f3e2ce5edf1d7551371cce295715ad42d29a9a0bb923bc5dda8ca104b7023",
+    "n": 767,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "rwqa_proxy_kit2": {
+   "records": "data/build/s4-rwqa/proxy_kit_v2.jsonl",
+   "records_sha256": "2fed97f567608f28b41546b9150ec0711be8c175b3f362fb0c55fcd0acc36cd3",
+   "rows": 444,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/rwqa_proxy_kit2.json",
+    "records_file": "data/build/s4-rwqa/proxy_kit_v2.jsonl",
+    "records_sha256": "2fed97f567608f28b41546b9150ec0711be8c175b3f362fb0c55fcd0acc36cd3",
+    "n": 444,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/rwqa_proxy_kit2.json",
+    "records_file": "data/build/s4-rwqa/proxy_kit_v2.jsonl",
+    "records_sha256": "2fed97f567608f28b41546b9150ec0711be8c175b3f362fb0c55fcd0acc36cd3",
+    "n": 444,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "rwqa_proxy": {
+   "records": "data/build/s4-rwqa/proxy.jsonl",
+   "records_sha256": "acc8cac82b6653e11318688b96804e178d6ab344b0fca2b51aa3be66d5bc365b",
+   "rows": 444,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/rwqa_proxy.json",
+    "records_file": "data/build/s4-rwqa/proxy.jsonl",
+    "records_sha256": "acc8cac82b6653e11318688b96804e178d6ab344b0fca2b51aa3be66d5bc365b",
+    "n": 444,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/rwqa_proxy.json",
+    "records_file": "data/build/s4-rwqa/proxy.jsonl",
+    "records_sha256": "acc8cac82b6653e11318688b96804e178d6ab344b0fca2b51aa3be66d5bc365b",
+    "n": 444,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "docs_proxy_kit2": {
+   "records": "data/build/s4-docs/proxy_kit_v2.jsonl",
+   "records_sha256": "7517f3129bd9980e3dfa1a37df2fb8254828e8136a6a9d2272dfbd878e96daa3",
+   "rows": 980,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/docs_proxy_kit2.json",
+    "records_file": "data/build/s4-docs/proxy_kit_v2.jsonl",
+    "records_sha256": "7517f3129bd9980e3dfa1a37df2fb8254828e8136a6a9d2272dfbd878e96daa3",
+    "n": 980,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/docs_proxy_kit2.json",
+    "records_file": "data/build/s4-docs/proxy_kit_v2.jsonl",
+    "records_sha256": "7517f3129bd9980e3dfa1a37df2fb8254828e8136a6a9d2272dfbd878e96daa3",
+    "n": 980,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "docs_proxy": {
+   "records": "data/build/s4-docs/proxy.jsonl",
+   "records_sha256": "181342d60bb7146ec532a6b57ff0e2ffda1f29be3ccb2fa26c2e857f65beb047",
+   "rows": 980,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/docs_proxy.json",
+    "records_file": "data/build/s4-docs/proxy.jsonl",
+    "records_sha256": "181342d60bb7146ec532a6b57ff0e2ffda1f29be3ccb2fa26c2e857f65beb047",
+    "n": 980,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/docs_proxy.json",
+    "records_file": "data/build/s4-docs/proxy.jsonl",
+    "records_sha256": "181342d60bb7146ec532a6b57ff0e2ffda1f29be3ccb2fa26c2e857f65beb047",
+    "n": 980,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "kie_proxy_kit2": {
+   "records": "data/build/s4-kie/proxy_kit_v2.jsonl",
+   "records_sha256": "6da5bbcd3427ed2599340004624de5ae2e87abfc0430120acce29959a0896271",
+   "rows": 214,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/kie_proxy_kit2.json",
+    "records_file": "data/build/s4-kie/proxy_kit_v2.jsonl",
+    "records_sha256": "6da5bbcd3427ed2599340004624de5ae2e87abfc0430120acce29959a0896271",
+    "n": 214,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/kie_proxy_kit2.json",
+    "records_file": "data/build/s4-kie/proxy_kit_v2.jsonl",
+    "records_sha256": "6da5bbcd3427ed2599340004624de5ae2e87abfc0430120acce29959a0896271",
+    "n": 214,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "kie_proxy": {
+   "records": "data/build/s4-kie/proxy.jsonl",
+   "records_sha256": "b23ac11a24bcb25d8ead139e4c7884c84d001b25b05630e116bb57a352bfc590",
+   "rows": 442,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/kie_proxy.json",
+    "records_file": "data/build/s4-kie/proxy.jsonl",
+    "records_sha256": "b23ac11a24bcb25d8ead139e4c7884c84d001b25b05630e116bb57a352bfc590",
+    "n": 442,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/kie_proxy.json",
+    "records_file": "data/build/s4-kie/proxy.jsonl",
+    "records_sha256": "b23ac11a24bcb25d8ead139e4c7884c84d001b25b05630e116bb57a352bfc590",
+    "n": 442,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "hm_proxy_kit2": {
+   "records": "data/build/s4-hm/proxy_kit_v2.jsonl",
+   "records_sha256": "e013b66e623726c1bfe1319708c648b1a8c16189d846e682c80ceeb51ead9910",
+   "rows": 847,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/hm_proxy_kit2.json",
+    "records_file": "data/build/s4-hm/proxy_kit_v2.jsonl",
+    "records_sha256": "e013b66e623726c1bfe1319708c648b1a8c16189d846e682c80ceeb51ead9910",
+    "n": 847,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/hm_proxy_kit2.json",
+    "records_file": "data/build/s4-hm/proxy_kit_v2.jsonl",
+    "records_sha256": "e013b66e623726c1bfe1319708c648b1a8c16189d846e682c80ceeb51ead9910",
+    "n": 847,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "hm_proxy": {
+   "records": "data/build/s4-hm/proxy.jsonl",
+   "records_sha256": "98672ecfab8bdb1bf02ec75ce7e686b240925f7ed3589b17418f6fe8595f862d",
+   "rows": 847,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/hm_proxy.json",
+    "records_file": "data/build/s4-hm/proxy.jsonl",
+    "records_sha256": "98672ecfab8bdb1bf02ec75ce7e686b240925f7ed3589b17418f6fe8595f862d",
+    "n": 847,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/hm_proxy.json",
+    "records_file": "data/build/s4-hm/proxy.jsonl",
+    "records_sha256": "98672ecfab8bdb1bf02ec75ce7e686b240925f7ed3589b17418f6fe8595f862d",
+    "n": 847,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "m2w_proxy_kit2": {
+   "records": "data/build/s4-m2w/proxy_kit_v2.jsonl",
+   "records_sha256": "aa37b18c70a3dcc63e911699e4d87060df2fb4366ffedbfc0a941bdd73c31cbd",
+   "rows": 995,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/m2w_proxy_kit2.json",
+    "records_file": "data/build/s4-m2w/proxy_kit_v2.jsonl",
+    "records_sha256": "aa37b18c70a3dcc63e911699e4d87060df2fb4366ffedbfc0a941bdd73c31cbd",
+    "n": 995,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/m2w_proxy_kit2.json",
+    "records_file": "data/build/s4-m2w/proxy_kit_v2.jsonl",
+    "records_sha256": "aa37b18c70a3dcc63e911699e4d87060df2fb4366ffedbfc0a941bdd73c31cbd",
+    "n": 995,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "m2w_proxy": {
+   "records": "data/build/s4-m2w/proxy.jsonl",
+   "records_sha256": "59ab7a42a1dc5aec455eebe0ddab0079cb5129c7cc50db5c9fdd5f8fb4393952",
+   "rows": 1000,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/m2w_proxy.json",
+    "records_file": "data/build/s4-m2w/proxy.jsonl",
+    "records_sha256": "59ab7a42a1dc5aec455eebe0ddab0079cb5129c7cc50db5c9fdd5f8fb4393952",
+    "n": 1000,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/m2w_proxy.json",
+    "records_file": "data/build/s4-m2w/proxy.jsonl",
+    "records_sha256": "59ab7a42a1dc5aec455eebe0ddab0079cb5129c7cc50db5c9fdd5f8fb4393952",
+    "n": 1000,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "charts_proxy": {
+   "records": "data/build/s4-charts/proxy_nosame.jsonl",
+   "records_sha256": "12bde1fe3eae0c11af19b96bfd5eda5fdf6c5d32b407eca67b8cde745bcc7880",
+   "rows": 1858,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/charts_proxy.json",
+    "records_file": "data/build/s4-charts/proxy_nosame.jsonl",
+    "records_sha256": "12bde1fe3eae0c11af19b96bfd5eda5fdf6c5d32b407eca67b8cde745bcc7880",
+    "n": 1858,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/charts_proxy.json",
+    "records_file": "data/build/s4-charts/proxy_nosame.jsonl",
+    "records_sha256": "12bde1fe3eae0c11af19b96bfd5eda5fdf6c5d32b407eca67b8cde745bcc7880",
+    "n": 1858,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "nlvr2_proxy": {
+   "records": "data/build/s4-nlvr2/proxy.jsonl",
+   "records_sha256": "300bfa14fddfed4e3d0f488f5028d4a3843ed4c6c1b125a03a74ae62dedb41b1",
+   "rows": 1024,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/nlvr2_proxy.json",
+    "records_file": "data/build/s4-nlvr2/proxy.jsonl",
+    "records_sha256": "300bfa14fddfed4e3d0f488f5028d4a3843ed4c6c1b125a03a74ae62dedb41b1",
+    "n": 1024,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/nlvr2_proxy.json",
+    "records_file": "data/build/s4-nlvr2/proxy.jsonl",
+    "records_sha256": "300bfa14fddfed4e3d0f488f5028d4a3843ed4c6c1b125a03a74ae62dedb41b1",
+    "n": 1024,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  },
+  "funsd_proxy_kit2": {
+   "records": "data/build/s4-funsd-kit/proxy.jsonl",
+   "records_sha256": "8fea6042c967b00f363817a8ed1a0eb159344116ca7ee18210f78310aece1086",
+   "rows": 412,
+   "new": {
+    "file": "results/decision-index/vision/s4c-prxv2/funsd_proxy_kit2.json",
+    "records_file": "data/build/s4-funsd-kit/proxy.jsonl",
+    "records_sha256": "8fea6042c967b00f363817a8ed1a0eb159344116ca7ee18210f78310aece1086",
+    "n": 412,
+    "target": "s4c-prxv2",
+    "model": "vev-s4c"
+   },
+   "ref": {
+    "file": "results/decision-index/vision/s4m-avg-prxv2/funsd_proxy_kit2.json",
+    "records_file": "data/build/s4-funsd-kit/proxy.jsonl",
+    "records_sha256": "8fea6042c967b00f363817a8ed1a0eb159344116ca7ee18210f78310aece1086",
+    "n": 412,
+    "target": "s4m-avg-prxv2",
+    "model": "vev-s4m-avg"
+   }
+  }
+ },
+ "rules": {
+  "kit_total8": "95% lower bound > 0 pass, upper bound < 0 worse, else inconclusive",
+  "orig_total8": "95% lower bound > -1.0 pass, else upper bound < 0 worse, else inconclusive",
+  "text": "remaining index (new - ref) >= -0.5",
+  "d3": "inconclusive is accepted with a single seed"
+ },
+ "vision": {
+  "rows": {
+   "kit": {
+    "cvb": 998,
+    "blink": 784,
+    "wino": 767,
+    "rwqa": 444,
+    "docs": 980,
+    "kie": 214,
+    "hm": 847,
+    "m2w": 995
+   },
+   "orig": {
+    "cvb": 998,
+    "blink": 784,
+    "wino": 767,
+    "rwqa": 444,
+    "docs": 980,
+    "kie": 214,
+    "hm": 847,
+    "m2w": 995
+   }
+  },
+  "groups": {
+   "kit": {
+    "cvb": 998,
+    "blink": 737,
+    "wino": 492,
+    "rwqa": 235,
+    "docs": 591,
+    "kie": 58,
+    "hm": 847,
+    "m2w": 53
+   },
+   "orig": {
+    "cvb": 998,
+    "blink": 737,
+    "wino": 492,
+    "rwqa": 235,
+    "docs": 591,
+    "kie": 58,
+    "hm": 847,
+    "m2w": 53
+   }
+  },
+  "kit_group_differs_from_original": {
+   "cvb": 0,
+   "blink": 0,
+   "wino": 0,
+   "rwqa": 0,
+   "docs": 0,
+   "kie": 0,
+   "hm": 0,
+   "m2w": 0
+  },
+  "per_family": {
+   "kit": {
+    "cvb": {
+     "rows": 998,
+     "groups": 998,
+     "new": 74.59,
+     "ref": 75.1,
+     "diff": -0.5,
+     "ci": [
+      -2.52,
+      1.52
+     ]
+    },
+    "blink": {
+     "rows": 784,
+     "groups": 737,
+     "new": 76.19,
+     "ref": 69.63,
+     "diff": 6.57,
+     "ci": [
+      3.09,
+      10.11
+     ]
+    },
+    "wino": {
+     "rows": 767,
+     "groups": 492,
+     "new": 96.87,
+     "ref": 96.87,
+     "diff": 0.0,
+     "ci": [
+      -0.78,
+      0.78
+     ]
+    },
+    "rwqa": {
+     "rows": 444,
+     "groups": 235,
+     "new": 78.88,
+     "ref": 81.07,
+     "diff": -2.18,
+     "ci": [
+      -4.11,
+      -0.71
+     ]
+    },
+    "docs": {
+     "rows": 980,
+     "groups": 591,
+     "new": 93.47,
+     "ref": 93.61,
+     "diff": -0.14,
+     "ci": [
+      -1.4,
+      1.12
+     ]
+    },
+    "kie": {
+     "rows": 214,
+     "groups": 58,
+     "new": 99.36,
+     "ref": 99.36,
+     "diff": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ]
+    },
+    "hm": {
+     "rows": 847,
+     "groups": 847,
+     "new": 53.01,
+     "ref": 52.54,
+     "diff": 0.47,
+     "ci": [
+      -3.07,
+      4.01
+     ]
+    },
+    "m2w": {
+     "rows": 995,
+     "groups": 53,
+     "new": 89.15,
+     "ref": 88.07,
+     "diff": 1.07,
+     "ci": [
+      -0.43,
+      2.57
+     ]
+    }
+   },
+   "orig": {
+    "cvb": {
+     "rows": 998,
+     "groups": 998,
+     "new": 75.26,
+     "ref": 75.26,
+     "diff": 0.0,
+     "ci": [
+      -1.7,
+      1.7
+     ]
+    },
+    "blink": {
+     "rows": 784,
+     "groups": 737,
+     "new": 79.48,
+     "ref": 79.48,
+     "diff": 0.0,
+     "ci": [
+      -2.89,
+      2.71
+     ]
+    },
+    "wino": {
+     "rows": 767,
+     "groups": 492,
+     "new": 96.87,
+     "ref": 97.39,
+     "diff": -0.52,
+     "ci": [
+      -1.57,
+      0.52
+     ]
+    },
+    "rwqa": {
+     "rows": 444,
+     "groups": 235,
+     "new": 80.34,
+     "ref": 80.7,
+     "diff": -0.36,
+     "ci": [
+      -3.21,
+      2.47
+     ]
+    },
+    "docs": {
+     "rows": 980,
+     "groups": 591,
+     "new": 94.01,
+     "ref": 94.56,
+     "diff": -0.54,
+     "ci": [
+      -1.59,
+      0.55
+     ]
+    },
+    "kie": {
+     "rows": 214,
+     "groups": 58,
+     "new": 98.75,
+     "ref": 98.75,
+     "diff": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ]
+    },
+    "hm": {
+     "rows": 847,
+     "groups": 847,
+     "new": 51.12,
+     "ref": 52.07,
+     "diff": -0.94,
+     "ci": [
+      -4.01,
+      2.13
+     ]
+    },
+    "m2w": {
+     "rows": 995,
+     "groups": 53,
+     "new": 91.02,
+     "ref": 92.09,
+     "diff": -1.07,
+     "ci": [
+      -2.72,
+      0.44
+     ]
+    }
+   }
+  },
+  "totals": {
+   "kit": {
+    "total8": {
+     "new": 82.69,
+     "ref": 82.03,
+     "diff": 0.66,
+     "diff_exact": 0.6608010002905615,
+     "ci": [
+      -0.09,
+      1.38
+     ]
+    },
+    "total7": {
+     "new": 81.77,
+     "ref": 81.17,
+     "diff": 0.6,
+     "diff_exact": 0.6020544573792108,
+     "ci": [
+      -0.21,
+      1.41
+     ]
+    }
+   },
+   "orig": {
+    "total8": {
+     "new": 83.36,
+     "ref": 83.79,
+     "diff": -0.43,
+     "diff_exact": -0.43079307237324826,
+     "ci": [
+      -1.15,
+      0.28
+     ]
+    },
+    "total7": {
+     "new": 82.26,
+     "ref": 82.6,
+     "diff": -0.34,
+     "diff_exact": -0.3391882540451405,
+     "ci": [
+      -1.12,
+      0.45
+     ]
+    }
+   }
+  },
+  "verdict_by_shape": {
+   "kit": "inconclusive",
+   "orig": "inconclusive"
+  },
+  "verdict": "inconclusive",
+  "unconvertible_original_shape": {
+   "kie": {
+    "rows": 228,
+    "groups": 137,
+    "new": 95.87,
+    "ref": 97.52,
+    "diff": -1.65,
+    "ci": [
+     -4.26,
+     0.0
+    ],
+    "reasons": {
+     "kie_amounts_not_kit_showable": 28,
+     "kie_kind_field_presence": 200
+    }
+   },
+   "m2w": {
+    "rows": 5,
+    "groups": 2,
+    "new": 73.33,
+    "ref": 73.33,
+    "diff": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "reasons": {
+     "m2w_kit.py did not render this action (proxy totals: image_hit_dropped=4, skip_fewer_than_3_negatives=1)": 5
+    }
+   }
+  }
+ },
+ "reported": {
+  "charts": {
+   "all": {
+    "rows": 1858,
+    "groups": 1348,
+    "new": 93.76,
+    "ref": 89.81,
+    "diff": 3.95,
+    "ci": [
+     2.72,
+     5.26
+    ]
+   },
+   "ecd": {
+    "rows": 525,
+    "groups": 492,
+    "new": 86.79,
+    "ref": 84.25,
+    "diff": 2.54,
+    "ci": [
+     0.25,
+     4.81
+    ]
+   },
+   "ecd_heldout_style": {
+    "rows": 196,
+    "groups": 183,
+    "new": 87.07,
+    "ref": 87.76,
+    "diff": -0.68,
+    "ci": [
+     -4.0,
+     2.07
+    ]
+   },
+   "plotqa": {
+    "rows": 1137,
+    "groups": 673,
+    "new": 98.12,
+    "ref": 92.73,
+    "diff": 5.39,
+    "ci": [
+     3.69,
+     7.11
+    ]
+   }
+  },
+  "nlvr2": {
+   "all": {
+    "rows": 1024,
+    "groups": 310,
+    "new": 88.48,
+    "ref": 79.1,
+    "diff": 9.38,
+    "ci": [
+     5.98,
+     12.4
+    ]
+   },
+   "comparison": {
+    "rows": 116,
+    "groups": 55,
+    "new": 84.48,
+    "ref": 75.86,
+    "diff": 8.62,
+    "ci": [
+     0.0,
+     18.35
+    ]
+   },
+   "counting": {
+    "rows": 276,
+    "groups": 113,
+    "new": 86.96,
+    "ref": 75.36,
+    "diff": 11.59,
+    "ci": [
+     5.17,
+     18.05
+    ]
+   },
+   "other": {
+    "rows": 84,
+    "groups": 43,
+    "new": 85.71,
+    "ref": 76.19,
+    "diff": 9.52,
+    "ci": [
+     2.3,
+     19.75
+    ]
+   },
+   "quantifier": {
+    "rows": 268,
+    "groups": 115,
+    "new": 89.55,
+    "ref": 84.33,
+    "diff": 5.22,
+    "ci": [
+     0.0,
+     10.92
+    ]
+   },
+   "spatial": {
+    "rows": 280,
+    "groups": 123,
+    "new": 91.43,
+    "ref": 80.0,
+    "diff": 11.43,
+    "ci": [
+     5.05,
+     18.12
+    ]
+   }
+  },
+  "funsd": {
+   "all": {
+    "rows": 412,
+    "groups": 20,
+    "new": 94.15,
+    "ref": 92.98,
+    "diff": 1.17,
+    "ci": [
+     -1.54,
+     4.12
+    ]
+   },
+   "field_present": {
+    "rows": 210,
+    "groups": 20,
+    "new": 87.62,
+    "ref": 84.76,
+    "diff": 2.86,
+    "ci": [
+     -4.18,
+     9.3
+    ]
+   },
+   "field_value": {
+    "rows": 202,
+    "groups": 16,
+    "new": 98.68,
+    "ref": 98.68,
+    "diff": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ]
+   }
+  }
+ },
+ "text": {
+  "new_file": "results/decision-index/text/s4c-rt/scores.json",
+  "ref_file": "results/decision-index/text/s4m-avg-rt/scores.json",
+  "spec": "competitors/decision-index/decision_index/data/index-0.3.json",
+  "edition": "0.3",
+  "cleaned_set": {
+   "file": "data/stage4/text_cleaned_benchmarks.json",
+   "sha256": "09d45bb484323ece7604fa5626438597b0d745475a90907b189fb6c66566c48d",
+   "fixed": "2026-11-05",
+   "rule": "a DI text benchmark is cleaned when its training families (di_<name>, s4_text_di_<name>) lost >= 10% of their rows to the v0.2 cleaning, summed over stages 1, 3 and 4 (docs/74 §17, amended 11-05)",
+   "ids": [
+    2,
+    9,
+    12,
+    20,
+    21,
+    25,
+    33,
+    36,
+    38,
+    41,
+    42,
+    57,
+    58,
+    64
+   ],
+   "hand_1104": [
+    2,
+    9,
+    12,
+    21,
+    25,
+    33,
+    36,
+    38,
+    41,
+    43,
+    58,
+    64
+   ],
+   "added": [
+    20,
+    42,
+    57
+   ],
+   "dropped": [
+    43
+   ]
+  },
+  "published": {
+   "new": 60.13,
+   "ref": 63.41
+  },
+  "recomputed_full": {
+   "new": 60.133,
+   "ref": 63.408
+  },
+  "remaining": {
+   "benchmarks": 23,
+   "new": 65.98,
+   "ref": 66.47,
+   "diff": -0.5,
+   "diff_exact": -0.49900535969507587,
+   "areas": {
+    "knowledge": {
+     "new": 38.13,
+     "ref": 38.23
+    },
+    "language": {
+     "new": 72.27,
+     "ref": 72.58
+    },
+    "retrieval": {
+     "new": 81.24,
+     "ref": 81.28
+    },
+    "tools": {
+     "new": 86.01,
+     "ref": 87.78
+    },
+    "arts": {
+     "new": 54.48,
+     "ref": 55.12
+    }
+   }
+  },
+  "rule": "remaining index (new - ref) >= -0.5",
+  "verdict": "pass",
+  "counts": {
+   "new": {
+    "ok": 140157,
+    "unsupported": 21
+   },
+   "ref": {
+    "ok": 140157,
+    "unsupported": 21
+   }
+  },
+  "per_benchmark": [
+   {
+    "id": 25,
+    "dataset": "GPQA Diamond",
+    "area": "knowledge",
+    "gold_weight": 1.2,
+    "ref": 24.49,
+    "new": 21.77,
+    "diff": -2.72,
+    "set": "cleaned",
+    "removed_share": 1.0,
+    "cleaned_by": "di_gpqa: 100.0% of 1430 rows removed (split:GPQA extended (benchmark only, no train split) 1430)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 30,
+    "dataset": "GSM8K",
+    "area": "knowledge",
+    "gold_weight": 1.0,
+    "ref": 59.72,
+    "new": 59.37,
+    "diff": -0.35,
+    "set": "judged",
+    "removed_share": 0.0265,
+    "cleaned_by": null,
+    "note": "di_gsm8k: 2.6% of 14658 rows removed (eval_same_item 388)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 31,
+    "dataset": "ChessBench",
+    "area": "knowledge",
+    "gold_weight": 1.0,
+    "ref": 13.94,
+    "new": 12.93,
+    "diff": -1.01,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 32,
+    "dataset": "MuSR",
+    "area": "knowledge",
+    "gold_weight": 1.0,
+    "ref": 30.45,
+    "new": 30.65,
+    "diff": 0.2,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 33,
+    "dataset": "SATA-Bench",
+    "area": "knowledge",
+    "gold_weight": 1.0,
+    "ref": 45.4,
+    "new": 17.53,
+    "diff": -27.87,
+    "set": "cleaned",
+    "removed_share": 1.0,
+    "cleaned_by": "di_sata: 100.0% of 2287 rows removed (split:sata-bench-raw pool (benchmark pre-review pool) 2287)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 43,
+    "dataset": "CRUXEval",
+    "area": "knowledge",
+    "gold_weight": 1.0,
+    "ref": 39.88,
+    "new": 41.82,
+    "diff": 1.94,
+    "set": "judged",
+    "removed_share": 0.0317,
+    "cleaned_by": null,
+    "note": "di_cruxeval, s4_text_di_cruxeval: 3.2% of 12249 rows removed (split:validation 349, split:prompt 17, extra_drop 15)",
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 44,
+    "dataset": "CLadder",
+    "area": "knowledge",
+    "gold_weight": 1.0,
+    "ref": 59.24,
+    "new": 59.44,
+    "diff": 0.2,
+    "set": "judged",
+    "removed_share": 0.0001,
+    "cleaned_by": null,
+    "note": "di_cladder, s4_text_di_cladder: 0.0% of 13597 rows removed (eval_same_item 2)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 45,
+    "dataset": "HLE",
+    "area": "knowledge",
+    "gold_weight": 1.2,
+    "ref": 0.0,
+    "new": 0.0,
+    "diff": 0.0,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 57,
+    "dataset": "MMLU-Pro",
+    "area": "knowledge",
+    "gold_weight": 1.2,
+    "ref": 54.66,
+    "new": 54.48,
+    "diff": -0.18,
+    "set": "cleaned",
+    "removed_share": 0.1317,
+    "cleaned_by": "di_mmlu_pro: 13.2% of 7258 rows removed (split:MMLU validation 741, split:MMLU dev 115, split:MMLU-Pro validation 100)",
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 58,
+    "dataset": "BBH fixed-option tasks",
+    "area": "knowledge",
+    "gold_weight": 1.2,
+    "ref": 69.0,
+    "new": 59.49,
+    "diff": -9.51,
+    "set": "cleaned",
+    "removed_share": 0.6206,
+    "cleaned_by": "di_bbh, s4_text_di_bbh: 62.1% of 11303 rows removed (split:BIG-bench task files (benchmark only, no train split) 4969, split:BIG-bench task.json examples (unsplit eval pool) 2042, extra_drop 3)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 28,
+    "dataset": "WinoGrande",
+    "area": "knowledge",
+    "gold_weight": 1.2,
+    "ref": 66.38,
+    "new": 64.96,
+    "diff": -1.42,
+    "set": "judged",
+    "removed_share": 0.004,
+    "cleaned_by": null,
+    "note": "di_winogrande, s4_text_di_winogrande: 0.4% of 26986 rows removed (eval_same_item 108)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 11,
+    "dataset": "ContractNLI",
+    "area": "language",
+    "gold_weight": 1.0,
+    "ref": 78.05,
+    "new": 77.22,
+    "diff": -0.83,
+    "set": "judged",
+    "removed_share": 0.0878,
+    "cleaned_by": null,
+    "note": "di_contractnli: 8.8% of 592 rows removed (eval_same_item 52)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 12,
+    "dataset": "ANLI",
+    "area": "language",
+    "gold_weight": 1.2,
+    "ref": 60.68,
+    "new": 56.8,
+    "diff": -3.88,
+    "set": "cleaned",
+    "removed_share": 0.4128,
+    "cleaned_by": "di_anli: 41.3% of 8721 rows removed (split:dev_r3 1495, split:dev_r2 1119, split:dev_r1 986)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 29,
+    "dataset": "HellaSwag",
+    "area": "language",
+    "gold_weight": 1.2,
+    "ref": 91.21,
+    "new": 90.88,
+    "diff": -0.33,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 38,
+    "dataset": "ACOS",
+    "area": "language",
+    "gold_weight": 1.0,
+    "ref": 35.21,
+    "new": 31.46,
+    "diff": -3.75,
+    "set": "cleaned",
+    "removed_share": 0.1013,
+    "cleaned_by": "di_acos, s4_text_di_acos: 10.1% of 7482 rows removed (split:dev 756, extra_drop 1, proxy_same_item 1)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 39,
+    "dataset": "FinEntity",
+    "area": "language",
+    "gold_weight": 1.0,
+    "ref": 91.48,
+    "new": 91.2,
+    "diff": -0.28,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 40,
+    "dataset": "iSarcasmEval",
+    "area": "language",
+    "gold_weight": 1.0,
+    "ref": 41.31,
+    "new": 42.12,
+    "diff": 0.81,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 41,
+    "dataset": "VAST",
+    "area": "language",
+    "gold_weight": 1.0,
+    "ref": 70.8,
+    "new": 69.69,
+    "diff": -1.11,
+    "set": "cleaned",
+    "removed_share": 0.2417,
+    "cleaned_by": "di_vast: 24.2% of 8743 rows removed (split:dev 2113)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 42,
+    "dataset": "NLI4CT",
+    "area": "language",
+    "gold_weight": 1.0,
+    "ref": 69.4,
+    "new": 62.68,
+    "diff": -6.72,
+    "set": "cleaned",
+    "removed_share": 0.5577,
+    "cleaned_by": "di_nli4ct: 55.8% of 5440 rows removed (split:practice_test 2758, split:dev 276)",
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 59,
+    "dataset": "RAGTruth response-level hallucination",
+    "area": "language",
+    "gold_weight": 1.0,
+    "ref": 57.1,
+    "new": 56.23,
+    "diff": -0.87,
+    "set": "judged",
+    "removed_share": 0.0091,
+    "cleaned_by": null,
+    "note": "di_ragtruth: 0.9% of 7883 rows removed (eval_same_item 72)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 4,
+    "dataset": "BANKING77",
+    "area": "retrieval",
+    "gold_weight": 1.2,
+    "ref": 90.59,
+    "new": 90.29,
+    "diff": -0.3,
+    "set": "judged",
+    "removed_share": 0.0333,
+    "cleaned_by": null,
+    "note": "di_banking77: 3.3% of 5529 rows removed (eval_same_item 173, extra_drop 8, gate_derive:s4-v020c 3)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 5,
+    "dataset": "CLINC150+OOS",
+    "area": "retrieval",
+    "gold_weight": 1.2,
+    "ref": 93.13,
+    "new": 92.8,
+    "diff": -0.33,
+    "set": "judged",
+    "removed_share": 0.0046,
+    "cleaned_by": null,
+    "note": "di_clinc150: 0.5% of 1941 rows removed (extra_drop 4, eval_same_item 4, gate_derive:s4-v020c 1)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 36,
+    "dataset": "BRIGHT",
+    "area": "retrieval",
+    "gold_weight": 1.2,
+    "ref": 32.76,
+    "new": 33.4,
+    "diff": 0.64,
+    "set": "cleaned",
+    "removed_share": 1.0,
+    "cleaned_by": "di_bright, s4_text_di_bright: 100.0% of 1259 rows removed (split:BRIGHT documents 917, split:BRIGHT documents (benchmark corpus, no train split) 342)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 37,
+    "dataset": "Amazon ESCI",
+    "area": "retrieval",
+    "gold_weight": 1.0,
+    "ref": 48.88,
+    "new": 49.32,
+    "diff": 0.44,
+    "set": "judged",
+    "removed_share": 0.0001,
+    "cleaned_by": null,
+    "note": "di_esci: 0.0% of 21772 rows removed (extra_drop 1, eval_same_item 1)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 56,
+    "dataset": "PhishNChips phishing decisions",
+    "area": "retrieval",
+    "gold_weight": 1.0,
+    "ref": 93.8,
+    "new": 93.7,
+    "diff": -0.1,
+    "set": "judged",
+    "removed_share": 0.0856,
+    "cleaned_by": null,
+    "note": "di_phishnchips: 8.6% of 3226 rows removed (split:real_phishing_validation 276)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 61,
+    "dataset": "HoVer claim verification",
+    "area": "retrieval",
+    "gold_weight": 1.0,
+    "ref": 75.76,
+    "new": 75.96,
+    "diff": 0.2,
+    "set": "judged",
+    "removed_share": 0.0113,
+    "cleaned_by": null,
+    "note": "di_hover: 1.1% of 18150 rows removed (eval_same_item 206)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 1,
+    "dataset": "BFCL",
+    "area": "tools",
+    "gold_weight": 1.2,
+    "ref": 95.78,
+    "new": 95.3,
+    "diff": -0.48,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 2,
+    "dataset": "ToolRet",
+    "area": "tools",
+    "gold_weight": 1.0,
+    "ref": 61.4,
+    "new": 59.35,
+    "diff": -2.05,
+    "set": "cleaned",
+    "removed_share": 0.3593,
+    "cleaned_by": "di_toolret: 35.9% of 359 rows removed (split:before-sample (benchmark pool) 129)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 3,
+    "dataset": "API-Bank",
+    "area": "tools",
+    "gold_weight": 1.2,
+    "ref": 84.15,
+    "new": 82.14,
+    "diff": -2.01,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 9,
+    "dataset": "Home appliance simulator",
+    "area": "tools",
+    "gold_weight": 1.0,
+    "ref": 84.09,
+    "new": 40.91,
+    "diff": -43.18,
+    "set": "cleaned",
+    "removed_share": 1.0,
+    "cleaned_by": "di_home: 100.0% of 3319 rows removed (split:dev 3319)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 62,
+    "dataset": "When2Call MCQ",
+    "area": "tools",
+    "gold_weight": 1.0,
+    "ref": 82.55,
+    "new": 79.52,
+    "diff": -3.03,
+    "set": "judged",
+    "removed_share": 0.0233,
+    "cleaned_by": null,
+    "note": "di_when2call: 2.3% of 13101 rows removed (eval_same_item 305)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 20,
+    "dataset": "BPoMP",
+    "area": "arts",
+    "gold_weight": 1.0,
+    "ref": 88.75,
+    "new": 87.88,
+    "diff": -0.87,
+    "set": "cleaned",
+    "removed_share": 0.192,
+    "cleaned_by": "di_bpomp: 19.2% of 8694 rows removed (split:validation 869, split:test 800)",
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 21,
+    "dataset": "Humicroedit",
+    "area": "arts",
+    "gold_weight": 1.0,
+    "ref": 27.4,
+    "new": 23.82,
+    "diff": -3.58,
+    "set": "cleaned",
+    "removed_share": 0.1649,
+    "cleaned_by": "di_humicroedit: 16.5% of 8832 rows removed (split:dev 1456)",
+    "note": null,
+    "hand_1104": "cleaned"
+   },
+   {
+    "id": 22,
+    "dataset": "POP909-CL",
+    "area": "arts",
+    "gold_weight": 1.0,
+    "ref": 80.08,
+    "new": 79.0,
+    "diff": -1.08,
+    "set": "judged",
+    "removed_share": 0.0007,
+    "cleaned_by": null,
+    "note": "di_pop909: 0.1% of 8838 rows removed (eval_same_item 3, extra_drop 2, gate_derive:s4-v020c 1)",
+    "hand_1104": "judged"
+   },
+   {
+    "id": 23,
+    "dataset": "cfcolor",
+    "area": "arts",
+    "gold_weight": 1.0,
+    "ref": 42.79,
+    "new": 42.63,
+    "diff": -0.16,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 50,
+    "dataset": "Habermas Machine",
+    "area": "arts",
+    "gold_weight": 1.0,
+    "ref": 42.5,
+    "new": 41.81,
+    "diff": -0.69,
+    "set": "judged",
+    "removed_share": 0.0,
+    "cleaned_by": null,
+    "note": null,
+    "hand_1104": "judged"
+   },
+   {
+    "id": 64,
+    "dataset": "New Yorker caption matching",
+    "area": "arts",
+    "gold_weight": 1.0,
+    "ref": 64.49,
+    "new": 63.06,
+    "diff": -1.43,
+    "set": "cleaned",
+    "removed_share": 0.2136,
+    "cleaned_by": "di_newyorker: 21.4% of 2936 rows removed (split:validation 627)",
+    "note": null,
+    "hand_1104": "cleaned"
+   }
+  ]
+ },
+ "verdict": "inconclusive: the interval crosses its bound; D3 accepts the single seed, and the release notes say that seed variance was not estimated"
+}

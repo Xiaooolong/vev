@@ -1,0 +1,207 @@
+{
+ "model": "vev-4b 0.2.0",
+ "suite": "Decision Index public vision suite, 12,210 rows",
+ "protocol": "Decision Index board protocol: one process on one GPU, one request at a time, 10 untimed rows first; end-to-end wall time per row as the kit's vision runner records it (model_request_wall_ms, client-side image encoding included), engine evals/decision_index/vision_engine.py plus the server's timing extension. Server started with scripts/serve_board.sh. Times in ms.",
+ "hardware": "1 x NVIDIA H800 (HKUST SuperPod), 12 CPU cores of a Xeon Platinum 8480CL",
+ "environment": "Python 3.13, torch 2.8.0+cu128, triton 3.8.0, transformers 5.17.0, flash-linear-attention 0.5.2, numpy 2.5.3 (requirements-serve.txt); no causal-conv1d",
+ "code": "release-0.2 with vev/warmup.py; 3 jobs of every third row, each with the same 10 untimed rows",
+ "rows": 12210,
+ "ok": 12210,
+ "all_rows": {
+  "end_to_end": {
+   "n": 12210,
+   "median": 100.9,
+   "mean": 150.8,
+   "p80": 225.3,
+   "p95": 395.2,
+   "max": 720.2
+  },
+  "http": {
+   "n": 12210,
+   "median": 97.6,
+   "mean": 119.5,
+   "p80": 173.6,
+   "p95": 215.8,
+   "max": 366.9
+  },
+  "server_engine_run": {
+   "n": 12210,
+   "median": 93.1,
+   "mean": 114.1,
+   "p80": 167.6,
+   "p95": 200.5,
+   "max": 356.3
+  },
+  "server_model_phase": {
+   "n": 12210,
+   "median": 78.5,
+   "mean": 95.5,
+   "p80": 144.3,
+   "p95": 148.1,
+   "max": 312.3
+  },
+  "client_encode": {
+   "n": 12210,
+   "median": 2.5,
+   "mean": 30.4,
+   "p80": 47.8,
+   "p95": 191.1,
+   "max": 488.6
+  }
+ },
+ "two_image_rows": {
+  "end_to_end": {
+   "n": 574,
+   "median": 269.9,
+   "mean": 236.6,
+   "p80": 320.4,
+   "p95": 372.6,
+   "max": 468.8
+  },
+  "http": {
+   "n": 574,
+   "median": 261.1,
+   "mean": 226.0,
+   "p80": 309.7,
+   "p95": 336.6,
+   "max": 366.9
+  },
+  "server_engine_run": {
+   "n": 574,
+   "median": 255.6,
+   "mean": 221.2,
+   "p80": 304.4,
+   "p95": 330.6,
+   "max": 356.3
+  },
+  "server_model_phase": {
+   "n": 574,
+   "median": 231.1,
+   "mean": 197.5,
+   "p80": 272.5,
+   "p95": 294.5,
+   "max": 312.3
+  },
+  "client_encode": {
+   "n": 574,
+   "median": 3.9,
+   "mean": 9.3,
+   "p80": 4.7,
+   "p95": 51.6,
+   "max": 109.8
+  }
+ },
+ "per_set_end_to_end": {
+  "blink/1img": {
+   "n": 387,
+   "median": 53.6,
+   "mean": 55.2,
+   "p80": 58.3,
+   "p95": 61.6,
+   "max": 87.0
+  },
+  "blink/2img": {
+   "n": 574,
+   "median": 269.9,
+   "mean": 236.6,
+   "p80": 320.4,
+   "p95": 372.6,
+   "max": 468.8
+  },
+  "charxiv/1img": {
+   "n": 532,
+   "median": 84.8,
+   "mean": 85.8,
+   "p80": 98.0,
+   "p95": 112.9,
+   "max": 123.2
+  },
+  "cord/1img": {
+   "n": 1522,
+   "median": 146.5,
+   "mean": 215.0,
+   "p80": 403.8,
+   "p95": 587.3,
+   "max": 720.2
+  },
+  "cvbench/1img": {
+   "n": 2038,
+   "median": 61.6,
+   "mean": 85.5,
+   "p80": 90.5,
+   "p95": 238.5,
+   "max": 268.8
+  },
+  "funsd/1img": {
+   "n": 943,
+   "median": 83.0,
+   "mean": 83.8,
+   "p80": 85.9,
+   "p95": 89.5,
+   "max": 112.6
+  },
+  "hateful_memes/1img": {
+   "n": 1213,
+   "median": 68.3,
+   "mean": 67.6,
+   "p80": 73.7,
+   "p95": 81.5,
+   "max": 101.4
+  },
+  "infovqa/1img": {
+   "n": 244,
+   "median": 220.4,
+   "mean": 189.1,
+   "p80": 240.3,
+   "p95": 288.3,
+   "max": 459.2
+  },
+  "mind2web/1img": {
+   "n": 973,
+   "median": 146.7,
+   "mean": 147.6,
+   "p80": 149.7,
+   "p95": 153.4,
+   "max": 218.7
+  },
+  "mmmu_pro_vision/1img": {
+   "n": 1730,
+   "median": 287.9,
+   "mean": 261.9,
+   "p80": 381.6,
+   "p95": 439.9,
+   "max": 704.4
+  },
+  "rbench_m/1img": {
+   "n": 665,
+   "median": 60.8,
+   "mean": 74.9,
+   "p80": 72.0,
+   "p95": 145.3,
+   "max": 411.2
+  },
+  "realworldqa/1img": {
+   "n": 589,
+   "median": 166.1,
+   "mean": 175.4,
+   "p80": 235.1,
+   "p95": 266.2,
+   "max": 377.3
+  },
+  "winoground/1img": {
+   "n": 800,
+   "median": 224.7,
+   "mean": 225.7,
+   "p80": 232.0,
+   "p95": 244.4,
+   "max": 449.2
+  }
+ },
+ "answers_vs_previous_code": {
+  "reference": "the same checkpoint on the same suite before the warm-up change (4 concurrent requests; one request runs at a time on the server)",
+  "rows_compared": 12210,
+  "same_choice": 12210,
+  "identical_probabilities": 12210,
+  "max_abs_dp": 0.0
+ }
+}

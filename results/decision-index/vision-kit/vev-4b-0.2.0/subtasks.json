@@ -1,0 +1,363 @@
+{
+ "about": "per-subtask accuracy and chance-corrected skill (x100) of the run in results.jsonl.gz, scored like the kit: chance = mean of 1/(number of options) over the rows",
+ "benchmarks": {
+  "BLINK": {
+   "Counting": {
+    "rows": 120,
+    "accuracy": 0.75,
+    "chance": 0.25,
+    "skill": 66.67
+   },
+   "Functional_Correspondence": {
+    "rows": 130,
+    "accuracy": 0.6769,
+    "chance": 0.25,
+    "skill": 56.92
+   },
+   "Multi-view_Reasoning": {
+    "rows": 133,
+    "accuracy": 0.7744,
+    "chance": 0.5,
+    "skill": 54.89
+   },
+   "Relative_Depth": {
+    "rows": 124,
+    "accuracy": 0.8952,
+    "chance": 0.5,
+    "skill": 79.03
+   },
+   "Semantic_Correspondence": {
+    "rows": 139,
+    "accuracy": 0.7122,
+    "chance": 0.25,
+    "skill": 61.63
+   },
+   "Spatial_Relation": {
+    "rows": 143,
+    "accuracy": 0.8811,
+    "chance": 0.5,
+    "skill": 76.22
+   },
+   "Visual_Correspondence": {
+    "rows": 172,
+    "accuracy": 0.9709,
+    "chance": 0.25,
+    "skill": 96.12
+   }
+  },
+  "CV-Bench": {
+   "Count": {
+    "rows": 788,
+    "accuracy": 0.7602,
+    "chance": 0.2254,
+    "skill": 69.04
+   },
+   "Distance": {
+    "rows": 600,
+    "accuracy": 0.9183,
+    "chance": 0.5,
+    "skill": 83.67
+   },
+   "Relation": {
+    "rows": 650,
+    "accuracy": 0.9662,
+    "chance": 0.5,
+    "skill": 93.23
+   }
+  },
+  "CharXiv": {
+   "number-in-chart": {
+    "rows": 221,
+    "accuracy": 0.8643,
+    "chance": 0.25,
+    "skill": 81.9
+   },
+   "number-in-general": {
+    "rows": 229,
+    "accuracy": 0.7336,
+    "chance": 0.25,
+    "skill": 64.48
+   },
+   "text-in-chart": {
+    "rows": 82,
+    "accuracy": 0.8659,
+    "chance": 0.25,
+    "skill": 82.11
+   }
+  },
+  "InfographicVQA": {
+   "numeric": {
+    "rows": 158,
+    "accuracy": 0.962,
+    "chance": 0.25,
+    "skill": 94.94
+   },
+   "text": {
+    "rows": 86,
+    "accuracy": 0.9651,
+    "chance": 0.25,
+    "skill": 95.35
+   }
+  },
+  "KIE (CORD+FUNSD)": {
+   "field_present": {
+    "rows": 1344,
+    "accuracy": 0.9338,
+    "chance": 0.5,
+    "skill": 86.76
+   },
+   "field_value": {
+    "rows": 1121,
+    "accuracy": 0.9884,
+    "chance": 0.2638,
+    "skill": 98.42
+   }
+  },
+  "MMMU-Pro vision": {
+   "Accounting": {
+    "rows": 58,
+    "accuracy": 0.1897,
+    "chance": 0.1175,
+    "skill": 8.17
+   },
+   "Agriculture": {
+    "rows": 60,
+    "accuracy": 0.2667,
+    "chance": 0.102,
+    "skill": 18.33
+   },
+   "Architecture_and_Engineering": {
+    "rows": 60,
+    "accuracy": 0.3167,
+    "chance": 0.1026,
+    "skill": 23.85
+   },
+   "Art": {
+    "rows": 53,
+    "accuracy": 0.5283,
+    "chance": 0.1194,
+    "skill": 46.44
+   },
+   "Art_Theory": {
+    "rows": 55,
+    "accuracy": 0.6,
+    "chance": 0.1,
+    "skill": 55.56
+   },
+   "Basic_Medical_Science": {
+    "rows": 52,
+    "accuracy": 0.5,
+    "chance": 0.1322,
+    "skill": 42.39
+   },
+   "Biology": {
+    "rows": 59,
+    "accuracy": 0.3729,
+    "chance": 0.1402,
+    "skill": 27.06
+   },
+   "Chemistry": {
+    "rows": 60,
+    "accuracy": 0.45,
+    "chance": 0.1613,
+    "skill": 34.42
+   },
+   "Clinical_Medicine": {
+    "rows": 59,
+    "accuracy": 0.5593,
+    "chance": 0.1044,
+    "skill": 50.79
+   },
+   "Computer_Science": {
+    "rows": 60,
+    "accuracy": 0.4833,
+    "chance": 0.1577,
+    "skill": 38.66
+   },
+   "Design": {
+    "rows": 60,
+    "accuracy": 0.6,
+    "chance": 0.1087,
+    "skill": 55.12
+   },
+   "Diagnostics_and_Laboratory_Medicine": {
+    "rows": 60,
+    "accuracy": 0.3333,
+    "chance": 0.1343,
+    "skill": 22.99
+   },
+   "Economics": {
+    "rows": 59,
+    "accuracy": 0.3898,
+    "chance": 0.1209,
+    "skill": 30.59
+   },
+   "Electronics": {
+    "rows": 60,
+    "accuracy": 0.6,
+    "chance": 0.107,
+    "skill": 55.21
+   },
+   "Energy_and_Power": {
+    "rows": 58,
+    "accuracy": 0.1552,
+    "chance": 0.1103,
+    "skill": 5.04
+   },
+   "Finance": {
+    "rows": 60,
+    "accuracy": 0.3167,
+    "chance": 0.1004,
+    "skill": 24.04
+   },
+   "Geography": {
+    "rows": 52,
+    "accuracy": 0.4038,
+    "chance": 0.1613,
+    "skill": 28.92
+   },
+   "History": {
+    "rows": 56,
+    "accuracy": 0.5357,
+    "chance": 0.1002,
+    "skill": 48.4
+   },
+   "Literature": {
+    "rows": 52,
+    "accuracy": 0.75,
+    "chance": 0.1231,
+    "skill": 71.49
+   },
+   "Manage": {
+    "rows": 50,
+    "accuracy": 0.42,
+    "chance": 0.1632,
+    "skill": 30.69
+   },
+   "Marketing": {
+    "rows": 59,
+    "accuracy": 0.3559,
+    "chance": 0.1128,
+    "skill": 27.41
+   },
+   "Materials": {
+    "rows": 60,
+    "accuracy": 0.2833,
+    "chance": 0.1197,
+    "skill": 18.59
+   },
+   "Math": {
+    "rows": 60,
+    "accuracy": 0.4,
+    "chance": 0.1133,
+    "skill": 32.33
+   },
+   "Mechanical_Engineering": {
+    "rows": 59,
+    "accuracy": 0.339,
+    "chance": 0.1501,
+    "skill": 22.22
+   },
+   "Music": {
+    "rows": 60,
+    "accuracy": 0.3333,
+    "chance": 0.1921,
+    "skill": 17.48
+   },
+   "Pharmacy": {
+    "rows": 57,
+    "accuracy": 0.5088,
+    "chance": 0.2142,
+    "skill": 37.49
+   },
+   "Physics": {
+    "rows": 60,
+    "accuracy": 0.3833,
+    "chance": 0.1296,
+    "skill": 29.15
+   },
+   "Psychology": {
+    "rows": 60,
+    "accuracy": 0.4333,
+    "chance": 0.1184,
+    "skill": 35.72
+   },
+   "Public_Health": {
+    "rows": 58,
+    "accuracy": 0.2759,
+    "chance": 0.1055,
+    "skill": 19.05
+   },
+   "Sociology": {
+    "rows": 54,
+    "accuracy": 0.5926,
+    "chance": 0.1284,
+    "skill": 53.26
+   }
+  },
+  "Mind2Web": {
+   "Entertainment": {
+    "rows": 225,
+    "accuracy": 0.9067,
+    "chance": 0.25,
+    "skill": 87.56
+   },
+   "Shopping": {
+    "rows": 400,
+    "accuracy": 0.9325,
+    "chance": 0.25,
+    "skill": 91.0
+   },
+   "Travel": {
+    "rows": 348,
+    "accuracy": 0.9626,
+    "chance": 0.25,
+    "skill": 95.02
+   }
+  },
+  "Moderation (Hateful Memes)": {
+   "binary": {
+    "rows": 1213,
+    "accuracy": 0.7123,
+    "chance": 0.5,
+    "skill": 42.46
+   }
+  },
+  "R-Bench-M": {
+   "content_correct": {
+    "rows": 500,
+    "accuracy": 0.51,
+    "chance": 0.1668,
+    "skill": 41.19
+   },
+   "other_correct": {
+    "rows": 165,
+    "accuracy": 0.0667,
+    "chance": 0.1667,
+    "skill": -12.0
+   }
+  },
+  "RealWorldQA": {
+   "mc": {
+    "rows": 426,
+    "accuracy": 0.7817,
+    "chance": 0.3453,
+    "skill": 66.66
+   },
+   "yesno": {
+    "rows": 163,
+    "accuracy": 0.7669,
+    "chance": 0.5,
+    "skill": 53.37
+   }
+  },
+  "Winoground": {
+   "text": {
+    "rows": 800,
+    "accuracy": 0.8875,
+    "chance": 0.5,
+    "skill": 77.5
+   }
+  }
+ }
+}

@@ -1,0 +1,44 @@
+{
+ "change": "vev-release 01dd21e: a request over the token limits (32,768 for the state plus one question, 65,536 for the whole request) only because of the read-twice layout is read once, in the 0.1.x layout",
+ "suite": "Decision Index text public suite, edition 0.3, with the board's tool",
+ "method": "the request chunks refused before the change, plus a fixed hash sample of answered chunks (md5(run_id) mod 140620 < 1500), re-run with the changed server; all other chunks are kept from the run before the change. Same checkpoint and settings (VEV_READ_TWICE=full, VEV_BIDIR=state).",
+ "vev-4b 0.2.0": {
+  "refused_before": 407,
+  "answered_after": 369,
+  "refused_after": 38,
+  "refused_after_equals_0.1.0_and_base_model": true,
+  "scored_requests_refused_after": 0,
+  "sample": {
+   "chunks": 1483,
+   "one_question": 1284,
+   "several_questions": 199,
+   "identical": 1480,
+   "different": 3,
+   "different_all_several_questions": true,
+   "max_abs_probability_difference": 0.0044,
+   "answers_changed": 0
+  },
+  "decision_index": {
+   "before": 60.13,
+   "after": 60.32
+  }
+ },
+ "research checkpoint s4m-avg (reference of the model card's comparison)": {
+  "refused_before": 407,
+  "answered_after": 369,
+  "refused_after": 38,
+  "sample": {
+   "chunks": 1483,
+   "identical": 1479,
+   "different": 4,
+   "different_all_several_questions": true,
+   "max_abs_probability_difference": 0.0047,
+   "answers_changed": 0
+  },
+  "decision_index": {
+   "before": 63.41,
+   "after": 63.6
+  }
+ },
+ "note": "Differences in the sample are in requests with several questions, whose batching depends on free GPU memory."
+}
