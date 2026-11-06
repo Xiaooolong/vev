@@ -1,6 +1,10 @@
 # Training
 
-This file records how `vev-4b` and `vev-9b` were trained, so the runs can be repeated or varied.
+This file records how `vev-4b` 0.1.0 and `vev-9b` 0.1.0 were trained, so the runs can be repeated or varied.
+
+`vev-4b` 0.2.0 was trained in four stages on a different data mix, listed in [TRAINING_DATA.md](TRAINING_DATA.md);
+its training settings are in the [vev-4b model card](https://huggingface.co/CountingSheep/vev-4b#training). Its data
+builders are not in this repository. Everything below is about 0.1.0.
 
 ## Recipe
 
@@ -68,9 +72,8 @@ public sources: 431,449 image records and 331,371 text records, 620,975 English 
 is converted into typed questions by the scripts in `data/sources/`. The license of each source was checked by
 hand; the evidence and quotes are in `data/licenses.json`.
 
-Six sources are research-only or non-commercial and eleven have no clear license for their data (tier unknown), which is why the weights are released
-under CC BY-NC 4.0. `data.build --allow commercial-ok` builds a mixture from the permissive sources only; no model
-has been trained on it yet.
+`data.build --allow commercial-ok` builds a mixture from the permissive sources only; no model has been trained on it
+yet.
 
 | Source | Kind | Train records | Tier | License |
 |---|---|---|---|---|

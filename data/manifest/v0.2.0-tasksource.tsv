@@ -1,0 +1,670 @@
+source	upstream	split	records	removed
+ts/AdjectiveScaleProbe-nli	tasksource/AdjectiveScaleProbe-nli	train	89	
+ts/AmbigNQ-clarifying-question	erbacher/AmbigNQ-clarifying-question	train	320	
+ts/BeaverTails	PKU-Alignment/BeaverTails	330k_train	312	
+ts/CONDAQA	lasha-nlp/CONDAQA	train	273	
+ts/CREAK	amydeng2000/CREAK	train	175	
+ts/ConTRoL-nli	tasksource/ConTRoL-nli	train	162	
+ts/Dilemmas_Disagreement	RuyuanWan/Dilemmas_Disagreement	unknown	196	
+ts/Dynasent_Disagreement	RuyuanWan/Dynasent_Disagreement	unknown	297	
+ts/FLD.v2/default	hitachi-nlp/FLD.v2 (config default)	train	301	
+ts/FLD.v2/star	hitachi-nlp/FLD.v2 (config star)	train	291	
+ts/FLUTE	ColumbiaNLP/FLUTE	train	267	
+ts/FOL-nli	unigram/FOL-nli	train	162	
+ts/HatemojiBuild	HannahRoseKirk/HatemojiBuild	train	297	
+ts/HelpSteer/coherence	nvidia/HelpSteer	train	325	
+ts/HelpSteer/complexity	nvidia/HelpSteer	train	292	
+ts/HelpSteer/correctness	nvidia/HelpSteer	train	303	
+ts/HelpSteer/helpfulness	nvidia/HelpSteer	train	298	
+ts/HelpSteer/verbosity	nvidia/HelpSteer	train	305	
+ts/HelpSteer2/coherence	nvidia/HelpSteer2	train	310	
+ts/HelpSteer2/complexity	nvidia/HelpSteer2	train	301	
+ts/HelpSteer2/correctness	nvidia/HelpSteer2	train	311	
+ts/HelpSteer2/helpfulness	nvidia/HelpSteer2	train	302	
+ts/HelpSteer2/verbosity	nvidia/HelpSteer2	train	315	
+ts/HelpSteer3/edit_quality	nvidia/HelpSteer3 (config edit_quality)	train	252	
+ts/HelpSteer3/feedback	nvidia/HelpSteer3 (config feedback)	unknown	313	
+ts/HelpSteer3/preference	nvidia/HelpSteer3 (config preference)	train	309	
+ts/HelpSteer3/preference_strength	nvidia/HelpSteer3 (config preference)	train	324	
+ts/HelpSteer3/principle	nvidia/HelpSteer3 (config principle)	train	181	
+ts/I2D2	tasksource/I2D2	train	232	
+ts/LogicNLI	tasksource/LogicNLI	train	168	
+ts/MOH	tasksource/MOH	train	196	
+ts/MSciNLI	sadat2307/MSciNLI	train	162	
+ts/PARADISE	GGLab/PARADISE	train	308	
+ts/PARARULE-Plus	qbao775/PARARULE-Plus	train	293	
+ts/PKU-SafeRLHF/helpfulness	PKU-Alignment/PKU-SafeRLHF	train	321	
+ts/PKU-SafeRLHF/safety	PKU-Alignment/PKU-SafeRLHF	train	317	
+ts/Pol_NLI	mlburnham/Pol_NLI	train	174	
+ts/Politeness_Disagreement	RuyuanWan/Politeness_Disagreement	unknown	205	
+ts/Prompt-injection-dataset/full	neuralchemy/Prompt-injection-dataset (config full)	train	285	
+ts/PromptShield	hendzh/PromptShield	train	298	
+ts/ReSQ	tasksource/ReSQ	train	304	
+ts/SBIC_Disagreement	RuyuanWan/SBIC_Disagreement	unknown	192	
+ts/SChem_Disagreement	RuyuanWan/SChem_Disagreement	unknown	177	
+ts/SDOH-NLI	tasksource/SDOH-NLI	train	168	
+ts/SHP	stanfordnlp/SHP	train	325	
+ts/Sarcasm_News_Headline	raquiba/Sarcasm_News_Headline	train	302	
+ts/ScienceQA_text_only	tasksource/ScienceQA_text_only	train	312	
+ts/ShellRisk-Bench	kontext-security/ShellRisk-Bench	train	274	
+ts/SpaRTUN	tasksource/SpaRTUN	train	305	
+ts/SpaceNLI	tasksource/SpaceNLI	train	162	
+ts/Touche23-ValueEval	webis/Touche23-ValueEval	train	202	
+ts/TroFi	tasksource/TroFi	train	253	
+ts/TuringBench	jana4/turingbench-humanized via tasksource/tasksource-jev-typed-decisions (default config, train split); originals turingbench/TuringBench	train	308	
+ts/UNLI	Zhengping/UNLI	train	193	
+ts/UltraFeedback-paired	pushpdeep/UltraFeedback-paired	train	316	
+ts/VUAC	tasksource/VUAC	train	196	
+ts/WANLI	alisawuffles/WANLI	train	181	
+ts/acceptability-prediction/binary_votes	tasksource/acceptability-prediction	train	215	
+ts/acceptability-prediction/rating_votes	tasksource/acceptability-prediction	train	324	
+ts/add_one_rte	pietrolesci/add_one_rte	train	173	
+ts/ade_corpus_v2/Ade_corpus_v2_classification	ade-benchmark-corpus/ade_corpus_v2 (config Ade_corpus_v2_classification)	train	244	
+ts/ag_news	fancyzhx/ag_news	train	301	
+ts/amazon_counterfactual/en	mteb/amazon_counterfactual (config en)	train	258	
+ts/amazon_polarity/amazon_polarity	fancyzhx/amazon_polarity (config amazon_polarity)	train	231	
+ts/ambient	tasksource/ambient	(none left)	0	validation 17
+ts/antique	tasksource/antique via tasksource/tasksource-jev-typed-decisions (default config, train split); originals irds/antique, irds/antique_test, irds/antique_train	train	75	
+ts/apt	tasksource/apt	train	245	
+ts/arct	tasksource/arct	train	142	
+ts/args_me	webis/args_me	train	182	
+ts/argument-feedback	tasksource/argument-feedback	train	277	
+ts/art	allenai/art	train	307	
+ts/auditor_review	demo-org/auditor_review	train	317	
+ts/autotnli	tasksource/autotnli	train	23	
+ts/avicenna	tasksource/avicenna	train	301	
+ts/babi_nli/basic-coreference	tasksource/babi_nli (config basic-coreference)	train	115	
+ts/babi_nli/basic-deduction	tasksource/babi_nli (config basic-deduction)	train	114	
+ts/babi_nli/basic-induction	tasksource/babi_nli (config basic-induction)	train	108	
+ts/babi_nli/compound-coreference	tasksource/babi_nli (config compound-coreference)	train	104	
+ts/babi_nli/conjunction	tasksource/babi_nli (config conjunction)	train	112	
+ts/babi_nli/counting	tasksource/babi_nli (config counting)	train	109	
+ts/babi_nli/indefinite-knowledge	tasksource/babi_nli (config indefinite-knowledge)	train	118	
+ts/babi_nli/lists-sets	tasksource/babi_nli (config lists-sets)	train	111	
+ts/babi_nli/path-finding	tasksource/babi_nli (config path-finding)	train	110	
+ts/babi_nli/positional-reasoning	tasksource/babi_nli (config positional-reasoning)	train	99	
+ts/babi_nli/simple-negation	tasksource/babi_nli (config simple-negation)	train	98	
+ts/babi_nli/single-supporting-fact	tasksource/babi_nli (config single-supporting-fact)	train	116	
+ts/babi_nli/size-reasoning	tasksource/babi_nli (config size-reasoning)	train	111	
+ts/babi_nli/three-arg-relations	tasksource/babi_nli (config three-arg-relations)	train	117	
+ts/babi_nli/three-supporting-facts	tasksource/babi_nli (config three-supporting-facts)	train	113	
+ts/babi_nli/time-reasoning	tasksource/babi_nli (config time-reasoning)	train	114	
+ts/babi_nli/two-arg-relations	tasksource/babi_nli (config two-arg-relations)	train	115	
+ts/babi_nli/two-supporting-facts	tasksource/babi_nli (config two-supporting-facts)	train	121	
+ts/babi_nli/yes-no-questions	tasksource/babi_nli (config yes-no-questions)	train	93	
+ts/balanced-copa	pkavumba/balanced-copa	train	93	
+ts/biored/relation	gyorilab/BioRED	unknown	66	
+ts/biosift-nli	AshtonIsNotHere/biosift-nli	train	181	
+ts/blog_authorship_corpus/age	tasksource/blog_authorship_corpus via tasksource/tasksource-jev-typed-decisions (default config, train split); originals barilan/blog_authorship_corpus	train	304	
+ts/blog_authorship_corpus/gender	tasksource/blog_authorship_corpus via tasksource/tasksource-jev-typed-decisions (default config, train split); originals barilan/blog_authorship_corpus	train	244	
+ts/boolq-natural-perturbations	tasksource/boolq-natural-perturbations	train	237	
+ts/brainteasers/WP	tasksource/brainteasers (config WP)	train	206	
+ts/breaking_nli	pietrolesci/breaking_nli	full	168	
+ts/causal-news	thagen/CNCv2 (config causality detection)	train	52	
+ts/causal-reasoning/transitivity	ludwigw/causal-reasoning-benchmarks	unknown	55	
+ts/cbt/cn	cam-cst/cbt (config CN)	train	106	
+ts/cbt/ne	cam-cst/cbt (config NE)	train	119	
+ts/cebab/ambiance	EleutherAI/CEBaB via tasksource/tasksource-jev-typed-decisions (default config, train split); originals CEBaB/CEBaB	train	28	
+ts/cebab/food	EleutherAI/CEBaB via tasksource/tasksource-jev-typed-decisions (default config, train split); originals CEBaB/CEBaB	train	33	
+ts/cebab/noise	EleutherAI/CEBaB via tasksource/tasksource-jev-typed-decisions (default config, train split); originals CEBaB/CEBaB	train	27	
+ts/cebab/rating	EleutherAI/CEBaB via tasksource/tasksource-jev-typed-decisions (default config, train split); originals CEBaB/CEBaB	train	33	
+ts/cebab/service	EleutherAI/CEBaB via tasksource/tasksource-jev-typed-decisions (default config, train split); originals CEBaB/CEBaB	train	29	
+ts/chaos-mnli-ambiguity/votes	tasksource/chaos-mnli-ambiguity	train	187	
+ts/chatbot_arena_conversations	lmsys/chatbot_arena_conversations	train	208	
+ts/chemprot/chemprot_full_source	bigbio/chemprot (config chemprot_full_source)	unknown	302	
+ts/cicero	declare-lab/cicero	train	313	
+ts/circa	google-research-datasets/circa	train	281	
+ts/civil_comments/identity_attack_share	google/civil_comments	train	104	
+ts/civil_comments/insult_share	google/civil_comments	train	248	
+ts/civil_comments/obscene_share	google/civil_comments	train	76	
+ts/civil_comments/severe_toxicity_share	google/civil_comments	train	3	
+ts/civil_comments/sexual_explicit_share	google/civil_comments	train	29	
+ts/civil_comments/threat_share	google/civil_comments	train	54	
+ts/civil_comments/toxicity_share	google/civil_comments	train	250	
+ts/clcd-english	tasksource/clcd-english	train	186	
+ts/clear/readability	casey-martin/CommonLit-Ease-of-Readability	train	72	
+ts/cloth	AndyChiang/cloth	train	312	
+ts/clutrr	tasksource/clutrr via tasksource/tasksource-jev-typed-decisions (default config, train split); originals CLUTRR/v1	train	329	
+ts/cnli	tasksource/cnli	train	179	
+ts/codah/codah	jaredfern/codah (config codah)	train	314	
+ts/code_x_glue_cc_defect_detection	google/code_x_glue_cc_defect_detection	train	299	
+ts/com2sense	tasksource/com2sense	train	194	
+ts/commonsense_qa	tau/commonsense_qa	train	329	
+ts/commonsense_qa_2.0	tasksource/commonsense_qa_2.0	train	158	
+ts/comve	tasksource/comve	train	7	
+ts/conceptrules_v2	tasksource/conceptrules_v2	train	288	
+ts/conj_nli	pietrolesci/conj_nli	train	72	
+ts/conll2003/ner_tags	tomaarsen/conll2003 via tasksource/tasksource-jev-typed-decisions (default config, train split); originals eriktks/conll2003	train	310	
+ts/coqa/yesno	stanfordnlp/coqa	unknown	42	
+ts/cosmos_qa	Samsoup/cosmos_qa via tasksource/tasksource-jev-typed-decisions (default config, train split); originals allenai/cosmos_qa	train	318	
+ts/counterfactually-augmented-imdb	tasksource/counterfactually-augmented-imdb	train	192	
+ts/counterfactually-augmented-snli	tasksource/counterfactually-augmented-snli	train	74	
+ts/crowdflower/airline-sentiment	tasksource/crowdflower (config airline-sentiment)	train	326	
+ts/crowdflower/corporate-messaging	tasksource/crowdflower (config corporate-messaging)	train	283	
+ts/crowdflower/political-media-audience	tasksource/crowdflower (config political-media-audience)	train	125	
+ts/crowdflower/political-media-bias	tasksource/crowdflower (config political-media-bias)	train	131	
+ts/crowdflower/political-media-message	tasksource/crowdflower (config political-media-message)	train	296	
+ts/crowdflower/tweet_global_warming	tasksource/crowdflower (config tweet_global_warming)	train	120	
+ts/cycic_classification	tasksource/cycic_classification	train	180	
+ts/cycic_multiplechoice	tasksource/cycic_multiplechoice	train	324	
+ts/dbpedia_14/dbpedia_14	fancyzhx/dbpedia_14 (config dbpedia_14)	train	303	
+ts/ddi/relation	OpenMed/DDI-Corpus-Processed	train	49	
+ts/defeasible-nli/atomic	tasksource/defeasible-nli (config atomic)	train	165	
+ts/defeasible-nli/snli	tasksource/defeasible-nli (config snli)	train	175	
+ts/defeasible-nli/social	tasksource/defeasible-nli (config social)	train	166	
+ts/definite_pronoun_resolution	community-datasets/definite_pronoun_resolution	train	137	
+ts/discosense	tasksource/discosense via tasksource/tasksource-jev-typed-decisions (default config, train split); originals prajjwal1/discosense	train	309	
+ts/discovery/discovery	sileod/discovery (config discovery)	train	59	
+ts/disrpt/eng.dep.scidtb.rels	multilingual-discourse-hub/disrpt (config eng.dep.scidtb.rels)	train	103	
+ts/dnc	pietrolesci/dnc	train	22	
+ts/docred	YufeiHFUT/DocRED_origin via tasksource/tasksource-jev-typed-decisions (default config, train split); originals thunlp/docred	unknown	76	
+ts/dream	dataset-org/dream	train	313	
+ts/dynahate	tasksource/dynahate via tasksource/tasksource-jev-typed-decisions (default config, train split); originals aps/dynahate	train	314	
+ts/dynasent/r1_votes	dynabench/dynasent	train	340	
+ts/dynasent/r2_votes	dynabench/dynasent	train	328	
+ts/e-CARE	12ml/e-CARE	train	209	
+ts/edos	tasksource/edos	train	59	
+ts/ekar_english	Jiangjie/ekar_english	train	296	
+ts/emo/emo2019	oneonlee/cleansed_emocontext via tasksource/tasksource-jev-typed-decisions (default config, train split); originals SemEvalWorkshop/emo	train	302	
+ts/empathetic-dialogues/emotion	facebook/empathetic_dialogues	train	60	
+ts/english-grading/cohesion	tasksource/english-grading	train	195	
+ts/english-grading/conventions	tasksource/english-grading	train	164	
+ts/english-grading/grammar	tasksource/english-grading	train	177	
+ts/english-grading/phraseology	tasksource/english-grading	train	180	
+ts/english-grading/syntax	tasksource/english-grading	train	161	
+ts/english-grading/vocabulary	tasksource/english-grading	train	182	
+ts/equate	tasksource/equate	train	70	
+ts/esconv/strategy	tasksource/esconv via tasksource/tasksource-jev-typed-decisions (default config, train split); originals thu-coai/esconv	train	60	
+ts/ethics/commonsense	hendrycks/ethics (config commonsense)	train	102	
+ts/ethics/deontology	hendrycks/ethics (config deontology)	train	121	
+ts/ethics/justice	hendrycks/ethics (config justice)	train	123	
+ts/ethics/virtue	hendrycks/ethics (config default)	train	94	
+ts/ethos/multilabel	tasksource/ethos (config multilabel) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals iamollas/ethos	unknown	256	
+ts/evidence-inference	tasksource/evidence-inference	train	1	
+ts/fabsa/sentiment	jordiclive/FABSA	unknown	78	
+ts/faithdial/grounding	McGill-NLP/FaithDial	train	53	
+ts/feasibilityQA	tasksource/feasibilityQA	train	248	
+ts/fever-evidence-related	mwong/fever-evidence-related	train	278	
+ts/few_rel/default	tasksource/few_rel (config default)	unknown	107	
+ts/fig-qa	nightingal3/fig-qa	train	285	
+ts/fnc1/stance	tasksource/fnc1	train	59	
+ts/folio	tasksource/folio	train	295	
+ts/fool-me-twice	tasksource/fool-me-twice	train	289	
+ts/fracas	pietrolesci/fracas	train	131	
+ts/gap	coref-data/gap_raw	train	41	
+ts/glue/cola	nyu-mll/glue (config cola)	train	278	
+ts/glue/mnli	nyu-mll/glue (config mnli)	train	171	
+ts/glue/mrpc	nyu-mll/glue (config mrpc)	train	247	
+ts/glue/qnli	nyu-mll/glue (config qnli)	train	187	
+ts/glue/qqp	nyu-mll/glue (config qqp)	train	194	
+ts/glue/rte	nyu-mll/glue (config rte)	train	166	
+ts/glue/sst2	nyu-mll/glue (config sst2)	train	216	
+ts/glue/stsb	nyu-mll/glue (config stsb)	train	346	
+ts/glue/wnli	nyu-mll/glue (config wnli)	train	173	later gate rules 3
+ts/go_emotions/simplified	google-research-datasets/go_emotions (config simplified)	train	81	
+ts/goal-step-wikihow/goal	tasksource/goal-step-wikihow (config goal)	train	319	
+ts/goal-step-wikihow/order	tasksource/goal-step-wikihow (config order)	train	234	
+ts/goal-step-wikihow/step	tasksource/goal-step-wikihow (config step)	train	319	
+ts/google_wellformed_query	tasksource/google_wellformed_query via tasksource/tasksource-jev-typed-decisions (default config, train split); originals google-research-datasets/google_wellformed_query	train	300	
+ts/hallmarks-of-cancer/yesno	bigbio/hallmarks_of_cancer (config hallmarks_of_cancer_bigbio_text)	unknown	27	
+ts/hans	tasksource/hans via tasksource/tasksource-jev-typed-decisions (default config, train split); originals jhu-cogsci/hans	train	22	
+ts/hate_speech18	tasksource/hate_speech18 via tasksource/tasksource-jev-typed-decisions (default config, train split); originals odegiber/hate_speech18	train	226	
+ts/hate_speech_offensive	tdavidson/hate_speech_offensive	train	295	
+ts/hatexplain/majority	Hate-speech-CNERG/hatexplain	train	301	
+ts/head_qa/en	EleutherAI/headqa (config en) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals dvilares/head_qa	train	299	
+ts/headline_cause/en_simple	IlyaGusev/headline_cause	train	279	
+ts/help-nli	tasksource/help-nli	train	186	
+ts/hh-rlhf/harmless-base	tasksource/hh-rlhf (config harmless-base)	train	326	
+ts/hh-rlhf/helpful-base	tasksource/hh-rlhf (config helpful-base)	train	323	
+ts/hh-rlhf/helpful-online	tasksource/hh-rlhf (config helpful-online)	train	189	
+ts/hh-rlhf/helpful-rejection-sampled	tasksource/hh-rlhf (config helpful-rejection-sampled)	train	327	
+ts/hope_edi/english	dravidianlangtech/hope_edi	train	290	
+ts/hyperpartisan_news	zapsdcn/hyperpartisan_news	train	102	
+ts/idioms-nli	tasksource/idioms-nli	train	188	
+ts/imdb	stanfordnlp/imdb	train	249	
+ts/implicatures	tasksource/implicatures	train	103	
+ts/implicit-hate-stg1	tasksource/implicit-hate-stg1	train	314	
+ts/infotabs	table-benchmark/infotabs	train	53	
+ts/insincere-questions	SetFit/insincere-questions	train	198	
+ts/jigsaw_toxicity	tasksource/jigsaw_toxicity	train	307	
+ts/joci	pietrolesci/joci	(none left)	0	full 315
+ts/knowref60k	coref-data/knowref_60k_raw	train	107	
+ts/language-identification	papluca/language-identification	train	63	
+ts/lewidi/hs_brexit	tasksource/lewidi (config hs_brexit)	train	110	
+ts/lewidi/md_agreement	tasksource/lewidi (config md_agreement)	train	323	
+ts/lewidi/mp	tasksource/lewidi (config mp)	train	322	
+ts/lexical_relation_classification/BLESS	relbert/lexical_relation_classification (config BLESS)	train	94	
+ts/lexical_relation_classification/CogALexV	relbert/lexical_relation_classification	train	66	
+ts/lexical_relation_classification/K&H+N	relbert/lexical_relation_classification (config K&H+N)	train	61	
+ts/lexical_relation_classification/ROOT09	relbert/lexical_relation_classification (config ROOT09)	train	34	
+ts/liar	tasksource/liar via tasksource/tasksource-jev-typed-decisions (default config, train split); originals ucsbai/liar	train	337	
+ts/lifecycle-entailment	tasksource/lifecycle-entailment	train	24	
+ts/lingnli	tasksource/lingnli	train	169	
+ts/linguisticprobing/bigram_shift	tasksource/linguisticprobing (config bigram_shift)	train	5	
+ts/linguisticprobing/coordination_inversion	tasksource/linguisticprobing (config coordination_inversion)	train	7	
+ts/linguisticprobing/obj_number	tasksource/linguisticprobing (config obj_number)	train	4	
+ts/linguisticprobing/odd_man_out	tasksource/linguisticprobing (config odd_man_out)	train	6	
+ts/linguisticprobing/past_present	tasksource/linguisticprobing (config past_present)	train	5	
+ts/linguisticprobing/subj_number	tasksource/linguisticprobing (config subj_number)	train	4	
+ts/linguisticprobing/top_constituents	tasksource/linguisticprobing (config top_constituents)	train	20	
+ts/logical-entailment	tasksource/logical-entailment	train	172	
+ts/logical-fallacy	tasksource/logical-fallacy	train	302	
+ts/logiqa	fireworks-ai/logiqa via tasksource/tasksource-jev-typed-decisions (default config, train split); originals lucasmccabe/logiqa	train	332	
+ts/logiqa-2.0-nli	tasksource/logiqa-2.0-nli	train	181	
+ts/lonli	tasksource/lonli	train	174	
+ts/lsat-ar	tasksource/lsat-ar	train	299	
+ts/lsat-rc	tasksource/lsat-rc	train	298	
+ts/magpie/idiomatic	idioms-collaboration/magpie	unknown	55	
+ts/math_qa	tasksource/math_qa via tasksource/tasksource-jev-typed-decisions (default config, train split); originals allenai/math_qa	train	321	
+ts/matres/temporal	tasksource/matres	train	58	
+ts/maven-arg/role	mneb/maven-arg	unknown	4	
+ts/maven-ere/causal	Nofing/Maven-ERE-span	unknown	62	
+ts/maven/event	mneb/maven	unknown	9	
+ts/mcscript2	tasksource/mcscript2	train	90	
+ts/mctest-nli	tasksource/mctest-nli	train	172	
+ts/medical_questions_pairs	curaihealth/medical_questions_pairs	train	198	
+ts/medmcqa	openlifescienceai/medmcqa	train	327	
+ts/mindgames	sileod/mindgames	train	341	
+ts/missing-item-prediction/contrastive	sileod/missing-item-prediction (config contrastive)	train	250	
+ts/monli	tasksource/monli	train	17	
+ts/monotonicity-entailment	tasksource/monotonicity-entailment	train	171	
+ts/moral_stories/full	LabHC/moral_stories via tasksource/tasksource-jev-typed-decisions (default config, train split); originals demelin/moral_stories	train	295	
+ts/mpe	pietrolesci/mpe	train	189	
+ts/multidogo/airline/intent	jpcorb20/multidogo (config airline)	train	32	
+ts/multidogo/fastfood/intent	jpcorb20/multidogo (config fastfood)	train	25	
+ts/multidogo/finance/intent	jpcorb20/multidogo (config finance)	train	33	
+ts/multidogo/insurance/intent	jpcorb20/multidogo (config insurance)	train	29	
+ts/multidogo/media/intent	jpcorb20/multidogo (config media)	train	21	
+ts/multidogo/software/intent	jpcorb20/multidogo (config software)	train	42	
+ts/multilingual/AfriSenti-twitter-sentiment/amh	mteb/AfriSentiClassification (config amh) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	57	
+ts/multilingual/AfriSenti-twitter-sentiment/arq	mteb/AfriSentiClassification (config arq) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	71	
+ts/multilingual/AfriSenti-twitter-sentiment/ary	mteb/AfriSentiClassification (config ary) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	68	
+ts/multilingual/AfriSenti-twitter-sentiment/hau	mteb/AfriSentiClassification (config hau) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	56	
+ts/multilingual/AfriSenti-twitter-sentiment/ibo	mteb/AfriSentiClassification (config ibo) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	52	
+ts/multilingual/AfriSenti-twitter-sentiment/kin	mteb/AfriSentiClassification (config kin) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	61	
+ts/multilingual/AfriSenti-twitter-sentiment/pcm	mteb/AfriSentiClassification (config pcm) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	64	
+ts/multilingual/AfriSenti-twitter-sentiment/por	mteb/AfriSentiClassification (config por) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	68	
+ts/multilingual/AfriSenti-twitter-sentiment/swa	mteb/AfriSentiClassification (config swa) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	58	
+ts/multilingual/AfriSenti-twitter-sentiment/tso	mteb/AfriSentiClassification (config tso) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	46	
+ts/multilingual/AfriSenti-twitter-sentiment/twi	mteb/AfriSentiClassification (config twi) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	44	
+ts/multilingual/AfriSenti-twitter-sentiment/yor	mteb/AfriSentiClassification (config yor) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals shmuhammad/AfriSenti-twitter-sentiment	train	49	
+ts/multilingual/MLMA_hate_speech	nedjmaou/MLMA_hate_speech	train	220	
+ts/multilingual/NusaX-senti/ace	mteb/NusaX-senti (config ace) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	72	
+ts/multilingual/NusaX-senti/ban	mteb/NusaX-senti (config ban) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	60	
+ts/multilingual/NusaX-senti/bbc	mteb/NusaX-senti (config bbc) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	55	
+ts/multilingual/NusaX-senti/bjn	mteb/NusaX-senti (config bjn) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	73	
+ts/multilingual/NusaX-senti/bug	mteb/NusaX-senti (config bug) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	52	
+ts/multilingual/NusaX-senti/eng	mteb/NusaX-senti (config eng) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	62	
+ts/multilingual/NusaX-senti/ind	mteb/NusaX-senti (config ind) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	59	
+ts/multilingual/NusaX-senti/jav	mteb/NusaX-senti (config jav) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	63	
+ts/multilingual/NusaX-senti/mad	mteb/NusaX-senti (config mad) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	62	
+ts/multilingual/NusaX-senti/min	mteb/NusaX-senti (config min) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	62	
+ts/multilingual/NusaX-senti/nij	mteb/NusaX-senti (config nij) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	48	
+ts/multilingual/NusaX-senti/sun	mteb/NusaX-senti (config sun) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals indonlp/NusaX-senti	train	56	
+ts/multilingual/amazon_reviews_multi/all_languages	goosmanlei/amazon_reviews_multi (config all_languages) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals defunct-datasets/amazon_reviews_multi	train	295	
+ts/multilingual/americas_nli/all_languages	nala-cub/americas_nli (config all_languages)	(none left)	0	validation 147
+ts/multilingual/disrpt/deu.rst.pcc.rels	multilingual-discourse-hub/disrpt (config deu.rst.pcc.rels)	train	8	
+ts/multilingual/disrpt/eus.rst.ert.rels	multilingual-discourse-hub/disrpt (config eus.rst.ert.rels)	train	4	
+ts/multilingual/disrpt/fas.rst.prstc.rels	multilingual-discourse-hub/disrpt (config fas.rst.prstc.rels)	train	119	
+ts/multilingual/disrpt/fra.sdrt.annodis.rels	multilingual-discourse-hub/disrpt (config fra.sdrt.annodis.rels)	train	109	
+ts/multilingual/disrpt/nld.rst.nldt.rels	multilingual-discourse-hub/disrpt (config nld.rst.nldt.rels)	train	8	
+ts/multilingual/disrpt/por.rst.cstn.rels	multilingual-discourse-hub/disrpt (config por.rst.cstn.rels)	train	10	
+ts/multilingual/disrpt/rus.rst.rrt.rels	multilingual-discourse-hub/disrpt (config rus.rst.rrt.rels)	train	5	
+ts/multilingual/disrpt/spa.rst.rststb.rels	multilingual-discourse-hub/disrpt (config spa.rst.rststb.rels)	train	7	
+ts/multilingual/disrpt/tha.pdtb.tdtb.rels	multilingual-discourse-hub/disrpt (config tha.pdtb.tdtb.rels)	train	9	
+ts/multilingual/disrpt/zho.rst.gcdt.rels	multilingual-discourse-hub/disrpt (config zho.rst.gcdt.rels)	train	6	
+ts/multilingual/exams/multilingual	mhardalov/exams (config multilingual)	train	327	
+ts/multilingual/indic_glue/bbca.hi/news	ai4bharat/indic_glue (config bbca.hi)	train	144	
+ts/multilingual/indic_glue/iitp-mr.hi/sentiment	ai4bharat/indic_glue (config iitp-mr.hi)	train	94	
+ts/multilingual/indic_glue/iitp-pr.hi/sentiment	ai4bharat/indic_glue (config iitp-pr.hi)	train	91	
+ts/multilingual/indic_glue/inltkh	ai4bharat/indic_glue	train	88	
+ts/multilingual/indic_glue/inltkh.te/sentiment	ai4bharat/indic_glue (config inltkh.te)	train	89	
+ts/multilingual/indic_glue/md.hi/discourse_mode	ai4bharat/indic_glue (config md.hi)	train	132	
+ts/multilingual/indic_glue/sna.bn/news	ai4bharat/indic_glue (config sna.bn)	train	91	
+ts/multilingual/indic_glue/wstp	ai4bharat/indic_glue	train	316	
+ts/multilingual/klue/nli	klue/klue (config nli)	train	117	
+ts/multilingual/klue/sts	klue/klue (config sts)	train	24	
+ts/multilingual/klue/ynat	klue/klue (config ynat)	train	193	
+ts/multilingual/language-identification	papluca/language-identification	train	156	
+ts/multilingual/masakhanews/amh	masakhane/masakhanews (config amh)	train	48	
+ts/multilingual/masakhanews/eng	masakhane/masakhanews (config eng)	train	83	
+ts/multilingual/masakhanews/fra	masakhane/masakhanews (config fra)	train	54	
+ts/multilingual/masakhanews/hau	masakhane/masakhanews (config hau)	train	75	
+ts/multilingual/masakhanews/ibo	masakhane/masakhanews (config ibo)	train	80	
+ts/multilingual/masakhanews/lin	masakhane/masakhanews (config lin)	train	67	
+ts/multilingual/masakhanews/lug	masakhane/masakhanews (config lug)	train	60	
+ts/multilingual/masakhanews/orm	masakhane/masakhanews (config orm)	train	57	
+ts/multilingual/masakhanews/pcm	masakhane/masakhanews (config pcm)	train	41	
+ts/multilingual/masakhanews/run	masakhane/masakhanews (config run)	train	72	
+ts/multilingual/masakhanews/sna	masakhane/masakhanews (config sna)	train	46	
+ts/multilingual/masakhanews/som	masakhane/masakhanews (config som)	train	72	
+ts/multilingual/masakhanews/swa	masakhane/masakhanews (config swa)	train	82	
+ts/multilingual/masakhanews/tir	masakhane/masakhanews (config tir)	train	77	
+ts/multilingual/masakhanews/xho	masakhane/masakhanews (config xho)	train	57	
+ts/multilingual/masakhanews/yor	masakhane/masakhanews (config yor)	train	67	
+ts/multilingual/massive	mteb/MassiveIntentClassification (config en) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals AmazonScience/massive	train	16	
+ts/multilingual/miam	PierreColombo/miam	train	167	
+ts/multilingual/mms	tasksource/mms via tasksource/tasksource-jev-typed-decisions (default config, train split); originals Brand24/mms	train	222	
+ts/multilingual/mtop	tasksource/mtop	train	21	
+ts/multilingual/multilingual-sentiments/all	tasksource/multilingual-sentiments via tasksource/tasksource-jev-typed-decisions (default config, train split); originals tyqiangz/multilingual-sentiments	train	215	
+ts/multilingual/oasst1_pairwise_rlhf_reward	tasksource/oasst1_pairwise_rlhf_reward	train	78	
+ts/multilingual/offenseval_2020/ar	khalidalt/offenseval_2020_ar	train	25	
+ts/multilingual/offenseval_2020/da	tasksource/offenseval_2020 (config da)	train	23	
+ts/multilingual/offenseval_2020/gr	tasksource/offenseval_2020 (config gr)	train	25	
+ts/multilingual/offenseval_2020/tr	tasksource/offenseval_2020 (config tr)	train	19	
+ts/multilingual/offenseval_dravidian/kannada	community-datasets/offenseval_dravidian (config kannada)	train	138	
+ts/multilingual/offenseval_dravidian/malayalam	community-datasets/offenseval_dravidian (config malayalam)	train	183	
+ts/multilingual/offenseval_dravidian/tamil	community-datasets/offenseval_dravidian (config tamil)	train	198	
+ts/multilingual/paws-x/de	google-research-datasets/paws-x (config de)	train	22	
+ts/multilingual/paws-x/en	google-research-datasets/paws-x (config en)	train	24	
+ts/multilingual/paws-x/es	google-research-datasets/paws-x (config es)	train	22	
+ts/multilingual/paws-x/fr	google-research-datasets/paws-x (config fr)	train	28	
+ts/multilingual/paws-x/ja	google-research-datasets/paws-x (config ja)	train	30	
+ts/multilingual/paws-x/ko	google-research-datasets/paws-x (config ko)	train	21	
+ts/multilingual/paws-x/zh	google-research-datasets/paws-x (config zh)	train	14	
+ts/multilingual/tweet_sentiment_multilingual	mteb/tweet_sentiment_multilingual via tasksource/tasksource-jev-typed-decisions (default config, train split); originals cardiffnlp/tweet_sentiment_multilingual	train	219	
+ts/multilingual/tydi-as2-balanced	tasksource/tydi-as2-balanced	train	28	
+ts/multilingual/universal-joy	tasksource/universal-joy	train	239	
+ts/multilingual/wili_2018	MartinThoma/wili_2018	train	18	
+ts/multilingual/x-fact	tasksource/x-fact	train	197	
+ts/multilingual/x-stance	michiel/xstance via tasksource/tasksource-jev-typed-decisions (default config, train split); originals strombergnlp/x-stance	train	34	
+ts/multilingual/xcopa/et	cambridgeltl/xcopa (config et)	(none left)	0	validation 3
+ts/multilingual/xcopa/ht	cambridgeltl/xcopa (config ht)	(none left)	0	validation 4
+ts/multilingual/xcopa/id	cambridgeltl/xcopa (config id)	(none left)	0	validation 7
+ts/multilingual/xcopa/it	cambridgeltl/xcopa (config it)	(none left)	0	validation 8
+ts/multilingual/xcopa/qu	cambridgeltl/xcopa (config qu)	(none left)	0	validation 6
+ts/multilingual/xcopa/sw	cambridgeltl/xcopa (config sw)	(none left)	0	validation 6
+ts/multilingual/xcopa/ta	cambridgeltl/xcopa (config ta)	(none left)	0	validation 9
+ts/multilingual/xcopa/th	cambridgeltl/xcopa (config th)	(none left)	0	validation 9
+ts/multilingual/xcopa/tr	cambridgeltl/xcopa (config tr)	(none left)	0	validation 7
+ts/multilingual/xcopa/translation-et	cambridgeltl/xcopa (config translation-et)	(none left)	0	validation 9
+ts/multilingual/xcopa/translation-ht	cambridgeltl/xcopa (config translation-ht)	(none left)	0	validation 7
+ts/multilingual/xcopa/translation-id	cambridgeltl/xcopa (config translation-id)	(none left)	0	validation 5
+ts/multilingual/xcopa/translation-it	cambridgeltl/xcopa (config translation-it)	(none left)	0	validation 6
+ts/multilingual/xcopa/translation-sw	cambridgeltl/xcopa (config translation-sw)	(none left)	0	validation 5
+ts/multilingual/xcopa/translation-ta	cambridgeltl/xcopa (config translation-ta)	(none left)	0	validation 5
+ts/multilingual/xcopa/translation-th	cambridgeltl/xcopa (config translation-th)	(none left)	0	validation 7
+ts/multilingual/xcopa/translation-tr	cambridgeltl/xcopa (config translation-tr)	(none left)	0	validation 8
+ts/multilingual/xcopa/translation-vi	cambridgeltl/xcopa (config translation-vi)	(none left)	0	validation 6
+ts/multilingual/xcopa/translation-zh	cambridgeltl/xcopa (config translation-zh)	(none left)	0	validation 5
+ts/multilingual/xcopa/vi	cambridgeltl/xcopa (config vi)	(none left)	0	validation 4
+ts/multilingual/xcopa/zh	cambridgeltl/xcopa (config zh)	(none left)	0	validation 6
+ts/multilingual/xcsr/X-CODAH-ar	INK-USC/xcsr (config X-CODAH-ar)	(none left)	0	validation 6
+ts/multilingual/xcsr/X-CODAH-de	INK-USC/xcsr (config X-CODAH-de)	(none left)	0	validation 6
+ts/multilingual/xcsr/X-CODAH-en	INK-USC/xcsr (config X-CODAH-en)	(none left)	0	validation 4
+ts/multilingual/xcsr/X-CODAH-es	INK-USC/xcsr (config X-CODAH-es)	(none left)	0	validation 2
+ts/multilingual/xcsr/X-CODAH-fr	INK-USC/xcsr (config X-CODAH-fr)	(none left)	0	validation 6
+ts/multilingual/xcsr/X-CODAH-hi	INK-USC/xcsr (config X-CODAH-hi)	(none left)	0	validation 3
+ts/multilingual/xcsr/X-CODAH-it	INK-USC/xcsr (config X-CODAH-it)	(none left)	0	validation 2
+ts/multilingual/xcsr/X-CODAH-jap	INK-USC/xcsr (config X-CODAH-jap)	(none left)	0	validation 6
+ts/multilingual/xcsr/X-CODAH-nl	INK-USC/xcsr (config X-CODAH-nl)	(none left)	0	validation 5
+ts/multilingual/xcsr/X-CODAH-pl	INK-USC/xcsr (config X-CODAH-pl)	(none left)	0	validation 4
+ts/multilingual/xcsr/X-CODAH-pt	INK-USC/xcsr (config X-CODAH-pt)	(none left)	0	validation 6
+ts/multilingual/xcsr/X-CODAH-ru	INK-USC/xcsr (config X-CODAH-ru)	(none left)	0	validation 4
+ts/multilingual/xcsr/X-CODAH-sw	INK-USC/xcsr (config X-CODAH-sw)	(none left)	0	validation 4
+ts/multilingual/xcsr/X-CODAH-ur	INK-USC/xcsr (config X-CODAH-ur)	(none left)	0	validation 3
+ts/multilingual/xcsr/X-CODAH-vi	INK-USC/xcsr (config X-CODAH-vi)	(none left)	0	validation 3
+ts/multilingual/xcsr/X-CODAH-zh	INK-USC/xcsr (config X-CODAH-zh)	(none left)	0	validation 2
+ts/multilingual/xcsr/X-CSQA-ar	INK-USC/xcsr (config X-CSQA-ar)	(none left)	0	validation 86
+ts/multilingual/xcsr/X-CSQA-de	INK-USC/xcsr (config X-CSQA-de)	(none left)	0	validation 82
+ts/multilingual/xcsr/X-CSQA-en	INK-USC/xcsr (config X-CSQA-en)	(none left)	0	validation 90
+ts/multilingual/xcsr/X-CSQA-es	INK-USC/xcsr (config X-CSQA-es)	(none left)	0	validation 93
+ts/multilingual/xcsr/X-CSQA-fr	INK-USC/xcsr (config X-CSQA-fr)	(none left)	0	validation 70
+ts/multilingual/xcsr/X-CSQA-hi	INK-USC/xcsr (config X-CSQA-hi)	(none left)	0	validation 73
+ts/multilingual/xcsr/X-CSQA-it	INK-USC/xcsr (config X-CSQA-it)	(none left)	0	validation 88
+ts/multilingual/xcsr/X-CSQA-jap	INK-USC/xcsr (config X-CSQA-jap)	(none left)	0	validation 64
+ts/multilingual/xcsr/X-CSQA-nl	INK-USC/xcsr (config X-CSQA-nl)	(none left)	0	validation 67
+ts/multilingual/xcsr/X-CSQA-pl	INK-USC/xcsr (config X-CSQA-pl)	(none left)	0	validation 83
+ts/multilingual/xcsr/X-CSQA-pt	INK-USC/xcsr (config X-CSQA-pt)	(none left)	0	validation 80
+ts/multilingual/xcsr/X-CSQA-ru	INK-USC/xcsr (config X-CSQA-ru)	(none left)	0	validation 69
+ts/multilingual/xcsr/X-CSQA-sw	INK-USC/xcsr (config X-CSQA-sw)	(none left)	0	validation 77
+ts/multilingual/xcsr/X-CSQA-ur	INK-USC/xcsr (config X-CSQA-ur)	(none left)	0	validation 82
+ts/multilingual/xcsr/X-CSQA-vi	INK-USC/xcsr (config X-CSQA-vi)	(none left)	0	validation 79
+ts/multilingual/xcsr/X-CSQA-zh	INK-USC/xcsr (config X-CSQA-zh)	(none left)	0	validation 76
+ts/multilingual/xglue/nc	SetFit/xglue_nc	train	141	
+ts/multilingual/xglue/qadsm	tasksource/xglue (config qadsm) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals microsoft/xglue	train	37	
+ts/multilingual/xglue/qam	tasksource/xglue (config qam) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals microsoft/xglue	train	20	
+ts/multilingual/xglue/wpr	tasksource/xglue (config wpr) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals microsoft/xglue	train	111	
+ts/multilingual/xlwic/xlwic_de_de	tasksource/xlwic (config xlwic_de_de) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals pasinit/xlwic	train	22	
+ts/multilingual/xlwic/xlwic_en_ko	tasksource/xlwic (config xlwic_en_ko) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals pasinit/xlwic	train	31	
+ts/multilingual/xlwic/xlwic_fr_fr	tasksource/xlwic (config xlwic_fr_fr) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals pasinit/xlwic	train	29	
+ts/multilingual/xlwic/xlwic_it_it	tasksource/xlwic (config xlwic_it_it) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals pasinit/xlwic	train	33	
+ts/multilingual/xnli	facebook/xnli (config en)	train	174	
+ts/multilingual/xstory_cloze/ar	juletxara/xstory_cloze (config ar)	train	16	
+ts/multilingual/xstory_cloze/en	juletxara/xstory_cloze (config en)	train	16	
+ts/multilingual/xstory_cloze/es	juletxara/xstory_cloze (config es)	train	11	
+ts/multilingual/xstory_cloze/eu	juletxara/xstory_cloze (config eu)	train	17	
+ts/multilingual/xstory_cloze/hi	juletxara/xstory_cloze (config hi)	train	12	
+ts/multilingual/xstory_cloze/id	juletxara/xstory_cloze (config id)	train	15	
+ts/multilingual/xstory_cloze/my	juletxara/xstory_cloze (config my)	train	17	
+ts/multilingual/xstory_cloze/ru	juletxara/xstory_cloze (config ru)	train	17	
+ts/multilingual/xstory_cloze/sw	juletxara/xstory_cloze (config sw)	train	11	
+ts/multilingual/xstory_cloze/te	juletxara/xstory_cloze (config te)	train	13	
+ts/multilingual/xstory_cloze/zh	juletxara/xstory_cloze (config zh)	train	16	
+ts/multiwoz22/categorical-slot	pfb30/multi_woz_v22 (config v2.2)	unknown	49	
+ts/multiwoz22/dialogue-act	pfb30/multi_woz_v22 (config v2.2)	unknown	55	
+ts/mutual	tasksource/mutual	train	307	
+ts/nan-nli	joey234/nan-nli	train	133	
+ts/natural-language-satisfiability	tasksource/natural-language-satisfiability	train	297	
+ts/naturallogic	tasksource/naturallogic	train	90	
+ts/nevir	orionweller/NevIR	unknown	42	
+ts/newsmtsc	fhamborg/news_sentiment_newsmtsc	train	75	
+ts/nlgraph	tasksource/nlgraph	train	283	
+ts/nli-veridicality-transitivity	tasksource/nli-veridicality-transitivity	train	26	
+ts/nli_fever	pietrolesci/nli_fever	train	307	
+ts/nope	tasksource/nope	train	55	
+ts/numer_sense	tasksource/numer_sense via tasksource/tasksource-jev-typed-decisions (default config, train split); originals INK-USC/numer_sense	train	319	
+ts/oasst2/creativity	tasksource/oasst2_dense_flat	train	331	
+ts/oasst2/helpfulness	tasksource/oasst2_dense_flat	train	308	
+ts/oasst2/humor	tasksource/oasst2_dense_flat	train	325	
+ts/oasst2/quality	tasksource/oasst2_dense_flat	train	329	
+ts/oasst2/toxicity	tasksource/oasst2_dense_flat	train	335	
+ts/oasst2/violence	tasksource/oasst2_dense_flat	train	345	
+ts/oasst2_pairwise_rlhf_reward	tasksource/oasst2_pairwise_rlhf_reward	train	301	
+ts/olid/offensive	christophsonntag/OLID	train	298	
+ts/onestop_qa	malmaud/onestop_qa	train	297	
+ts/open_question_type	Korea-MES/open_question_type via tasksource/tasksource-jev-typed-decisions (default config, train split); originals launch/open_question_type	train	304	
+ts/openbookqa	allenai/openbookqa	train	290	later gate rules 1
+ts/parade	tasksource/parade	train	172	
+ts/patent-classification/abstract	ccdv/patent-classification (config abstract)	train	309	
+ts/patent-phrase-similarity	tasksource/patent-phrase-similarity	train	298	
+ts/path-naturalness-prediction	tasksource/path-naturalness-prediction	train	8	
+ts/paws/labeled_final	google-research-datasets/paws (config labeled_final)	train	135	
+ts/paws/labeled_swap	google-research-datasets/paws (config labeled_swap)	train	142	
+ts/perspectrum/stance	tasksource/perspectrum	train	62	
+ts/persuasion	Anthropic/persuasion	train	313	
+ts/phrase_similarity	Deehan1866/processed_phrase_similarity via tasksource/tasksource-jev-typed-decisions (default config, train split); originals PiC/phrase_similarity	train	207	
+ts/piqa	baber/piqa via tasksource/tasksource-jev-typed-decisions (default config, train split); originals ybisk/piqa	train	285	
+ts/poem_sentiment	google-research-datasets/poem_sentiment	train	300	
+ts/pragmeval/emergent	sileod/pragmeval (config emergent)	train	140	
+ts/pragmeval/emobank-dominance	sileod/pragmeval (config emobank-dominance)	train	55	
+ts/pragmeval/gum	sileod/pragmeval (config gum)	train	142	
+ts/pragmeval/pdtb	sileod/pragmeval (config pdtb)	train	145	
+ts/pragmeval/persuasiveness-claimtype	sileod/pragmeval (config persuasiveness-claimtype)	train	85	
+ts/pragmeval/persuasiveness-eloquence	sileod/pragmeval (config persuasiveness-eloquence)	train	53	
+ts/pragmeval/persuasiveness-premisetype	sileod/pragmeval (config persuasiveness-premisetype)	train	137	
+ts/pragmeval/persuasiveness-relevance	sileod/pragmeval (config persuasiveness-relevance)	train	56	
+ts/pragmeval/persuasiveness-specificity	sileod/pragmeval (config persuasiveness-specificity)	train	53	
+ts/pragmeval/persuasiveness-strength	sileod/pragmeval (config persuasiveness-strength)	train	48	
+ts/pragmeval/sarcasm	sileod/pragmeval (config sarcasm)	train	78	
+ts/pragmeval/squinky-formality	sileod/pragmeval (config squinky-formality)	train	62	
+ts/pragmeval/squinky-implicature	sileod/pragmeval (config squinky-implicature)	train	61	
+ts/pragmeval/squinky-informativeness	sileod/pragmeval (config squinky-informativeness)	train	48	
+ts/pragmeval/stac	sileod/pragmeval (config stac)	train	141	
+ts/pragmeval/switchboard	sileod/pragmeval (config switchboard)	train	4	
+ts/pragmeval/verifiability	sileod/pragmeval (config verifiability)	train	147	
+ts/preco/coreference	coref-data/preco_raw	unknown	59	
+ts/probability_words_nli/reasoning_1hop	sileod/probability_words_nli (config reasoning_1hop)	train	169	
+ts/probability_words_nli/reasoning_2hop	sileod/probability_words_nli (config reasoning_2hop)	train	191	
+ts/procedural-typed-decisions/arithmetic	tasksource/procedural-typed-decisions (config arithmetic)	train (tjtd train split; procedurally generated, no upstream split)	256	
+ts/procedural-typed-decisions/entity_belief_tracking	tasksource/procedural-typed-decisions (config entity_belief_tracking)	train (tjtd train split; procedurally generated, no upstream split)	213	
+ts/procedural-typed-decisions/event_state_reconstruction	tasksource/procedural-typed-decisions (config event_state_reconstruction)	train (tjtd train split; procedurally generated, no upstream split)	266	
+ts/procedural-typed-decisions/event_triggered_execution	tasksource/procedural-typed-decisions (config event_triggered_execution)	train (tjtd train split; procedurally generated, no upstream split)	256	
+ts/procedural-typed-decisions/evidence_sufficiency	tasksource/procedural-typed-decisions (config evidence_sufficiency)	train (tjtd train split; procedurally generated, no upstream split)	534	
+ts/procedural-typed-decisions/goal_directed_planning	tasksource/procedural-typed-decisions (config goal_directed_planning)	train (tjtd train split; procedurally generated, no upstream split)	276	
+ts/procedural-typed-decisions/graph_navigation	tasksource/procedural-typed-decisions (config graph_navigation)	train (tjtd train split; procedurally generated, no upstream split)	278	
+ts/procedural-typed-decisions/instruction_execution	tasksource/procedural-typed-decisions (config instruction_execution)	train (tjtd train split; procedurally generated, no upstream split)	197	
+ts/procedural-typed-decisions/multi_view_adjudication	tasksource/procedural-typed-decisions (config multi_view_adjudication)	train (tjtd train split; procedurally generated, no upstream split)	244	
+ts/procedural-typed-decisions/needle_retrieval	tasksource/procedural-typed-decisions (config needle_retrieval)	train (tjtd train split; procedurally generated, no upstream split)	530	
+ts/procedural-typed-decisions/partial_observation_calibration	tasksource/procedural-typed-decisions (config partial_observation_calibration)	train (tjtd train split; procedurally generated, no upstream split)	835	
+ts/procedural-typed-decisions/policy_applicability	tasksource/procedural-typed-decisions (config policy_applicability)	train (tjtd train split; procedurally generated, no upstream split)	253	
+ts/procedural-typed-decisions/record_aggregation	tasksource/procedural-typed-decisions (config record_aggregation)	train (tjtd train split; procedurally generated, no upstream split)	252	
+ts/procedural-typed-decisions/record_eligibility	tasksource/procedural-typed-decisions (config record_eligibility)	train (tjtd train split; procedurally generated, no upstream split)	190	
+ts/procedural-typed-decisions/state_perturbation	tasksource/procedural-typed-decisions (config state_perturbation)	train (tjtd train split; procedurally generated, no upstream split)	280	
+ts/procedural-typed-decisions/table_lookup	tasksource/procedural-typed-decisions (config table_lookup)	train (tjtd train split; procedurally generated, no upstream split)	215	
+ts/procedural-typed-decisions/taxonomy_routing	tasksource/procedural-typed-decisions (config taxonomy_routing)	train (tjtd train split; procedurally generated, no upstream split)	329	
+ts/prompt-injection-dataset	S-Labs/prompt-injection-dataset	train	295	
+ts/prompt-injections	deepset/prompt-injections	train	240	
+ts/proofwriter	tasksource/proofwriter	train	293	
+ts/propsegment/nli	sihaochen/propsegment	train	167	
+ts/prosocial-dialog/safety	allenai/prosocial-dialog	train	62	
+ts/proto_qa/proto_qa	community-datasets/proto_qa (config proto_qa)	train	348	
+ts/pubmed-rct/role	tasksource/pubmed-rct via tasksource/tasksource-jev-typed-decisions (default config, train split); originals zj88zj/PubMed_200k_RCT	train	70	
+ts/qasc	allenai/qasc	train	303	
+ts/qasper/yesno	allenai/qasper (config qasper)	unknown	1	
+ts/quac/answerability	allenai/quac (config plain_text)	unknown	61	
+ts/quail	textmachinelab/quail	train	310	
+ts/quarel	community-datasets/quarel	train	225	
+ts/quartz	allenai/quartz	train	262	
+ts/race-c	tasksource/race-c	train	303	
+ts/race/high	ehovy/race (config high)	train	307	
+ts/race/middle	ehovy/race (config middle)	train	313	
+ts/recam	holylovenia/recam	train	109	
+ts/recast/recast_factuality	tasksource/recast (config recast_factuality)	train	9	
+ts/recast/recast_megaveridicality	tasksource/recast (config recast_megaveridicality)	train	8	
+ts/recast/recast_ner	tasksource/recast (config recast_ner)	train	8	
+ts/recast/recast_puns	tasksource/recast (config recast_puns)	train	11	
+ts/recast/recast_sentiment	tasksource/recast (config recast_sentiment)	train	9	
+ts/recast/recast_verbcorner	tasksource/recast (config recast_verbcorner)	train	7	
+ts/recast/recast_verbnet	tasksource/recast (config recast_verbnet)	train	8	
+ts/recast_white/dpr	pietrolesci/recast_white	(none left)	0	dpr 18
+ts/recast_white/fnplus	pietrolesci/recast_white	(none left)	0	fnplus 12
+ts/recast_white/sprl	pietrolesci/recast_white	(none left)	0	sprl 12
+ts/reclor	tasksource/reclor	train	315	
+ts/record/candidate	aps/super_glue (config record)	unknown	42	
+ts/redial/preference	community-datasets/re_dial	unknown	53	
+ts/regset	tasksource/regset	train	331	
+ts/resnli	tasksource/resnli	train	171	
+ts/riddle_sense	jeggers/riddle_sense via tasksource/tasksource-jev-typed-decisions (default config, train split); originals INK-USC/riddle_sense	train	315	
+ts/robustLR	tasksource/robustLR	train	300	
+ts/robust_nli/IS_CS	pietrolesci/robust_nli	IS_CS	11	
+ts/robust_nli/LI_LI	pietrolesci/robust_nli	LI_LI	11	
+ts/robust_nli/PI_CD	pietrolesci/robust_nli	PI_CD	7	
+ts/robust_nli/PI_SP	pietrolesci/robust_nli	PI_SP	12	
+ts/robust_nli/ST_LM	pietrolesci/robust_nli	ST_LM	4	
+ts/robust_nli/ST_NE	pietrolesci/robust_nli	ST_NE	7	
+ts/robust_nli/ST_SE	pietrolesci/robust_nli	ST_SE	11	
+ts/robust_nli/ST_WO	pietrolesci/robust_nli	ST_WO	9	
+ts/robust_nli_is_sd	pietrolesci/robust_nli_is_sd	IS_SD	5	
+ts/robust_nli_li_ts	pietrolesci/robust_nli_li_ts	LI_TS	3	
+ts/rotten_tomatoes	cornell-movie-review-data/rotten_tomatoes	train	286	
+ts/ruletaker	tasksource/ruletaker	train	296	
+ts/rumoureval_2019/RumourEval2019	strombergnlp/rumoureval_2019	train	285	
+ts/safe-guard-prompt-injection	xTRam1/safe-guard-prompt-injection	train	299	
+ts/sbic/intent	tasksource/sbic via tasksource/tasksource-jev-typed-decisions (default config, train split); originals allenai/social_bias_frames	train	58	
+ts/sbic/offensiveness	tasksource/sbic via tasksource/tasksource-jev-typed-decisions (default config, train split); originals allenai/social_bias_frames	train	303	
+ts/scientific-exaggeration-detection	copenlu/scientific-exaggeration-detection	train	62	
+ts/scifact_entailment	tasksource/scifact_entailment via tasksource/tasksource-jev-typed-decisions (default config, train split); originals allenai/scifact_entailment	train	316	
+ts/sciie	zapsdcn/sciie	train	314	
+ts/scinli	tasksource/scinli	train	159	
+ts/sciq	allenai/sciq	train	292	
+ts/scirepeval/search	tasksource/scirepeval-search via tasksource/tasksource-jev-typed-decisions (default config, train split); originals allenai/scirepeval	train	85	
+ts/scitail/snli_format	allenai/scitail (config snli_format)	train	160	
+ts/scone	tasksource/scone	train	14	
+ts/sem_eval_2010_task_8	SemEvalWorkshop/sem_eval_2010_task_8	train	324	
+ts/semantic_fragments_nli	tasksource/semantic_fragments_nli	train	75	
+ts/semcor	tasksource/semcor via tasksource/tasksource-jev-typed-decisions (default config, train split); originals thesofakillers/SemCor	train	104	
+ts/sen-making/1	tasksource/sen-making	train	16	
+ts/sen-making/2	tasksource/sen-making	train	288	
+ts/sentihood/sentiment	bhavnicksm/sentihood	unknown	58	
+ts/sharc	tasksource/sharc via tasksource/tasksource-jev-typed-decisions (default config, train split); originals nikhilweee/sharc_modified	train	296	
+ts/shell-safety-v2	tomngdev/shell-safety-v2	train	294	
+ts/sherliic	tasksource/sherliic	train	8	
+ts/sick/label	tasksource/sick via tasksource/tasksource-jev-typed-decisions (default config, train split); originals RobZamp/sick	train	182	
+ts/sick/relatedness	tasksource/sick via tasksource/tasksource-jev-typed-decisions (default config, train split); originals RobZamp/sick	train	319	
+ts/silicone/dyda_da	tasksource/silicone (config dyda_da) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals eusip/silicone	train	294	
+ts/silicone/maptask	tasksource/silicone (config maptask) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals eusip/silicone	train	305	
+ts/silicone/oasis	tasksource/silicone (config oasis) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals eusip/silicone	train	35	
+ts/silicone/sem	tasksource/silicone (config sem) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals eusip/silicone	train	288	
+ts/simple_pair	tasksource/simple_pair	train	318	
+ts/slurp/intent	tasksource/slurp	train	3	
+ts/slurp/slot-type	tasksource/slurp	unknown	3	
+ts/sms_spam	ucirvine/sms_spam	train	184	
+ts/snips_built_in_intents	sonos-nlu-benchmark/snips_built_in_intents	train	163	
+ts/snli	stanfordnlp/snli	train	162	
+ts/social_i_qa	tasksource/social_i_qa via tasksource/tasksource-jev-typed-decisions (default config, train split); originals allenai/social_i_qa	train	311	
+ts/spartqa-mchoice	tasksource/spartqa-mchoice	train	309	
+ts/spartqa-yn	tasksource/spartqa-yn	train	296	
+ts/spider/column	tasksource/spider (config column) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals minktn/spider-data	train	27	
+ts/squad-v2/answerability	rajpurkar/squad_v2	train	60	
+ts/sst5	SetFit/sst5	train	87	
+ts/starcon	tasksource/starcon	train	202	
+ts/stepgame	tasksource/stepgame	train	277	
+ts/strategy-qa	tasksource/strategy-qa	train	304	
+ts/streusle/noun	tasksource/streusle	train	3	
+ts/streusle/verb	tasksource/streusle	train	50	
+ts/sts-companion	tasksource/sts-companion	train	328	
+ts/subjectivity	tasksource/subjectivity	train	156	
+ts/summarize_from_feedback/comparisons	vwxyzjn/summarize_from_feedback_oai_preprocessing via tasksource/tasksource-jev-typed-decisions (default config, train split); originals openai/summarize_from_feedback	train	295	
+ts/super_glue/boolq	aps/super_glue (config boolq)	train	125	
+ts/super_glue/boolq_passage	aps/super_glue (config boolq)	train	86	
+ts/super_glue/cb	aps/super_glue (config cb)	train	130	
+ts/super_glue/copa	aps/super_glue (config copa)	train	173	
+ts/super_glue/wic	aps/super_glue (config wic)	train	269	
+ts/syntactic-augmentation-nli	tasksource/syntactic-augmentation-nli	train	76	
+ts/synthetic-instruct-gptj-pairwise	Dahoas/synthetic-instruct-gptj-pairwise	train	274	
+ts/synthetic-retrieval-NLI/binary	tasksource/synthetic-retrieval-NLI (config binary)	train	172	
+ts/synthetic-retrieval-NLI/count	tasksource/synthetic-retrieval-NLI (config count)	train	192	
+ts/synthetic-retrieval-NLI/position	tasksource/synthetic-retrieval-NLI (config position)	train	181	
+ts/tab/identifier	doshimit3015/text-anonymization-benchmark	unknown	29	
+ts/tabfact	wenhu/tab_fact (config tab_fact)	train	48	
+ts/tabmwp	tasksource/tabmwp	train	83	
+ts/temporal-nli	tasksource/temporal-nli	train	168	
+ts/tomi-nli	tasksource/tomi-nli	unknown	190	
+ts/topv2/intent	WillHeld/top_v2	train	1	
+ts/topv2/slot-type	WillHeld/top_v2	unknown	3	
+ts/toxic_conversations	SetFit/toxic_conversations	train	285	
+ts/toxigen-data/annotated	skg/toxigen-data (config annotated)	train	282	
+ts/tracie	tasksource/tracie	train	308	
+ts/trec	tasksource/trec via tasksource/tasksource-jev-typed-decisions (default config, train split); originals CogComp/trec	train	126	
+ts/trip/cloze	sled-umich/TRIP	train	2	
+ts/trip/order	sled-umich/TRIP	train	3	
+ts/tweet_eval/emoji	cardiffnlp/tweet_eval (config emoji)	train	208	
+ts/tweet_eval/emotion	cardiffnlp/tweet_eval (config emotion)	train	201	
+ts/tweet_eval/hate	cardiffnlp/tweet_eval (config hate)	train	132	
+ts/tweet_eval/irony	cardiffnlp/tweet_eval (config irony)	train	90	
+ts/tweet_eval/offensive	cardiffnlp/tweet_eval (config offensive)	train	111	
+ts/tweet_eval/sentiment	cardiffnlp/tweet_eval (config sentiment)	train	196	
+ts/tweet_eval/stance_abortion	cardiffnlp/tweet_eval (config stance_abortion)	train	226	
+ts/tweet_eval/stance_atheism	cardiffnlp/tweet_eval (config stance_atheism)	train	209	
+ts/tweet_eval/stance_climate	cardiffnlp/tweet_eval (config stance_climate)	train	188	
+ts/tweet_eval/stance_feminist	cardiffnlp/tweet_eval (config stance_feminist)	train	190	
+ts/tweet_eval/stance_hillary	cardiffnlp/tweet_eval (config stance_hillary)	train	204	
+ts/tweets_hate_speech_detection	tweets-hate-speech-detection/tweets_hate_speech_detection	train	192	
+ts/twentyquestions	tasksource/twentyquestions	train	303	
+ts/ukpconvarg/convincingness	tasksource/ukpconvarg	train	13	
+ts/utilitarianism	hendrycks/ethics	train	93	
+ts/vitaminc	tals/vitaminc	train	294	
+ts/wands	tasksource/wands via tasksource/tasksource-jev-typed-decisions (default config, train split); originals napsternxg/wands	train	72	
+ts/webgpt_comparisons	heegyu/webgpt_comparisons_ko	train	329	
+ts/weblinx/action	McGill-NLP/WebLINX (config chat)	unknown	82	
+ts/weblinx/dom-element	McGill-NLP/WebLINX (config chat)	unknown	107	
+ts/websrc/element	tasksource/websrc (config element) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals X-LANCE/WebSRC_v1.0	train	2	
+ts/websrc/yesno	tasksource/websrc (config yesno) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals X-LANCE/WebSRC_v1.0	train	36	
+ts/wice	tasksource/wice	train	298	
+ts/wiki_hop/original	MoE-UNC/wikihop (config default) via tasksource/tasksource-jev-typed-decisions (default config, train split); originals QAngaroo/wiki_hop	train	324	
+ts/wiki_qa	microsoft/wiki_qa	train	262	
+ts/wikipedia-detox/aggression	tasksource/wikipedia-detox-votes (config aggression)	train	345	
+ts/wikipedia-detox/aggression_score	tasksource/wikipedia-detox-votes (config aggression)	train	301	
+ts/wikipedia-detox/attack	tasksource/wikipedia-detox-votes (config attack)	train	337	
+ts/wikipedia-detox/toxicity	tasksource/wikipedia-detox-votes (config toxicity)	train	311	
+ts/wikipedia-detox/toxicity_score	tasksource/wikipedia-detox-votes (config toxicity)	train	322	
+ts/wikiqa	microsoft/wiki_qa	train	34	
+ts/wikisql/aggregation	Salesforce/wikisql	train	52	
+ts/wikisql/column	Salesforce/wikisql	train	131	
+ts/wikisql/operator	Salesforce/wikisql	unknown	40	
+ts/winowhy	tasksource/winowhy	train	157	later gate rules 4
+ts/wiqa	allenai/wiqa	train	315	
+ts/wnut_17/wnut_17	flaitenberger/wnut_17 via tasksource/tasksource-jev-typed-decisions (default config, train split); originals leondz/wnut_17	train	322	
+ts/yahoo_answers_topics	community-datasets/yahoo_answers_topics	train	288	
+ts/yelp_review_full/yelp_review_full	Yelp/yelp_review_full (config yelp_review_full)	train	301	

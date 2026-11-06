@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.0 (2026-11-06)
+
+New `vev-4b` weights. `vev-9b` and both adapter repositories stay at 0.1.0.
+
+- `vev-4b` is retrained from Qwen3.5-4B in four stages with a new data mix, including data for the task families of
+  the Jev Decision Index (DI) built from their training splits. Sources, removals and the overlaps with evaluation
+  data that remain: [TRAINING_DATA.md](TRAINING_DATA.md). CharXiv, whose card forbids training, is no longer used.
+- DI public suites: vision 72.90, text 60.32 (0.1.0: 38.91). On the 18 release sets, 0.2.0 is significantly more
+  accurate than 0.1.0 on 8 and less accurate on 4 (game_vr, policy_cat, t2i_elem, ui_toggle);
+  `results/comparisons/vev-4b-0.2.0.json`.
+- `vev serve` reads the reading layout from the checkpoint's `vev.json`: `bidir` (state tokens attend to each other
+  in both directions), `read_twice` (short text states are written twice), `image_read` (images are passed twice in
+  one-question requests) and `max_image_pixels` (1.6 MP for `vev-4b` 0.2.0). Checkpoints without these fields are read
+  as in 0.1.x. A request that is over the token limits only because of the repetition is read once.
+- The server warms up its GPU kernels before `/healthz` answers (`--no-warmup` skips it).
+- `requirements-serve.txt`, `scripts/serve_board.sh`, a `Dockerfile` and [docs/serving.md](docs/serving.md): the
+  environment and start command the DI latencies were measured with (H800: 101 / 151 / 225 ms median / mean / p80).
+- `evals/decision_index/`: engines that run the DI tool's text and vision suites against `vev serve`.
+- `results/vev-4b/` holds the 0.2.0 results; the 0.1.0 files moved to `results/vev-4b-0.1.0/`.
+
 ## 0.1.1 (2026-10-01)
 
 - The questions of a request run as one batch instead of one forward pass each. On one H800, 100 questions about a

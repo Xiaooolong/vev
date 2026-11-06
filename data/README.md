@@ -49,7 +49,7 @@ The license review (2026-09-23, recorded in `licenses.json`) leads to three rule
 - **The SeeTRUE authors ask that it not be used for training** ("should not be used for training"). It has no converter here.
 - **sugarcrepe consists entirely of COCO val2017 images** and is dropped wholesale by the third decontamination pass. The converter is kept, but it contributes nothing to the training set.
 
-Two builds: `v1` (`--allow commercial-ok` + per-image COCO filtering) admits only permissively licensed sources; `v1-research` also admits unknown and non-commercial sources. The v0.1 models were trained on `v1-research`, so their weights are CC BY-NC 4.0.
+Two builds: `v1` (`--allow commercial-ok` + per-image COCO filtering) admits only permissively licensed sources; `v1-research` also admits unknown and non-commercial sources. The v0.1 models were trained on `v1-research`.
 
 The Cauldron copies lost the COCO file names (only vqav2 keeps them), so records from COCO-based sources such as vsr and aokvqa have no `meta.coco_id` and cannot be filtered per image. `build.py --coco-id-required vsr,aokvqa,foil_coco,sugarcrepe,coco_cn` drops every record from these sources that lacks a coco_id in a strict build; `--exclude-sources a,b` excludes whole sources. To bring vsr back into the strict build, reconvert it from the original HF set `cambridgeltl/vsr_random` (which has COCO file names).
 

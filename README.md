@@ -6,26 +6,24 @@
 
 <img src="docs/doom.webp" alt="vev-4b playing Doom in real time: the game on the left, the eight slice probabilities and the chosen action on the right.">
 
-vev-4b playing Doom in real time. On each look, a small harness cuts the screen into 8 vertical slices and asks Vev
-one yes/no question per slice in a single request ("does this slice show a monster?"); a fixed rule turns the answers into
-turning and firing. The game never waits for the model.
+vev-4b 0.1.0 playing Doom in real time. For every frame, a small harness cuts the screen into 8 vertical slices and
+sends one request with a yes/no question per slice ("does this slice show a monster?"); a fixed rule turns the answers
+into turning and firing. The game does not pause for the model.
 
-Ask yes/no, multiple-choice or graded questions about a piece of text, a JSON record or a screenshot, and get a
-probability for every allowed answer back in about 40 ms. Nothing is generated, so the answer is always one of the
-options you defined, and you can put a threshold on it. The weights are open and run on your own GPU.
+The input is a piece of text, a JSON record or a screenshot, plus a few yes/no, multiple-choice or graded questions;
+the output is a probability for each option. The model only scores the given options and does not generate text. One
+image question takes about 100–120 ms on a single GPU ([speed](#speed)). The weights are open and can be run locally.
 
-- **Speaks the Jev API.** [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev) is TypeSafe's hosted
-  decision model. Vev serves the same `/v1/systemone` request format, so code written with TypeSafe's SDK works after
-  changing the base URL.
-- **Sees images.** Screenshots and photos go into the request next to text. We measured it on reading UI state,
-  checking images against a written policy and checking generated images against their prompt
-  ([what it can do](#what-it-can-do)).
-- **Two sizes, English and Chinese.** `vev-4b` needs about 10 GB of GPU memory and `vev-9b` about 19 GB. Both are
-  fine-tuned from Qwen3.5.
+- **Jev API compatible.** [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev) is TypeSafe's hosted
+  decision model. Vev implements the same `/v1/systemone` request format; code written with TypeSafe's SDK only needs a
+  different base URL.
+- **Image input.** Screenshots and photos can be sent in the request together with text.
+- **English and Chinese.** Fine-tuned from Qwen3.5.
 
 <img src="docs/checkout.png" width="560" alt="A checkout page with a red banner: Payment failed: your card was declined.">
 
 ```python
+# client and checkout_png are created as shown in Get started
 resp = client.system_one(
     state={"screen": {"image": {"url": checkout_png}}},
     questions={
@@ -37,30 +35,28 @@ resp = client.system_one(
                                  "nothing": "Nothing, the order went through"}),
     },
 )
-# vev-4b:  error 0.991
-#          step  {"shipping": 0.005, "payment": 0.765, "review": 0.229}
-#          next  {"retry": 0.983, "wait": 0.004, "nothing": 0.014}
+# vev-4b 0.2.0:  error 0.996
+#                step  {"shipping": 0.002, "payment": 0.965, "review": 0.033}
+#                next  {"retry": 0.996, "wait": 0.002, "nothing": 0.003}
 ```
 
-The step question gets a less certain answer than the other two, which is what the probabilities are for: the
-progress bar shows both "Payment" and "Review".
-
-This is v0.1, a research preview. The weights are for non-commercial use only, and on most text sets Vev is less
-accurate than Jev; see [limitations](#limitations).
+This is v0.2, a research preview: `vev-4b` is 0.2.0, `vev-9b` is still 0.1.0. The weights are licensed under
+CC BY-NC 4.0. On one of the four text sets, Jev is still clearly more accurate (see [Text](#text)).
 
 ## Get started
+
+Requirements: Python 3.11 or newer, an NVIDIA GPU and a CUDA build of PyTorch. On Windows, pip installs a CPU-only
+PyTorch by default, so install `torch` and `torchvision` from [pytorch.org](https://pytorch.org/get-started/locally/)
+first.
 
 ```bash
 pip install git+https://github.com/Xiaooolong/vev
 vev serve --model CountingSheep/vev-4b          # downloads the weights on first start, listens on 127.0.0.1:8009
 ```
 
-You need Python 3.11 or newer, an NVIDIA GPU and a CUDA build of PyTorch; CPU and Apple Silicon are untested. On
-Windows, pip installs a CPU-only PyTorch by default, so install `torch` and `torchvision` together from
-[pytorch.org](https://pytorch.org/get-started/locally/) first. Tested with torch 2.8.0, transformers 5.17.0 and
-peft 0.21.0.
+On first start the server warms up its GPU kernels, which takes about two minutes with an empty Triton cache.
 
-Then ask questions with TypeSafe's Python SDK (`pip install typesafe-sdk`):
+Requests can then be sent with TypeSafe's Python SDK (`pip install typesafe-sdk`):
 
 ```python
 from typesafe_sdk import Choice, Noul, TypeSafeClient
@@ -74,12 +70,12 @@ resp = client.system_one(
                        criteria={"shipping": "Delivery and tracking", "billing": "Charges and refunds"}),
     },
 )
-print(resp.answers["urgent"].noul)          # probability of "yes": 0.98 with vev-4b
+print(resp.answers["urgent"].noul)          # probability of "yes": 0.97 with vev-4b 0.2.0
 print(resp.answers["team"].probabilities)   # {"shipping": 0.97, "billing": 0.03}
 ```
 
-`Noul` is the API's name for a yes/no question. The state can be a string or any JSON object; an image is an
-object `{"image": {"url": "data:image/png;base64,..."}}` anywhere inside it:
+`Noul` is the API's type name for a yes/no question. The state can be a string or any JSON object; an image is
+written as `{"image": {"url": "data:image/png;base64,..."}}` and can appear anywhere inside it:
 
 ```python
 import base64
@@ -89,11 +85,11 @@ checkout_png = "data:image/png;base64," + base64.b64encode(open("docs/checkout.p
 
 ### Other ways to run it
 
-- `--model CountingSheep/vev-4b-lora` downloads only the adapter (130 MB) and applies it to `Qwen/Qwen3.5-4B`,
-  which is reused if it is already in your Hugging Face cache. `--revision v0.1.0` pins the weights.
-- Docker: `docker build -t vev .` in a clone of this repository, then
+- `--revision v0.1.0` loads the 0.1.0 weights, `--revision v0.2.0` the current ones.
+- Docker: `docker build -t vev .`, then
   `docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev --model CountingSheep/vev-4b`.
-- Without the HTTP server, for example to score a large file offline:
+- The pinned environment and start script used for the Decision Index runs are in [docs/serving.md](docs/serving.md).
+- Without the HTTP server, calling the model from Python:
 
   ```python
   from vev.model import CheckpointEngine
@@ -105,147 +101,133 @@ checkout_png = "data:image/png;base64," + base64.b64encode(open("docs/checkout.p
   ```
 
 - In another inference engine: [spec/systemone-api.md](spec/systemone-api.md), section 10, gives the prompt
-  template and which token probabilities to read.
+  template and which token probabilities to read; [How it works](#how-it-works) describes the reading layout of
+  `vev-4b` 0.2.0.
 
 ### Speed
 
-All questions of a request run as one batch. On one H800, `vev-4b` answers:
+On the public items of the Decision Index vision suite, timed the way that board times submissions (one request at a
+time with one question, end to end including encoding the images on the client, images up to 1.6 MP):
 
-| Request | 1 question | 10 questions | 100 questions |
-|---|---|---|---|
-| short text | 38 ms | 58 ms | 232 ms |
-| 7k-token text | 280 ms | 334 ms | 1.07 s |
-| one 1 MP image | 78 ms | 120 ms (25 questions: 143 ms) | — |
+| GPU | Items | median | mean | p80 |
+|---|---|---|---|---|
+| H800 | all 12,210 | 101 ms | 151 ms | 225 ms |
+| RTX PRO 6000 Blackwell | 1,294, weighted to the whole suite | 120 ms | 182 ms | 283 ms |
 
-`vev-9b` is up to 30% slower; the full curves are in `conformance/results/vev-*/curves.json`. A `vev serve`
-process handles one request at a time and queues the rest; for more throughput, run one process per GPU behind a
-load balancer.
+All questions of a request run as one batch. A `vev serve` process handles one request at a time; for more
+throughput, start one process per GPU. Details: [docs/serving.md](docs/serving.md#latency).
 
-## What it can do
+## Results
 
-Accuracy on human-labelled data, by the kind of question. The text sets are public benchmarks; the image tasks are
-judgment sets we converted from labelled public data ([details](#detailed-results)).
+Accuracy on the full sets, measured with the harness in `evals/` against `vev serve`. "Significant" means a paired
+bootstrap over the same questions gives a 95% interval that excludes zero. Full metrics and the comparisons are in
+[results/](results/).
 
-| Kind of question | Example | vev-4b | vev-9b |
-|---|---|---|---|
-| Jev-style decisions on text | JevBench public subset | 0.766 | 0.823 |
-| The same, on sources the model has not seen | kev transfer-v4 | 0.776 | 0.781 |
-| Chinese | judgekit | 0.962 | 0.938 |
-| Pairs where a small change flips the answer | nimble | 0.707 | 0.747 |
-| UI state in an app screenshot | "Is there a switch or checkbox that is turned on?" / "Is there a text input field?" | 0.928 / 0.951 | 0.923 / 0.955 |
-| An image against a written safety policy | the LlavaGuard policy categories (hate, violence, sexual content, ...) | 0.742 | 0.724 |
-| A generated image against its prompt | "Does the image show the element 'grass' as the prompt describes?" | 0.715 | 0.703 |
-| General questions about a photo | MMBench-EN / POPE / MMStar | 0.881 / 0.889 / 0.627 | 0.902 / 0.897 / 0.674 |
-| Bugs in game screenshots | glitch / object clipping (VideoGameQA-Bench) | 0.613 / 0.671 | 0.626 / 0.729 |
+### Jev Decision Index
 
-UI-state questions are the most accurate; policy checks, generated-image checks and the harder visual benchmarks
-are mid-range; game bugs are too weak to rely on. These numbers describe these data sets, not yours. To check Vev
-on your own questions, write a few hundred labelled examples in the [record format](evals/README.md) and run
-`python -m evals.run` against your server; it reports accuracy, calibration, and accuracy among the most confident
-answers at each coverage level.
+Results on the public suites of the [Jev Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index),
+measured with the board's official tool. Scores are the board's chance-corrected skill ×100. The board's full score
+also includes private items that only the maintainers run, so it is not known.
 
-## Detailed results
+| Suite | vev-4b 0.1.0 | vev-4b 0.2.0 |
+|---|---|---|
+| vision, public suite (12,210 items) | – | 72.90 |
+| text, public suite, edition 0.3 | 38.91 | 60.32 |
 
-All numbers are accuracy on the full sets, measured with the harness in `evals/`. Where two systems are compared,
-the difference is tested with a paired bootstrap over the same questions (95% interval); "n.s." marks differences
-whose interval includes zero; for the image sets, questions that share an image are resampled together. The results
-were computed with version 0.1.0, which ran one forward pass per question; 0.1.1 gives the same probabilities for
-requests with one question, and with 5 or 50 extra questions per request no significance verdict below changes.
-Per-set metrics, including Brier score and calibration error, are in [results/](results/); sets there that are not
-below were used for diagnostics during development.
+0.1.0 was not run on the vision suite. 0.2.0 was trained with data for the board's task families, built from their
+training splits ([TRAINING_DATA.md](TRAINING_DATA.md)). Per-benchmark scores are in `results/decision-index/` and in
+the [vev-4b model card](https://huggingface.co/CountingSheep/vev-4b).
 
 ### Text
 
-| Set | n | kev-4B | vev-4b | vev-9b | Jev |
+| Set | n | Qwen3.5-4B | kev-4B | vev-4b 0.2.0 | Jev |
 |---|---|---|---|---|---|
-| [judgekit](https://github.com/lexingtonhibiki/judgekit) (Chinese) | 130 | 0.846 | 0.962 | 0.938 | 0.962 |
-| [JevBench](https://github.com/fstandhartinger/jevbench) (public subset) | 231 | 0.719 | 0.766 | 0.823 | 0.861 |
-| [nimble](https://github.com/bespokelabsai/nimble) | 324 | 0.735 | 0.707 | 0.747 | 0.923 |
-| [kev](https://github.com/jaredpalmer/kev) transfer-v4 (held-out sources) | 1528 | 0.802 | 0.776 | 0.781 | 0.854 |
+| [judgekit](https://github.com/lexingtonhibiki/judgekit) (Chinese) | 130 | 0.962 | 0.846 | 0.962 | 0.962 |
+| [JevBench](https://github.com/fstandhartinger/jevbench) (public subset) | 231 | 0.758 | 0.719 | 0.835 | 0.861 |
+| [nimble](https://github.com/bespokelabsai/nimble) | 324 | 0.710 | 0.735 | 0.806 | 0.923 |
+| [kev](https://github.com/jaredpalmer/kev) transfer-v4 (held-out sources) | 1528 | 0.758 | 0.802 | 0.842 | 0.854 |
 
-kev-4B was run locally with the same harness. Jev was queried through TypeSafe's API (`jev-latest`, 23–24 September
-2026); no Jev outputs were used for training. Differences in accuracy points:
+Qwen3.5-4B is the base model read the same way without fine-tuning. kev-4B was run locally with the same harness.
+Jev was queried through TypeSafe's API (`jev-latest`, 23–24 September 2026); no Jev outputs were used for training.
 
-- vev-4b against kev-4B: +11.5 on judgekit, −2.6 on kev transfer-v4; JevBench and nimble are n.s.
-- vev-9b against kev-4B: +9.2 on judgekit, +10.4 on JevBench, −2.1 on kev transfer-v4; nimble is n.s.
-- vev-4b against Jev: −9.5 on JevBench, −21.6 on nimble, −7.8 on kev transfer-v4; judgekit is a tie.
-- vev-9b against Jev: −17.6 on nimble, −7.3 on kev transfer-v4; judgekit (−2.3) and JevBench (−3.9) are n.s.
-
-### Before and after fine-tuning
-
-The base model, read the same way without fine-tuning (zero-shot), against Vev:
-
-| Set | n | Qwen3.5-4B | vev-4b | Qwen3.5-9B | vev-9b |
-|---|---|---|---|---|---|
-| judgekit | 130 | 0.962 | 0.962 | 0.938 | 0.938 |
-| JevBench | 231 | 0.758 | 0.766 | 0.805 | 0.823 |
-| nimble | 324 | 0.710 | 0.707 | 0.710 | **0.747** |
-| kev transfer-v4 | 1528 | 0.758 | **0.776** | 0.764 | **0.781** |
-| MMBench-EN | 1164 | 0.872 | 0.881 | 0.887 | **0.902** |
-| POPE | 9000 | 0.894 | *0.889* | 0.894 | 0.897 |
-| MMStar | 1498 | 0.544 | **0.627** | 0.608 | **0.674** |
-
-Bold marks a significant improvement, italics a significant drop.
+Fine-tuning improves on the base model on three of the four sets (judgekit is a tie), and Vev is significantly
+more accurate than kev-4B on all four. Jev is more accurate on nimble, by 11.7 points; the other differences to Jev are
+not significant.
 
 ### Images
 
-Public vision benchmarks mostly ask questions about an image. Vev is meant for judging an image against a stated
-rule, so we built judgment sets from human-labelled public data. The converters are in `evals/datasets/`; the
-converted data is not redistributed. Jev's API takes text only, so there is no Jev column here.
+Public vision benchmarks mostly ask questions about the content of an image. Vev is mainly used to judge an image
+against a given rule, so we also built judgment sets from human-labelled public data. The converters are in
+`evals/datasets/`; the converted data is not redistributed. Jev's API accepts text only, so there is no Jev column.
 
-| Set | What is judged | n | Qwen3.5-4B | vev-4b | Qwen3.5-9B | vev-9b |
-|---|---|---|---|---|---|---|
-| policy_mod | Does the image violate this safety policy? (LlavaGuard) | 659 | 0.686 | **0.742** | 0.666 | **0.724** |
-| game_glitch | Does the game screenshot contain a glitch? (VideoGameQA-Bench) | 1000 | 0.646 | 0.613 | 0.577 | **0.626** |
-| game_clip | Is the object clipping into the character? (VideoGameQA-Bench) | 686 | 0.561 | **0.671** | 0.736 | 0.729 |
-| ui_toggle | Is there a switch turned on / off? (MobileViews) | 800 | 0.901 | **0.928** | 0.921 | 0.923 |
-| ui_input | Is there a text input field? (MobileViews) | 800 | 0.949 | 0.951 | 0.948 | 0.955 |
-| t2i_elem | Does the generated image show this prompt element? (EvalMuse) | 1027 | 0.690 | **0.715** | 0.733 | 0.703 |
+| Set | What is judged | n | Qwen3.5-4B | vev-4b 0.2.0 |
+|---|---|---|---|---|
+| policy_mod | Does the image violate this safety policy? (LlavaGuard) | 659 | 0.686 | **0.760** |
+| game_glitch | Does the game screenshot contain a glitch? (VideoGameQA-Bench) | 1000 | 0.646 | 0.647 |
+| game_clip | Is the object clipping into the character? (VideoGameQA-Bench) | 686 | 0.561 | **0.810** |
+| ui_toggle | Is there a switch turned on / off? (MobileViews) | 800 | 0.901 | **0.920** |
+| ui_input | Is there a text input field? (MobileViews) | 800 | 0.949 | 0.950 |
+| t2i_elem | Does the generated image show this prompt element? (EvalMuse) | 1027 | 0.690 | 0.673 |
+| MMBench-EN | general questions about a photo | 1164 | 0.872 | **0.900** |
+| POPE | is this object in the photo? | 9000 | 0.894 | **0.900** |
+| MMStar | general questions about a photo | 1498 | 0.544 | **0.694** |
+
+Bold: significantly better than the base model.
+
+### Against 0.1.0
+
+On the 18 release sets, `vev-4b` 0.2.0 is significantly more accurate than 0.1.0 on 8 (JevBench, nimble, kev
+transfer-v4, MMBench-EN, POPE, MMStar, game_clip, game_glitch) and less accurate on 4: game_vr −22.0 (0.940 to
+0.720), policy_cat −11.2, t2i_elem −4.2 and ui_toggle −0.8. All 18 are in the
+[model card](https://huggingface.co/CountingSheep/vev-4b).
+
+To evaluate Vev on your own data, prepare a few hundred labelled examples in the [record format](evals/README.md)
+and run `python -m evals.run` against the server. It reports accuracy, calibration, and the accuracy of the most
+confident answers at each coverage level.
 
 ## Limitations
 
-- The probabilities rank answers well but are not exact frequencies: expected calibration error ranges from 0.01
-  to 0.14 depending on the task (Jev: 0.04–0.07 on the text sets). On "is something wrong here?" questions Vev
-  says "no" more often than the labels do. If you act on a threshold, choose it on your own labelled data
-  ([how](#what-it-can-do)).
-- Reversing the order of the options changes the top answer on 13% (`vev-9b`) and 17% (`vev-4b`) of JevBench and
-  kev transfer-v4 questions, against 10–12% for kev-4B and under 4% for Jev. Keep the option order fixed in your
-  application.
-- Judgments that need several steps of reasoning are weaker than the base model's own answer when it may think
-  first: on one internal scenario set (not released), by 4–8 points. On most public sets we tried, the single pass
-  was as accurate or better.
-- A question asked together with others gets probabilities up to a few hundredths away from asking it alone (bf16
-  rounding; p99 0.025), and a different top answer on at most 0.8% of questions. The same request always returns
-  the same answer ([spec §6](spec/systemone-api.md#6-semantic-guarantees)).
-- Long texts gain little from batching: with a 7k-token text, 100 questions take 3.8 times as long as one. A text
-  near the 32k-token limit does not fit on a 24 GB GPU with `vev-9b`. The first request with a new length or batch
-  shape can take a few seconds while GPU kernels are tuned.
-- The image sets are our own conversions of public data, not established benchmarks.
+- The probabilities rank answers well but are not exact frequencies: expected calibration error is 0.01–0.15
+  depending on the set (Jev: 0.04–0.07 on the text sets). Thresholds should be chosen on your own labelled data.
+- Reversing the order of the options changes the top answer on 3–11% of the questions of the four text sets (Jev:
+  under 4%). Keep the option order fixed in your application.
+- A question's probabilities can differ by a few hundredths between asking it alone and together with other
+  questions. Repeating the same request returns the same answer ([spec §6](spec/systemone-api.md#6-semantic-guarantees)).
+- `vev-4b` 0.2.0 is worse than 0.1.0 on four of our image sets, most on game_vr (comparing a game screenshot with a
+  reference, −22 points).
+- The image judgment sets are converted from public data and are not established benchmarks.
 - Compatible means the request and response formats match `/v1/systemone`; it does not mean Vev behaves like Jev.
   Vev is not affiliated with or endorsed by TypeSafe.
 
 ## How it works
 
-Each question becomes a prompt with the state, the question and the lettered options, and Vev reads the model's
-next-token probabilities for the answer tokens (Yes/No, option letters, level digits), renormalised over the
-allowed answers. Fine-tuning (LoRA on Qwen3.5) adjusts those probabilities; there is no separate classifier head.
+Each question becomes a prompt with the state, the question and the lettered options. Vev reads the model's
+next-token probabilities for the answer tokens (Yes/No, option letters, level digits) and renormalises them over the
+allowed answers. Fine-tuning (LoRA on Qwen3.5) adjusts these probabilities; there is no separate classifier head.
+
+`vev-4b` 0.2.0 reads a request differently from 0.1.0. The state tokens attend to each other in both directions in
+the 8 full-attention layers, and a short text state is written twice: the state, the question's instructions, the
+state again, then the question with its options. A request with images and one question passes the images twice the
+same way. These settings come from the checkpoint's `vev.json` ([details](docs/serving.md#start)); checkpoints
+without them, such as 0.1.0, are read as before.
 
 | Document | Contents |
 |---|---|
 | [spec/systemone-api.md](spec/systemone-api.md) | request format, limits, errors, guarantees, the prompt template |
-| [TRAINING.md](TRAINING.md) | training recipe, data sources and their licenses, what cannot be rebuilt |
+| [TRAINING_DATA.md](TRAINING_DATA.md) | training sources of vev-4b 0.2.0, what was removed, overlaps with evaluation data |
+| [TRAINING.md](TRAINING.md) | training recipe of 0.1.0 |
 | [evals/](evals/README.md) | converting the evaluation sets and running them against any `/v1/systemone` server |
 | [conformance/](conformance/README.md) | checking an implementation against the spec, including the official API |
+| [docs/serving.md](docs/serving.md) | pinned environment, start script, warm-up, latency |
 
 | Model | Base | Hugging Face |
 |---|---|---|
-| `vev-4b` | Qwen3.5-4B | [CountingSheep/vev-4b](https://huggingface.co/CountingSheep/vev-4b) (merged), [CountingSheep/vev-4b-lora](https://huggingface.co/CountingSheep/vev-4b-lora) (adapter) |
-| `vev-9b` | Qwen3.5-9B | [CountingSheep/vev-9b](https://huggingface.co/CountingSheep/vev-9b) (merged), [CountingSheep/vev-9b-lora](https://huggingface.co/CountingSheep/vev-9b-lora) (adapter) |
+| `vev-4b` | Qwen3.5-4B | [CountingSheep/vev-4b](https://huggingface.co/CountingSheep/vev-4b) (0.2.0); adapter [vev-4b-lora](https://huggingface.co/CountingSheep/vev-4b-lora) (0.1.0 only) |
+| `vev-9b` | Qwen3.5-9B | [CountingSheep/vev-9b](https://huggingface.co/CountingSheep/vev-9b), adapter [vev-9b-lora](https://huggingface.co/CountingSheep/vev-9b-lora) (both 0.1.0) |
 
 ## License
 
-Code: Apache 2.0. Model weights: CC BY-NC 4.0, non-commercial use only, because some training data is licensed for
-research use; the sources and their terms are listed in [TRAINING.md](TRAINING.md).
+Code: Apache 2.0. Model weights: CC BY-NC 4.0.
 
 ## Citation
 
@@ -255,6 +237,6 @@ research use; the sources and their terms are listed in [TRAINING.md](TRAINING.m
   author = {Wang, Xiaolong},
   year   = {2026},
   url    = {https://github.com/Xiaooolong/vev},
-  version = {0.1.1}
+  version = {0.2.0}
 }
 ```
