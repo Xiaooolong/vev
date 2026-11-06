@@ -1,5 +1,5 @@
 {
- "change": "vev-release 01dd21e: a request over the token limits (32,768 for the state plus one question, 65,536 for the whole request) only because of the read-twice layout is read once, in the 0.1.x layout",
+ "change": "a request over the token limits (32,768 for the state plus one question, 65,536 for the whole request) only because of the read-twice layout is read once, without the repetition",
  "suite": "Decision Index text public suite, edition 0.3, with the board's tool",
  "method": "the request chunks refused before the change, plus a fixed hash sample of answered chunks (md5(run_id) mod 140620 < 1500), re-run with the changed server; all other chunks are kept from the run before the change. Same checkpoint and settings (VEV_READ_TWICE=full, VEV_BIDIR=state).",
  "vev-4b-v2": {

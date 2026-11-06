@@ -38,7 +38,7 @@ resp = client.system_one(
 
 ## 开始使用
 
-环境要求：Python 3.11 及以上、NVIDIA GPU、CUDA 版 PyTorch。Windows 上 pip 默认安装 CPU 版 PyTorch，需要先按 [pytorch.org](https://pytorch.org/get-started/locally/) 的说明安装 `torch` 和 `torchvision`。
+环境要求：Python 3.11 及以上、NVIDIA GPU、CUDA 版 PyTorch；Linux 上还需要 C 编译器（`gcc`），用于编译 Triton kernel。Windows 上 pip 默认安装 CPU 版 PyTorch，需要先按 [pytorch.org](https://pytorch.org/get-started/locally/) 的说明安装 `torch` 和 `torchvision`。
 
 ```bash
 pip install git+https://github.com/Xiaooolong/vev
@@ -69,13 +69,15 @@ print(resp.answers["team"].probabilities)   # {"shipping": 0.97, "billing": 0.03
 
 ```python
 import base64
+import urllib.request
 
-checkout_png = "data:image/png;base64," + base64.b64encode(open("docs/checkout.png", "rb").read()).decode()
+png = urllib.request.urlopen("https://raw.githubusercontent.com/Xiaooolong/vev/main/docs/checkout.png").read()
+checkout_png = "data:image/png;base64," + base64.b64encode(png).decode()
 ```
 
 ### 其他运行方式
 
-- Docker：`docker build -t vev .`，然后 `docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev --model CountingSheep/vev-4b-v2`。
+- Docker（需要先 clone 本仓库）：`docker build -t vev .`，然后 `docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev --model CountingSheep/vev-4b-v2`。
 - Decision Index 测评所用的固定版本环境和启动脚本见 [docs/serving.md](docs/serving.md)（英文）。
 - 不启动 HTTP 服务、在代码中直接调用：
 
@@ -155,7 +157,7 @@ Qwen3.5-4B 是未微调的基座模型，按同样方式读取概率。kev-4B �
 
 ## 局限
 
-- 模型能较好地区分各答案的可能性，但输出的概率不等于实际正确率：各评测集上的期望校准误差为 0.01–0.15（Jev 在文本集上为 0.04–0.07）。如果按阈值做决策，建议用自己的标注数据确定阈值。
+- 模型能较好地区分各答案的可能性，但输出的概率不等于实际正确率：18 个发布评测集上的期望校准误差为 0.01–0.24（Jev 在四个文本集上为 0.04–0.07）。如果按阈值做决策，建议用自己的标注数据确定阈值。
 - 在四个文本评测集上，将选项顺序倒置后，有 3–11% 的题目答案会改变（Jev 低于 4%）。实际使用时建议固定选项顺序。
 - 同一个问题单独提问和与其他问题一起提问，概率可能相差零点零几。同一请求重复发送，结果不变（[spec §6](spec/systemone-api.md#6-semantic-guarantees)）。
 - `vev-4b-v2` 在四个自建图片评测集上不如 `vev-4b`，差距最大的是 game_vr（游戏截图与参考图的对比，−22 个点）。

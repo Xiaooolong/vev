@@ -85,7 +85,8 @@ def validate_semantics(req: SystemOneRequest, model_name: str) -> None:
                 raise bad(f"{where}.criteria: too many score levels ({n}); this model supports at most {MAX_SCORE_LEVELS}")
 
 
-def model_card(name: str, hf_id: str, max_image_pixels: int = MAX_IMAGE_PIXELS) -> dict[str, Any]:
+def model_card(name: str, hf_id: str, max_image_pixels: int = MAX_IMAGE_PIXELS,
+               release_date: str = "2026-10-01T00:00:00Z") -> dict[str, Any]:
     return {
         "name": name,
         "description": (
@@ -93,7 +94,7 @@ def model_card(name: str, hf_id: str, max_image_pixels: int = MAX_IMAGE_PIXELS) 
             "(choice letters, Yes/No, level digits). The questions of a request run as one batch, no decoding. "
             "confidence = (p_max - 1/K) / (1 - 1/K). output_tokens is informational only."
         ),
-        "release_date": "2026-10-01T00:00:00Z",
+        "release_date": release_date,
         "limits": {
             "max_images": MAX_IMAGES,
             "max_image_pixels": max_image_pixels,
@@ -115,6 +116,7 @@ def create_app(engine: Engine, model_name: str, hf_id: str, allow_remote_images:
     lock = threading.Lock()
     keys = {k.strip() for k in os.environ.get("VEV_API_KEYS", "").split(",") if k.strip()}
     max_pixels = getattr(engine, "max_image_pixels", MAX_IMAGE_PIXELS)
+    release_date = getattr(engine, "release_date", None) or "2026-10-01T00:00:00Z"
 
     @app.middleware("http")
     async def request_id(request: Request, call_next):
@@ -144,7 +146,7 @@ def create_app(engine: Engine, model_name: str, hf_id: str, allow_remote_images:
 
     @app.get("/v1/models")
     def models():
-        return {"models": [model_card(model_name, hf_id, max_pixels)]}
+        return {"models": [model_card(model_name, hf_id, max_pixels, release_date)]}
 
     @app.post("/v1/systemone")
     def systemone(req: SystemOneRequest, request: Request):

@@ -398,6 +398,7 @@ class CheckpointEngine:
         self.image_read = os.environ.get("VEV_IMAGE_READ", self.meta.get("image_read", ""))
         self.max_image_pixels = int(os.environ.get("VEV_MAX_IMAGE_PIXELS",
                                                    self.meta.get("max_image_pixels", 1024 * 1024)))
+        self.release_date = self.meta.get("release_date")  # /v1/models; checkpoints without it report the first release
         self.base_id = self.meta.get("base_model") or self.meta["base"]
         self.processor = AutoProcessor.from_pretrained(base_source(path, self.meta))
         self.tok = self.processor.tokenizer

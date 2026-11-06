@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1 (2026-11-06)
+
+- `/v1/models` reports the release date from the checkpoint's `vev.json` (`release_date`) when it has one.
+- The package reports its own version (0.2.0 reported 0.1.1).
+- The Docker image and `scripts/serve_board.sh` default to `CountingSheep/vev-4b-v2`.
+- Docs: models are named `vev-4b-v2` (second generation) and `vev-4b` / `vev-9b` (first generation); the README image
+  example downloads the picture instead of reading it from a clone; the spec gives the image limit and the reading
+  layout of `vev-4b-v2`.
+
 ## 0.2.0 (2026-11-06)
 
 New model [`vev-4b-v2`](https://huggingface.co/CountingSheep/vev-4b-v2), the second generation of `vev-4b`. `vev-4b`,

@@ -46,9 +46,9 @@ more accurate (see [Text](#text)).
 
 ## Get started
 
-Requirements: Python 3.11 or newer, an NVIDIA GPU and a CUDA build of PyTorch. On Windows, pip installs a CPU-only
-PyTorch by default, so install `torch` and `torchvision` from [pytorch.org](https://pytorch.org/get-started/locally/)
-first.
+Requirements: Python 3.11 or newer, an NVIDIA GPU, a CUDA build of PyTorch and, on Linux, a C compiler (`gcc`) for
+the Triton kernels. On Windows, pip installs a CPU-only PyTorch by default, so install `torch` and `torchvision` from
+[pytorch.org](https://pytorch.org/get-started/locally/) first.
 
 ```bash
 pip install git+https://github.com/Xiaooolong/vev
@@ -80,13 +80,15 @@ written as `{"image": {"url": "data:image/png;base64,..."}}` and can appear anyw
 
 ```python
 import base64
+import urllib.request
 
-checkout_png = "data:image/png;base64," + base64.b64encode(open("docs/checkout.png", "rb").read()).decode()
+png = urllib.request.urlopen("https://raw.githubusercontent.com/Xiaooolong/vev/main/docs/checkout.png").read()
+checkout_png = "data:image/png;base64," + base64.b64encode(png).decode()
 ```
 
 ### Other ways to run it
 
-- Docker: `docker build -t vev .`, then
+- Docker, in a clone of this repository: `docker build -t vev .`, then
   `docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev --model CountingSheep/vev-4b-v2`.
 - The pinned environment and start script used for the Decision Index runs are in [docs/serving.md](docs/serving.md).
 - Without the HTTP server, calling the model from Python:
@@ -187,8 +189,8 @@ confident answers at each coverage level.
 
 ## Limitations
 
-- The probabilities rank answers well but are not exact frequencies: expected calibration error is 0.01–0.15
-  depending on the set (Jev: 0.04–0.07 on the text sets). Thresholds should be chosen on your own labelled data.
+- The probabilities rank answers well but are not exact frequencies: expected calibration error is 0.01–0.24
+  across the 18 release sets (Jev: 0.04–0.07 on the four text sets). Thresholds should be chosen on your own labelled data.
 - Reversing the order of the options changes the top answer on 3–11% of the questions of the four text sets (Jev:
   under 4%). Keep the option order fixed in your application.
 - A question's probabilities can differ by a few hundredths between asking it alone and together with other

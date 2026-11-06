@@ -46,7 +46,7 @@ The script sets the reading layout explicitly and starts `python -m vev serve`; 
 | `VEV_MAX_IMAGE_PIXELS` | `1638400` | larger images are downscaled to 1.6 MP |
 
 A request that is over the token limits (32,768 for the state plus one question, 65,536 for the whole request) only
-when written twice is read once, in the 0.1.x layout.
+when written twice is read once, without the repetition.
 
 With Docker:
 

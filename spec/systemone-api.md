@@ -75,7 +75,7 @@ Three types; `type` is required. `instructions` may be omitted and then defaults
 | state + longest single question | 32,768 | same as official |
 | questions per request | no hard limit | |
 | images per request | 8 (`limits.max_images`) | Vev |
-| pixels per image | 1,048,576 (`limits.max_image_pixels`); larger images are downscaled to the limit | Vev |
+| pixels per image | `limits.max_image_pixels`: 1,048,576 for vev-4b and vev-9b, 1,638,400 for vev-4b-v2; larger images are downscaled to the limit | Vev |
 
 Tokens are counted with the model's own tokenizer and image processor; image tokens count towards the state.
 
@@ -153,7 +153,7 @@ Probabilities are not quantized (the official API quantizes to 0.01; this server
 
 | Guarantee | Content | Verified by |
 |---|---|---|
-| question isolation | the content of one question is never visible to another. The questions of a request are computed together as one batch, and in bf16 the batch shape changes the floating-point rounding, so the same question asked alone and together with others differs slightly: over the 14 evaluation sets, both model sizes and 5 or 50 other questions per request, p99 ≤ 0.025 in probability, largest seen 0.10, top answer changed on at most 0.8% of questions | conformance "isolation" group (default tolerance 0.05); the evaluation sets, see README, Results |
+| question isolation | the content of one question is never visible to another. The questions of a request are computed together as one batch, and in bf16 the batch shape changes the floating-point rounding, so the same question asked alone and together with others differs slightly. Measured with vev-4b and vev-9b over the 14 evaluation sets, with 5 or 50 other questions per request: p99 ≤ 0.025 in probability, largest seen 0.10, top answer changed on at most 0.8% of questions | conformance "isolation" group (default tolerance 0.05); the evaluation sets, see README, Results |
 | question order | the order of the questions in a request does not change any answer, bit for bit | conformance "isolation" group |
 | determinism | the same request sent again gives bit-identical probabilities, also after a server restart on the same hardware and software | conformance "determinism" group |
 | no generation | the server does no autoregressive decoding. The questions of a request run as one batch: the state is computed once (for short text states, the whole rows are batched instead), and the questions are split into chunks that fit the free GPU memory. vev-4b on one H800, short state: 1 question 38 ms, 10 questions 58 ms, 100 questions 232 ms; 7k-token state: 1 question 280 ms, 100 questions 1.07 s; one 1 MP image: 1 question 78 ms, 25 questions 143 ms | `conformance/curves.py`, measured in `conformance/results/vev-*/curves.json` |
@@ -249,5 +249,12 @@ The answer is read from the next-token logits at the last position of the prompt
 `A`, `B`, … for choice (after `Z` come two-letter labels such as `AA`, keeping only those the tokenizer encodes as
 one token), `Yes` and `No` for noul, `0` … `9` for score. A softmax over these logits gives the probabilities;
 `noul` is the probability of `Yes`. No sampling. The server computes the questions of a request as a batch (§6), which gives the same probabilities up to bf16 rounding.
+
+`vev-4b-v2` changes how the prompt is read, set in its `vev.json`: in the 8 full-attention layers the state tokens
+attend to each other in both directions (`bidir`, `vev/bidir.py`); a text state of up to 3,000 tokens is written
+twice, as state, the question's instructions, the state again, then the question with its answer format
+(`read_twice`); and a request with images and one question is written the same way with the images passed twice
+(`image_read`). Requests with several image questions read the images once, so a question's prompt differs between
+asking it alone and in a batch. The layout is built in `render_row` in `vev/model.py`.
 
 Behaviour of the official API observed with the conformance suite is recorded in `conformance/README.md`.

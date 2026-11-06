@@ -34,3 +34,11 @@ def test_models_and_systemone_use_the_engine_pixel_limit(limit, expected):
     r = client.post("/v1/systemone", json=body)
     assert r.status_code == 200, r.text
     assert engine.max_pixels_seen == [expected]
+
+
+@pytest.mark.parametrize("date, expected", [("2026-11-06T00:00:00Z", "2026-11-06T00:00:00Z"), (None, "2026-10-01T00:00:00Z")])
+def test_models_report_the_checkpoint_release_date(date, expected):
+    engine = FakeEngine()
+    engine.release_date = date
+    client = TestClient(create_app(engine, "vev-test", "Qwen/Qwen3.5-4B", allow_remote_images=False))
+    assert client.get("/v1/models").json()["models"][0]["release_date"] == expected

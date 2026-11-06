@@ -24,7 +24,7 @@ All sources use training splits, or generators where a task has none.
 | Public text and image datasets | stage 0 | AFQMC, AGIQA-3K, AI2D, AMEX, AndroidControl, A-OKVQA, BANKING77, BoolQ, CLINC150, CMM-Math, COCO-CN, DBpedia-14, FOIL-COCO, GUI-Odyssey, GUICourse, HPDv2, ImageRewardDB, IMDB, LLaVA-Critic, MNLI, PlotQA, SST-5, STS-B, TextVQA, TNEWS, TREC, Visual7W, VQAv2, VSR |
 | DI text task families | stage 1 | ACOS, ANLI, API-Bank, BANKING77, BBH-style generated items, CFColor, ChessBench, CLadder, CLINC150, ContractNLI, CRUXEval-style functions and MBPP, ESCI, SEntFiN, GSM8K, Habermas Machine, HellaSwag, HoVer, Humicroedit, iSarcasmEval, SuperGPQA, New Yorker caption contest, NLI4CT, PhishNChips, POP909-style pieces, RAGTruth, ToolRet, VAST, When2Call, WinoGrande, limerick-topic |
 | Chinese and OpenJevData | stage 3 | CAIL2018, CBLUE, ChnSentiCorp, CLUE, online_shopping_10_cats, waimai_10k, Weibo sentiment sets, OpenJevData-140k, synthetic-typed-decisions |
-| tasksource | stage 3 | 610 sources of `tasksource/tasksource-jev-typed-decisions`, listed in [`data/manifest/v0.2.0-tasksource.tsv`](data/manifest/v0.2.0-tasksource.tsv) |
+| tasksource | stage 3 | 610 sources of `tasksource/tasksource-jev-typed-decisions`, listed in [`data/manifest/vev-4b-v2-tasksource.tsv`](data/manifest/vev-4b-v2-tasksource.tsv) |
 | Vision task families | stage 4 | COCO train2014, Objectron, SPair-71k, VSR, TallyQA, VQAv2, ECD, PlotQA, ArxivQA, ChartQA, DocVQA, DVQA, InfographicVQA, CORD, SROIE, FUNSD, Mind2Web, NLVR2, Hateful Memes |
 | Text task families | stage 4 | ACOS, BBH-style, CLadder, CRUXEval-style, WinoGrande, Open-Jev environments, corr2cause, ETHICS, SpartQA, temporal-nli |
 
