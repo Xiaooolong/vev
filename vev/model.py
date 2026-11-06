@@ -9,6 +9,7 @@ from __future__ import annotations
 import copy
 import json
 import logging
+import os
 import re
 import time
 from pathlib import Path
@@ -19,7 +20,8 @@ import torch.nn.functional as F
 from PIL import Image
 from torch import nn
 
-from vev.readout import DTYPES, SYSTEM_PROMPT, LabelTokens, Result, make_answer, warmup, windows_sdpa_workaround
+from vev import bidir
+from vev.readout import DTYPES, SYSTEM_PROMPT, LabelTokens, Result, make_answer, windows_sdpa_workaround
 from vev.state import ImageSlot, InvalidRequest, render_desc, serialize_state
 from vev.tokens import count_output_tokens, count_state_tokens
 
@@ -55,10 +57,44 @@ def question_text(q: dict[str, Any], labels: list[str]) -> str:
     return "\n\n" + (f"Question: {instructions}\n\n" if instructions else "") + fmt
 
 
-def render_row(processor, segments: list, q: dict[str, Any], labels: LabelTokens) -> str:
-    content: list[dict[str, Any]] = [{"type": "text", "text": "State:\n"}]
-    for seg in segments:
-        content.append({"type": "image"} if isinstance(seg, ImageSlot) else {"type": "text", "text": sanitize(seg)})
+def render_row(processor, segments: list, q: dict[str, Any], labels: LabelTokens, image_mode: str = "",
+               read_twice: str = "", read_twice_max: int = 3000) -> str:
+    """The prompt of one question. image_mode (requests with images and one question): "twice" writes the state, the
+    question's instructions, the state again (its images included) and then the question; "qfirst" writes the
+    instructions before the state. read_twice (text-only states of at most read_twice_max tokens): "state" writes the
+    state twice before the question; "full" writes the state, the instructions, the state again and the question.
+    All off: the v0.1 layout."""
+    def state_part(head: str) -> list[dict[str, Any]]:
+        part: list[dict[str, Any]] = [{"type": "text", "text": head}]
+        for seg in segments:
+            part.append({"type": "image"} if isinstance(seg, ImageSlot) else {"type": "text", "text": sanitize(seg)})
+        return part
+
+    instructions = sanitize((q.get("instructions") or "").strip())
+    if image_mode == "qfirst":
+        content = state_part((f"Question: {instructions}\n\n" if instructions else "") + "State:\n")
+        content.append({"type": "text", "text": question_text(q, labels.letters)})
+        messages = [{"role": "system", "content": [{"type": "text", "text": SYSTEM_PROMPT}]},
+                    {"role": "user", "content": content}]
+        return processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+    if image_mode == "twice":
+        content = state_part("State:\n")
+        if instructions:
+            content.append({"type": "text", "text": f"\n\nQuestion: {instructions}"})
+        content += state_part("\n\nState (repeated):\n")
+        content.append({"type": "text", "text": question_text(q, labels.letters)})
+        messages = [{"role": "system", "content": [{"type": "text", "text": SYSTEM_PROMPT}]},
+                    {"role": "user", "content": content}]
+        return processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+
+    content = state_part("State:\n")
+    twice = read_twice in ("state", "full") and not any(isinstance(s, ImageSlot) for s in segments) and \
+        sum(len(processor.tokenizer.encode(sanitize(s), add_special_tokens=False)) for s in segments) <= read_twice_max
+    if twice and read_twice == "full":
+        if instructions:
+            content.append({"type": "text", "text": f"\n\nQuestion: {instructions}"})
+    if twice:
+        content += state_part("\n\nState (repeated):\n")
     content.append({"type": "text", "text": question_text(q, labels.letters)})
     messages = [{"role": "system", "content": [{"type": "text", "text": SYSTEM_PROMPT}]},
                 {"role": "user", "content": content}]
@@ -79,21 +115,57 @@ def encode_row(processor, text: str, images: list[Image.Image]) -> dict[str, Any
     return row
 
 
-def encode_rows(processor, texts: list[str], images: list[Image.Image]) -> list[dict[str, Any]]:
-    """encode_row for several prompts that contain the same images. The first row goes through the full processor; the
-    others are tokenized in one call with a single <|image_pad|> per image, and each placeholder position is then
-    repeated grid_k / merge² times in every field, which is what the processor's expansion produces. The first row's
-    pixel_values and image_grid_thw are reused, so the image processor runs once."""
-    first = encode_row(processor, texts[0], images)
-    if len(texts) == 1:
-        return [first]
-    enc = processor(text=texts[1:])
-    counts = []
-    if images:
-        counts = [int(g.prod()) // processor.image_processor.merge_size ** 2 for g in first["image_grid_thw"]]
+def image_inputs(processor, images: list[Image.Image], device: torch.device | str | None = None
+                 ) -> tuple[torch.Tensor, torch.Tensor]:
+    """pixel_values and image_grid_thw for images, as processor(images=...) returns them, with each distinct image
+    object going through the image processor once (the image-read-twice layout lists every image twice) and its rows
+    repeated. With a device, the processor resizes on the CPU as usual but returns uint8 patches, and its own fused
+    rescale/normalize then runs on the device: one subtraction and one division per element, the same float32 values,
+    a quarter of the bytes to copy. image_grid_thw stays on the CPU."""
+    seen: dict[int, int] = {}
+    distinct, index = [], []
+    for im in images:
+        if id(im) not in seen:
+            seen[id(im)] = len(distinct)
+            distinct.append(im)
+        index.append(seen[id(im)])
+    ip = processor.image_processor
+    late = device is not None and ip.do_rescale and ip.do_normalize and hasattr(ip, "rescale_and_normalize")
+    enc = ip(distinct, return_tensors="pt", **({"do_rescale": False, "do_normalize": False} if late else {}))
+    pv, grid = enc["pixel_values"], enc["image_grid_thw"]
+    if late:
+        n, channels = pv.shape[0], pv.shape[1] // (ip.temporal_patch_size * ip.patch_size ** 2)
+        x = pv.to(device).view(n, channels, -1, 1)  # channel-major patches, normalized like an image tensor
+        mean, std = (tuple(v) if isinstance(v, list) else v for v in (ip.image_mean, ip.image_std))  # as preprocess()
+        pv = ip.rescale_and_normalize(x, ip.do_rescale, ip.rescale_factor, ip.do_normalize, mean, std).reshape(n, -1)
+    elif device is not None:
+        pv = pv.to(device)
+    if len(index) == len(distinct):
+        return pv, grid
+    parts = pv.split(grid.prod(-1).tolist())
+    return torch.cat([parts[i] for i in index]), grid[index]
+
+
+def encode_rows(processor, texts: list[str], images: list[Image.Image],
+                device: torch.device | str | None = None) -> list[dict[str, Any]]:
+    """encode_row for several prompts that contain the same images. Without images, the first row goes through the
+    full processor. With images, image_inputs() runs the image processor once per distinct image (on `device`, see
+    there), the prompts are tokenized with a single <|image_pad|> per image, and each placeholder position is then
+    repeated grid_k / merge² times in every field, which is what the processor's expansion produces. All rows share
+    the same pixel_values and image_grid_thw."""
+    if not images:
+        first = encode_row(processor, texts[0], images)
+        if len(texts) == 1:
+            return [first]
+        todo = texts[1:]
+        rows, pixel_values, grid, counts = [first], None, None, []
+    else:
+        pixel_values, grid = image_inputs(processor, images, device)
+        counts = [int(g.prod()) // processor.image_processor.merge_size ** 2 for g in grid]
+        todo, rows = texts, []
+    enc = processor(text=todo)
     pad_id = processor.image_token_id
-    rows = [first]
-    for i in range(len(texts) - 1):
+    for i in range(len(todo)):
         ids = enc["input_ids"][i]
         where = [p for p, x in enumerate(ids) if x == pad_id]
         if len(where) != len(counts):
@@ -104,9 +176,9 @@ def encode_rows(processor, texts: list[str], images: list[Image.Image]) -> list[
             for p, c in zip(where, counts):
                 out += seq[last:p] + [seq[p]] * c
                 last = p + 1
-            row[k] = torch.tensor(out + seq[last:], dtype=first[k].dtype)
+            row[k] = torch.tensor(out + seq[last:], dtype=torch.long)
         if images:
-            row["pixel_values"], row["image_grid_thw"] = first["pixel_values"], first["image_grid_thw"]
+            row["pixel_values"], row["image_grid_thw"] = pixel_values, grid
         row["decide"] = int(row["input_ids"].shape[0]) - 1
         rows.append(row)
     return rows
@@ -278,6 +350,25 @@ def fork_cache(cache, n: int = 1):
     return new
 
 
+def vision_once_per_image(forward):
+    """Wraps a vision tower's forward. When the second half of a forward's images repeats the first half (same grids,
+    same pixel rows: the image-read-twice layout), it encodes the first half and repeats the outputs. The tower attends
+    only within each image (cu_seqlens) and its other layers act patch by patch, so this equals encoding every copy."""
+    def wrapped(hidden_states, grid_thw=None, **kwargs):
+        n = 0 if grid_thw is None else int(grid_thw.shape[0])
+        if n >= 2 and n % 2 == 0 and torch.equal(grid_thw[: n // 2], grid_thw[n // 2:]):
+            m = int(grid_thw[: n // 2].prod(-1).sum())
+            if hidden_states.shape[0] == 2 * m and torch.equal(hidden_states[:m], hidden_states[m:]):
+                out = forward(hidden_states[:m], grid_thw=grid_thw[: n // 2], **kwargs)
+                if any(v is not None for k, v in out.items() if k not in ("last_hidden_state", "pooler_output")):
+                    return forward(hidden_states, grid_thw=grid_thw, **kwargs)  # outputs this wrapper does not know
+                out.last_hidden_state = torch.cat([out.last_hidden_state] * 2)
+                out.pooler_output = torch.cat([out.pooler_output] * 2)
+                return out
+        return forward(hidden_states, grid_thw=grid_thw, **kwargs)
+    return wrapped
+
+
 class CheckpointEngine:
     """Serving backend for a Vev checkpoint, one row per question.
 
@@ -285,7 +376,8 @@ class CheckpointEngine:
     Several questions run as one batch. When whole rows would recompute a long state many times over, and always for
     states with images, the state is prefilled once and the question suffixes continue from copies of that cache as a
     right-padded batch; otherwise the whole rows are right-padded into one batch. Batches are split into chunks that fit the free GPU memory. Rows are ordered by (length, name), so the
-    order of the questions in a request does not change what is computed."""
+    order of the questions in a request does not change what is computed. With images, the image processor and the
+    vision tower run once per distinct image, also when the image-read-twice layout lists every image twice."""
 
     def __init__(self, ckpt: str, dtype: str = "bf16", device: str = "cuda", attn_implementation: str | None = None,
                  prefix_min_tokens: int = 4096, revision: str | None = None):
@@ -294,6 +386,18 @@ class CheckpointEngine:
         windows_sdpa_workaround()
         self.device = torch.device(device)
         self.model, self.meta, path = load_checkpoint(ckpt, DTYPES[dtype], self.device, attn_implementation, revision)
+        # Reading layout, from the checkpoint's vev.json; the VEV_* environment variables override it (experiments).
+        mode = os.environ.get("VEV_BIDIR", self.meta.get("bidir", ""))
+        if self.meta.get("bidir") and mode != self.meta["bidir"]:
+            raise RuntimeError(f"{ckpt} was trained with bidir={self.meta['bidir']}; serve it with the same setting")
+        if mode and not self.meta.get("bidir"):
+            log.warning("bidir=%s on %s, which was trained without it", mode, ckpt)
+        bidir.configure(mode)
+        self.read_twice = os.environ.get("VEV_READ_TWICE", self.meta.get("read_twice", ""))
+        self.read_twice_max = int(os.environ.get("VEV_READ_TWICE_MAX", self.meta.get("read_twice_max", 3000)))
+        self.image_read = os.environ.get("VEV_IMAGE_READ", self.meta.get("image_read", ""))
+        self.max_image_pixels = int(os.environ.get("VEV_MAX_IMAGE_PIXELS",
+                                                   self.meta.get("max_image_pixels", 1024 * 1024)))
         self.base_id = self.meta.get("base_model") or self.meta["base"]
         self.processor = AutoProcessor.from_pretrained(base_source(path, self.meta))
         self.tok = self.processor.tokenizer
@@ -307,6 +411,9 @@ class CheckpointEngine:
         self.max_batch_tokens = 32768  # padded tokens per forward pass
         self.cache_memory_fraction = 0.5  # of the free GPU memory, for the per-row copies of the state cache
         self.image_pad_id = self.tok.convert_tokens_to_ids("<|image_pad|>")
+        vision = getattr(self.model.backbone, "visual", None)
+        if vision is not None:
+            vision.forward = vision_once_per_image(vision.forward)
 
     def _autocast(self):
         on = self.autocast_dtype is not None and self.device.type == "cuda"
@@ -316,13 +423,16 @@ class CheckpointEngine:
     def _logits(self, row: dict[str, Any]) -> torch.Tensor:
         batch, decide = collate_rows([row], self.tok.pad_token_id)
         batch = {k: v.to(self.device) for k, v in batch.items()}
-        with self._autocast():
+        with self._autocast(), bidir.for_rows([row]):
             z = self.model(batch, decide, [row["answer_ids"]])[0]
         return z.float().cpu()
 
-    def _prefix_len(self, segments: list, rows: list[dict[str, Any]]) -> int:
+    def _prefix_len(self, segments: list, rows: list[dict[str, Any]], image_mode: str = "",
+                    probe_instructions: str | None = None, read_twice: str | None = None) -> int:
         """Length of the shared prefix, taken from state-only probe rows. Falls back to the rows' common prefix if
         some row tokenizes the state boundary differently."""
+        if "state_len" in rows[0]:  # VEV_BIDIR=state: computed by this method in run() for the same rows
+            return rows[0]["state_len"]
         grid = rows[0].get("image_grid_thw")
         counts = [] if grid is None else [int(g.prod()) // self.merge**2 for g in grid]
 
@@ -332,14 +442,17 @@ class CheckpointEngine:
                 out.extend([t] * next(it) if t == self.image_pad_id else [t])
             return out
 
-        probes = [expand(self.tok(render_row(self.processor, segments, q, self.labels), add_special_tokens=False)["input_ids"])
-                  for q in PROBE_QUESTIONS]
+        pqs = PROBE_QUESTIONS if probe_instructions is None else [dict(q, instructions=probe_instructions)
+                                                                  for q in PROBE_QUESTIONS]
+        read_twice = self.read_twice if read_twice is None else read_twice
+        probes = [expand(self.tok(render_row(self.processor, segments, q, self.labels, image_mode, read_twice,
+                                             self.read_twice_max), add_special_tokens=False)["input_ids"]) for q in pqs]
         ids = [r["input_ids"].tolist() for r in rows]
         n = common_prefix_len(probes)
         if any(x[:n] != probes[0][:n] for x in ids):
             n = common_prefix_len(probes + ids)
         mm = rows[0].get("mm_token_type_ids")
-        if mm is not None and bool((mm[n:] != 0).any()):
+        if not image_mode and mm is not None and bool((mm[n:] != 0).any()):
             raise RuntimeError("image tokens outside the shared state prefix")
         if any(n > r["decide"] for r in rows):
             raise RuntimeError("readout position inside the shared prefix")
@@ -371,7 +484,8 @@ class CheckpointEngine:
         zs = []
         with self._autocast():
             cache = DynamicCache(config=bb.config)
-            bb(**{k: v.to(dev) for k, v in pre.items()}, past_key_values=cache, use_cache=True)
+            with bidir.state_blocks([n]):
+                bb(**{k: v.to(dev) for k, v in pre.items()}, past_key_values=cache, use_cache=True)
             for i, r in enumerate(rows):
                 x = r["input_ids"][n:]
                 mask = torch.ones(1, n + x.shape[0], dtype=torch.long, device=dev)
@@ -380,29 +494,55 @@ class CheckpointEngine:
                 zs += self.model.readout(h, [r["decide"] - n], [r["answer_ids"]])
         return [z.float().cpu() for z in zs]
 
-    def run(self, state: Any, questions: dict[str, dict[str, Any]], max_images: int = 8, max_pixels: int = 1024 * 1024,
+    def run(self, state: Any, questions: dict[str, dict[str, Any]], max_images: int = 8, max_pixels: int | None = None,
             allow_remote: bool = False, max_state_tokens: int = 32768, max_request_tokens: int = 65536) -> Result:
         t0 = time.perf_counter()
+        max_pixels = max_pixels or self.max_image_pixels
         segments, images = serialize_state(state, max_images=max_images, max_pixels=max_pixels, allow_remote=allow_remote)
         names = list(questions)
-        encoded = encode_rows(self.processor, [render_row(self.processor, segments, questions[k], self.labels)
-                                               for k in names], images)
-        rows = dict(zip(names, encoded))
+
+        def encode(image_mode: str, read_twice: str) -> dict[str, dict[str, Any]]:
+            texts = [render_row(self.processor, segments, questions[k], self.labels, image_mode, read_twice,
+                                self.read_twice_max) for k in names]
+            encoded = encode_rows(self.processor, texts, images * (2 if image_mode == "twice" else 1),
+                                  device=self.device if self.device.type == "cuda" else None)
+            return dict(zip(names, encoded))
+
+        def lengths(rows: dict[str, dict[str, Any]]) -> tuple[int, int, dict[str, int], str]:
+            state_text, state_image = count_state_tokens(self.tok, segments, next(iter(rows.values())), self.merge)
+            row_lens = {name: int(r["input_ids"].shape[0]) for name, r in rows.items()}
+            longest, total = max(row_lens.values()), sum(row_lens.values()) - (len(row_lens) - 1) * (state_text + state_image)
+            error = (f"state + longest question is {longest} tokens (max {max_state_tokens})" if longest > max_state_tokens
+                     else f"request is {total} tokens (max {max_request_tokens})" if total > max_request_tokens else "")
+            return state_text, state_image, row_lens, error
+
+        # The limits are on the caller's request: one that is over them only because the layout repeats the state (and
+        # the instructions) is read once, in the v0.1 layout.
+        image_mode = self.image_read if images and len(questions) == 1 else ""
+        read_twice = self.read_twice
+        rows = encode(image_mode, read_twice)
+        state_text, state_image, row_lens, error = lengths(rows)
+        if error and (image_mode or read_twice):
+            image_mode = read_twice = ""
+            rows = encode(image_mode, read_twice)
+            state_text, state_image, row_lens, error = lengths(rows)
+        if error:
+            raise InvalidRequest(400, "invalid_request_error", error)
         for name, q in questions.items():
             rows[name]["answer_ids"] = self.labels.answer_ids(q)
-        first = next(iter(rows.values()))
-        state_text, state_image = count_state_tokens(self.tok, segments, first, self.merge)
         state_tokens = state_text + state_image
-        row_lens = {name: int(r["input_ids"].shape[0]) for name, r in rows.items()}
-        longest = max(row_lens.values())
-        if longest > max_state_tokens:
-            raise InvalidRequest(400, "invalid_request_error", f"state + longest question is {longest} tokens (max {max_state_tokens})")
         question_tokens = {name: n - state_tokens for name, n in row_lens.items()}
         input_tokens = state_tokens + sum(question_tokens.values())
-        if input_tokens > max_request_tokens:
-            raise InvalidRequest(400, "invalid_request_error", f"request is {input_tokens} tokens (max {max_request_tokens})")
+        if bidir.ENABLED or read_twice != self.read_twice:
+            # VEV_BIDIR=state: one state-block length per request, used by every path below; also the prefix of a
+            # request read once by the fallback above, whose probes must be rendered the same way
+            n_state = self._prefix_len(segments, list(rows.values()), image_mode,
+                                       (questions[names[0]].get("instructions") or "").strip()
+                                       if image_mode == "qfirst" else None, read_twice)
+            for r in rows.values():
+                r["state_len"] = n_state
         t1 = time.perf_counter()
-        if len(rows) == 1 and state_tokens >= self.prefix_min_tokens:
+        if len(rows) == 1 and state_tokens >= self.prefix_min_tokens and not image_mode:
             logits = dict(zip(rows, self._logits_shared(segments, list(rows.values()))))
         elif len(rows) == 1:
             logits = {name: self._logits(r) for name, r in rows.items()}
@@ -453,7 +593,7 @@ class CheckpointEngine:
         for chunk in self._chunks(order, length, lambda b, s: b * s <= self.max_batch_tokens):
             batch, decide = collate_rows([rows[k] for k in chunk], self.tok.pad_token_id)
             batch = {k: v.to(self.device) for k, v in batch.items()}
-            with self._autocast():
+            with self._autocast(), bidir.for_rows([rows[k] for k in chunk]):
                 h = self.model.hidden(batch)
                 out.update(self._readout(h, chunk, decide, rows))
         return out
@@ -488,7 +628,8 @@ class CheckpointEngine:
         out: dict[str, torch.Tensor] = {}
         with self._autocast():
             cache = DynamicCache(config=bb.config)
-            bb(**{k: v.to(dev) for k, v in pre.items()}, past_key_values=cache, use_cache=True)
+            with bidir.state_blocks([n]):
+                bb(**{k: v.to(dev) for k, v in pre.items()}, past_key_values=cache, use_cache=True)
             kv, state = self._cache_bytes(cache)
             per_token = kv / max(1, n)
             budget = (torch.cuda.mem_get_info(dev)[0] * self.cache_memory_fraction if dev.type == "cuda" else float("inf"))
@@ -514,6 +655,7 @@ class CheckpointEngine:
         return out
 
     def warmup(self) -> None:
-        warmup(self)
-        many = {f"q{i}": {"type": "noul", "instructions": f"Is item {i} mentioned?", "criteria": None} for i in range(64)}
-        self.run("warmup: items 1, 2 and 3.", many)
+        """vev.warmup: requests in the board's shapes, so Triton compiles and autotunes before the first request."""
+        from vev import warmup
+
+        warmup.run(self)

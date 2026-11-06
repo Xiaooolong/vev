@@ -1,0 +1,61 @@
+# Exact versions for `vev serve`, from the two environments the published latencies were measured in:
+#   one H800: Python 3.13, torch 2.8.0+cu128
+#   one RTX PRO 6000 Blackwell (Hugging Face Jobs): Python 3.11, image pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime
+# Every package below has the same version in both, except numpy (2.5.3 needs Python >= 3.12). docs/serving.md has
+# the numbers and how they were measured.
+#
+# torch first, then this file without dependency resolution, then vev itself:
+#   pip install torch==2.8.0 torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cu128
+#   pip install --no-deps -r requirements-serve.txt
+#   pip install --no-deps .
+# --no-deps because torch 2.8.0 declares triton==3.4.0 while both environments run triton 3.8.0; pip prints a warning
+# about that, which is expected. Triton compiles kernels at run time and needs a C compiler (gcc).
+#
+# Not installed in either environment, and not needed: causal-conv1d (transformers then logs that causal_conv1d_fn
+# falls back to its PyTorch implementation; all published numbers are with that fallback), uvloop, httptools.
+
+accelerate==1.15.0
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.15.1
+certifi==2026.7.22
+click==8.5.0
+einops==0.8.2
+fastapi==0.141.1
+filelock==4.0.0
+fla-core==0.5.2
+flash-linear-attention==0.5.2
+fsspec==2026.6.0
+h11==0.16.0
+hf-xet==1.6.0
+httpcore==1.0.9
+httpx==0.28.1
+huggingface-hub==1.32.0
+idna==3.20
+jinja2==3.1.6
+markdown-it-py==4.2.0
+markupsafe==3.0.3
+mdurl==0.1.2
+numpy==2.4.6; python_version < "3.12"
+numpy==2.5.3; python_version >= "3.12"
+packaging==26.3
+peft==0.21.0
+pillow==12.3.0
+psutil==7.2.2
+pydantic==2.13.5
+pydantic-core==2.46.5
+pygments==2.21.0
+pyyaml==6.0.3
+regex==2026.9.10
+rich==15.0.0
+safetensors==0.8.0
+shellingham==1.5.4
+starlette==1.6.0
+tokenizers==0.23.2
+tqdm==4.70.1
+transformers==5.17.0
+triton==3.8.0
+typer==0.27.2
+typing-extensions==4.16.0
+typing-inspection==0.4.4
+uvicorn==0.53.0

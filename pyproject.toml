@@ -60,7 +60,7 @@ line-length = 120
 target-version = "py311"
 
 [tool.pytest.ini_options]
-testpaths = ["evals/tests", "train/tests", "data/tests"]
+testpaths = ["tests", "evals/tests", "train/tests", "data/tests"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "UP", "B"]

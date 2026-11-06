@@ -22,7 +22,7 @@ log = logging.getLogger("vev")
 
 ALIASES = ["vev-latest", "jev-latest", "latest"]
 MAX_IMAGES = 8
-MAX_IMAGE_PIXELS = 1024 * 1024
+MAX_IMAGE_PIXELS = 1024 * 1024  # engines without their own max_image_pixels (zero-shot base models)
 MAX_STATE_TOKENS = 32768
 MAX_REQUEST_TOKENS = 65536
 KNOWN_TYPES = ("noul", "choice", "score")
@@ -85,7 +85,7 @@ def validate_semantics(req: SystemOneRequest, model_name: str) -> None:
                 raise bad(f"{where}.criteria: too many score levels ({n}); this model supports at most {MAX_SCORE_LEVELS}")
 
 
-def model_card(name: str, hf_id: str) -> dict[str, Any]:
+def model_card(name: str, hf_id: str, max_image_pixels: int = MAX_IMAGE_PIXELS) -> dict[str, Any]:
     return {
         "name": name,
         "description": (
@@ -96,7 +96,7 @@ def model_card(name: str, hf_id: str) -> dict[str, Any]:
         "release_date": "2026-10-01T00:00:00Z",
         "limits": {
             "max_images": MAX_IMAGES,
-            "max_image_pixels": MAX_IMAGE_PIXELS,
+            "max_image_pixels": max_image_pixels,
             "max_state_tokens": MAX_STATE_TOKENS,
             "max_request_tokens": MAX_REQUEST_TOKENS,
             "max_score_levels": MAX_SCORE_LEVELS,
@@ -114,6 +114,7 @@ def create_app(engine: Engine, model_name: str, hf_id: str, allow_remote_images:
     app = FastAPI(title="vev", docs_url=None, redoc_url=None)
     lock = threading.Lock()
     keys = {k.strip() for k in os.environ.get("VEV_API_KEYS", "").split(",") if k.strip()}
+    max_pixels = getattr(engine, "max_image_pixels", MAX_IMAGE_PIXELS)
 
     @app.middleware("http")
     async def request_id(request: Request, call_next):
@@ -143,7 +144,7 @@ def create_app(engine: Engine, model_name: str, hf_id: str, allow_remote_images:
 
     @app.get("/v1/models")
     def models():
-        return {"models": [model_card(model_name, hf_id)]}
+        return {"models": [model_card(model_name, hf_id, max_pixels)]}
 
     @app.post("/v1/systemone")
     def systemone(req: SystemOneRequest, request: Request):
@@ -155,7 +156,7 @@ def create_app(engine: Engine, model_name: str, hf_id: str, allow_remote_images:
                 req.state,
                 questions,
                 max_images=MAX_IMAGES,
-                max_pixels=MAX_IMAGE_PIXELS,
+                max_pixels=max_pixels,
                 allow_remote=allow_remote_images,
                 max_state_tokens=MAX_STATE_TOKENS,
                 max_request_tokens=MAX_REQUEST_TOKENS,
@@ -184,7 +185,9 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--dtype", default="bf16", choices=["bf16", "fp16", "fp32"])
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--allow-remote-images", action="store_true")
-    ap.add_argument("--no-warmup", action="store_true")
+    ap.add_argument("--no-warmup", action="store_true",
+                    help="start listening without the warm-up requests (vev/warmup.py); on a cold Triton cache the "
+                         "first requests of each new shape then wait for kernel autotuning, up to ~11 s each")
     ap.add_argument("--prefix-min-tokens", type=int, default=4096,
                     help="Vev checkpoints: prefill the state once and share it across questions for states of at least "
                          "this many tokens")
@@ -218,7 +221,7 @@ def main(argv: list[str] | None = None) -> None:
     if not a.no_warmup:
         t0 = time.perf_counter()
         engine.warmup()
-        log.info("warmup done in %.0f ms", (time.perf_counter() - t0) * 1000)
+        log.info("warmup done in %.1f s", time.perf_counter() - t0)
     app = create_app(engine, name, hf_id, a.allow_remote_images)
     uvicorn.run(app, host=a.host, port=a.port, log_level="info")
 
