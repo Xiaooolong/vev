@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir --no-deps . && chmod +x scripts/serve_board.sh
 
 EXPOSE 8009
 ENTRYPOINT ["vev", "serve", "--host", "0.0.0.0", "--port", "8009"]
-CMD ["--model", "CountingSheep/vev-4b"]
+CMD ["--model", "CountingSheep/vev-4b-v2"]

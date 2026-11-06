@@ -1,6 +1,6 @@
 # Running the server
 
-How to run `vev serve` the way the Decision Index numbers were measured. All numbers are for `vev-4b` 0.2.0 on the
+How to run `vev serve` the way the Decision Index numbers were measured. All numbers are for `vev-4b-v2` on the
 public vision suite of the Decision Index (12,210 rows, one choice question per row, up to two images).
 
 ## Install
@@ -31,11 +31,11 @@ numbers here were measured with that fallback.
 ## Start
 
 ```bash
-scripts/serve_board.sh CountingSheep/vev-4b --port 8009
+scripts/serve_board.sh CountingSheep/vev-4b-v2 --port 8009
 ```
 
 The script sets the reading layout explicitly and starts `python -m vev serve`; arguments after the model go to
-`vev serve`. The variables override the checkpoint's `vev.json`, which for `vev-4b` 0.2.0 has the same values.
+`vev serve`. The variables override the checkpoint's `vev.json`, which for `vev-4b-v2` has the same values.
 
 | Variable | Value | Effect |
 |---|---|---|
@@ -54,7 +54,7 @@ With Docker:
 docker build -t vev .
 docker run --gpus all -p 8009:8009 \
   -v ~/.cache/huggingface:/root/.cache/huggingface -v ~/.triton:/root/.triton \
-  --entrypoint /app/scripts/serve_board.sh vev CountingSheep/vev-4b --host 0.0.0.0 --port 8009
+  --entrypoint /app/scripts/serve_board.sh vev CountingSheep/vev-4b-v2 --host 0.0.0.0 --port 8009
 ```
 
 The second volume keeps Triton's compiled kernels between runs.

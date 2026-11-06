@@ -1,8 +1,8 @@
-# Training data of vev-4b 0.2.0
+# Training data of vev-4b-v2
 
-The data `vev-4b` 0.2.0 was trained on, and its overlaps with the
-[Jev Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) (DI). `vev-9b` is still the 0.1.0
-model described in [TRAINING.md](TRAINING.md).
+The data `vev-4b-v2` was trained on, and its overlaps with the
+[Jev Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) (DI). `vev-4b` and `vev-9b` are described
+in [TRAINING.md](TRAINING.md).
 
 ## Stages
 
@@ -78,7 +78,7 @@ Other splits of the same benchmarks:
 | total | 136 / 360 | 77 / 220 | 27 / 89 | 508 / 1049 |
 
 In text, 7 BANKING77 training sentences in stage 0 equal the sentence of a scored DI item, with a different
-instruction; BANKING77's own train and test splits share such sentences. `vev-4b` 0.2.0 answers all 7 correctly, out
+instruction; BANKING77's own train and test splits share such sentences. `vev-4b-v2` answers all 7 correctly, out
 of 3,080 scored BANKING77 items.
 
 | Training record | DI item |

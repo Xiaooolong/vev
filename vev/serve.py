@@ -178,7 +178,7 @@ def main(argv: list[str] | None = None) -> None:
                                  "behind a /v1/systemone-compatible HTTP API.")
     ap.add_argument("--model", required=True,
                     help="Vev checkpoint (local directory or Hugging Face repo id), or a Qwen3.5 model id for zero-shot use")
-    ap.add_argument("--revision", default=None, help="Hugging Face revision of --model (branch, tag or commit), e.g. v0.1.0")
+    ap.add_argument("--revision", default=None, help="Hugging Face revision of --model (branch, tag or commit)")
     ap.add_argument("--name", default=None, help="served model id; default derived from --model")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8009)

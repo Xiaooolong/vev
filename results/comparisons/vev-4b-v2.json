@@ -1,8 +1,8 @@
 {
- "method": "paired bootstrap over the same questions, 4,000 resamples, seed 0, 95% percentile interval; image sets resample whole meta.cluster groups (questions on the same image together); difference = vev-4b 0.2.0 minus reference",
- "model": "vev-4b 0.2.0",
+ "method": "paired bootstrap over the same questions, 4,000 resamples, seed 0, 95% percentile interval; image sets resample whole meta.cluster groups (questions on the same image together); difference = vev-4b-v2 minus reference",
+ "model": "vev-4b-v2",
  "comparisons": {
-  "vev-4b 0.1.0": {
+  "vev-4b": {
    "judgekit": {
     "n_questions": 130,
     "clusters": null,

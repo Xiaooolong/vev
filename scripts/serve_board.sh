@@ -3,7 +3,7 @@
 # text states up to 3,000 tokens and images read twice, images up to 1.6 MP. The warm-up runs before the server
 # answers /healthz. Arguments after MODEL go to `vev serve` (for example --port, --host, --revision).
 #
-#   scripts/serve_board.sh CountingSheep/vev-4b --port 8009
+#   scripts/serve_board.sh CountingSheep/vev-4b-v2 --port 8009
 set -euo pipefail
 if [ $# -lt 1 ]; then
   echo "usage: $0 MODEL [vev serve options]" >&2

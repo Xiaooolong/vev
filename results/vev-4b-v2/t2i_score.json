@@ -1,0 +1,25 @@
+{
+ "set": "t2i_score",
+ "model": "vev-4b-v2",
+ "records_sha256": "8349c95196cf26a340e46a695b4e4fd829480248cb531fade9bfb1b726419653",
+ "n": 480,
+ "metrics": {
+  "n_records": 480,
+  "n_questions": 480,
+  "order_flip_rate": null,
+  "batched_vs_separate_max_dp": null,
+  "repeat_max_dp": null,
+  "jitter_max_dp": null,
+  "jitter_flip_rate": null,
+  "negation_gap": null,
+  "accuracy": 0.26666666666666666,
+  "macro_f1": 0.25700007085839427,
+  "brier": 0.51854009590198,
+  "nll": 2.017590995641323,
+  "ece": 0.14961901387044538,
+  "ece_maxprob": 0.24800240841383736,
+  "ece_noise_floor": 0.0790642361111109,
+  "auroc_confidence": 0.5904430042613636,
+  "confidence_distinct": 480
+ }
+}

@@ -1,10 +1,10 @@
 # Training
 
-This file records how `vev-4b` 0.1.0 and `vev-9b` 0.1.0 were trained, so the runs can be repeated or varied.
+This file records how `vev-4b` and `vev-9b` were trained, so the runs can be repeated or varied.
 
-`vev-4b` 0.2.0 was trained in four stages on a different data mix, listed in [TRAINING_DATA.md](TRAINING_DATA.md);
-its training settings are in the [vev-4b model card](https://huggingface.co/CountingSheep/vev-4b#training). Its data
-builders are not in this repository. Everything below is about 0.1.0.
+`vev-4b-v2` was trained in four stages on a different data mix, listed in [TRAINING_DATA.md](TRAINING_DATA.md);
+its training settings are in the [vev-4b-v2 model card](https://huggingface.co/CountingSheep/vev-4b-v2#training). Its
+data builders are not in this repository. Everything below is about `vev-4b` and `vev-9b`.
 
 ## Recipe
 

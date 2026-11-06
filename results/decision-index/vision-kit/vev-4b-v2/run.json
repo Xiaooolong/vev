@@ -1,5 +1,5 @@
 {
- "model": "vev-4b 0.2.0 (served as vev-s4c-rel: the 0.2.0 weights with the release vev.json)",
+ "model": "vev-4b-v2 (served as vev-s4c-rel: the vev-4b-v2 weights with the release vev.json)",
  "server": "vev serve from this repository at e49fa00 (branch release-0.2), one H800",
  "kit": "decision-index 25c6ec7 (`decision_index vision pipeline`), engine evals/decision_index/vision_engine.py",
  "workers": 4,

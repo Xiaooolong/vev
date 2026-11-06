@@ -1,5 +1,5 @@
 {
- "model": "vev-4b 0.2.0",
+ "model": "vev-4b-v2",
  "suite": "Decision Index public vision suite, 12,210 rows",
  "protocol": "Decision Index board protocol: one process on one GPU, one request at a time, 10 untimed rows first; end-to-end wall time per row as the kit's vision runner records it (model_request_wall_ms, client-side image encoding included), engine evals/decision_index/vision_engine.py plus the server's timing extension. Server started with scripts/serve_board.sh. Times in ms.",
  "hardware": "1 x NVIDIA H800 (HKUST SuperPod), 12 CPU cores of a Xeon Platinum 8480CL",

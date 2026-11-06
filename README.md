@@ -6,7 +6,7 @@
 
 <img src="docs/doom.webp" alt="vev-4b playing Doom in real time: the game on the left, the eight slice probabilities and the chosen action on the right.">
 
-vev-4b 0.1.0 playing Doom in real time. For every frame, a small harness cuts the screen into 8 vertical slices and
+The first-generation vev-4b playing Doom in real time. For every frame, a small harness cuts the screen into 8 vertical slices and
 sends one request with a yes/no question per slice ("does this slice show a monster?"); a fixed rule turns the answers
 into turning and firing. The game does not pause for the model.
 
@@ -35,13 +35,14 @@ resp = client.system_one(
                                  "nothing": "Nothing, the order went through"}),
     },
 )
-# vev-4b 0.2.0:  error 0.996
+# vev-4b-v2:  error 0.996
 #                step  {"shipping": 0.002, "payment": 0.965, "review": 0.033}
 #                next  {"retry": 0.996, "wait": 0.002, "nothing": 0.003}
 ```
 
-This is v0.2, a research preview: `vev-4b` is 0.2.0, `vev-9b` is still 0.1.0. The weights are licensed under
-CC BY-NC 4.0. On one of the four text sets, Jev is still clearly more accurate (see [Text](#text)).
+The current model is `vev-4b-v2`, the second generation of `vev-4b`; `vev-9b` has not been retrained. This is a
+research preview, and the weights are licensed under CC BY-NC 4.0. On one of the four text sets, Jev is still clearly
+more accurate (see [Text](#text)).
 
 ## Get started
 
@@ -51,7 +52,7 @@ first.
 
 ```bash
 pip install git+https://github.com/Xiaooolong/vev
-vev serve --model CountingSheep/vev-4b          # downloads the weights on first start, listens on 127.0.0.1:8009
+vev serve --model CountingSheep/vev-4b-v2          # downloads the weights on first start, listens on 127.0.0.1:8009
 ```
 
 On first start the server warms up its GPU kernels, which takes about two minutes with an empty Triton cache.
@@ -70,7 +71,7 @@ resp = client.system_one(
                        criteria={"shipping": "Delivery and tracking", "billing": "Charges and refunds"}),
     },
 )
-print(resp.answers["urgent"].noul)          # probability of "yes": 0.97 with vev-4b 0.2.0
+print(resp.answers["urgent"].noul)          # probability of "yes": 0.97 with vev-4b-v2
 print(resp.answers["team"].probabilities)   # {"shipping": 0.97, "billing": 0.03}
 ```
 
@@ -85,16 +86,15 @@ checkout_png = "data:image/png;base64," + base64.b64encode(open("docs/checkout.p
 
 ### Other ways to run it
 
-- `--revision v0.1.0` loads the 0.1.0 weights, `--revision v0.2.0` the current ones.
 - Docker: `docker build -t vev .`, then
-  `docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev --model CountingSheep/vev-4b`.
+  `docker run --gpus all -p 8009:8009 -v ~/.cache/huggingface:/root/.cache/huggingface vev --model CountingSheep/vev-4b-v2`.
 - The pinned environment and start script used for the Decision Index runs are in [docs/serving.md](docs/serving.md).
 - Without the HTTP server, calling the model from Python:
 
   ```python
   from vev.model import CheckpointEngine
 
-  engine = CheckpointEngine("CountingSheep/vev-4b")
+  engine = CheckpointEngine("CountingSheep/vev-4b-v2")
   result = engine.run({"ticket": "My kettle never arrived."},
                       {"refund": {"type": "noul", "instructions": "Is the customer asking for a refund?"}})
   print(result.answers["refund"]["noul"])
@@ -102,7 +102,7 @@ checkout_png = "data:image/png;base64," + base64.b64encode(open("docs/checkout.p
 
 - In another inference engine: [spec/systemone-api.md](spec/systemone-api.md), section 10, gives the prompt
   template and which token probabilities to read; [How it works](#how-it-works) describes the reading layout of
-  `vev-4b` 0.2.0.
+  `vev-4b-v2`.
 
 ### Speed
 
@@ -129,18 +129,18 @@ Results on the public suites of the [Jev Decision Index](https://huggingface.co/
 measured with the board's official tool. Scores are the board's chance-corrected skill ×100. The board's full score
 also includes private items that only the maintainers run, so it is not known.
 
-| Suite | vev-4b 0.1.0 | vev-4b 0.2.0 |
+| Suite | vev-4b | vev-4b-v2 |
 |---|---|---|
 | vision, public suite (12,210 items) | – | 72.90 |
 | text, public suite, edition 0.3 | 38.91 | 60.32 |
 
-0.1.0 was not run on the vision suite. 0.2.0 was trained with data for the board's task families, built from their
+vev-4b was not run on the vision suite. vev-4b-v2 was trained with data for the board's task families, built from their
 training splits ([TRAINING_DATA.md](TRAINING_DATA.md)). Per-benchmark scores are in `results/decision-index/` and in
-the [vev-4b model card](https://huggingface.co/CountingSheep/vev-4b).
+the [vev-4b-v2 model card](https://huggingface.co/CountingSheep/vev-4b-v2).
 
 ### Text
 
-| Set | n | Qwen3.5-4B | kev-4B | vev-4b 0.2.0 | Jev |
+| Set | n | Qwen3.5-4B | kev-4B | vev-4b-v2 | Jev |
 |---|---|---|---|---|---|
 | [judgekit](https://github.com/lexingtonhibiki/judgekit) (Chinese) | 130 | 0.962 | 0.846 | 0.962 | 0.962 |
 | [JevBench](https://github.com/fstandhartinger/jevbench) (public subset) | 231 | 0.758 | 0.719 | 0.835 | 0.861 |
@@ -160,7 +160,7 @@ Public vision benchmarks mostly ask questions about the content of an image. Vev
 against a given rule, so we also built judgment sets from human-labelled public data. The converters are in
 `evals/datasets/`; the converted data is not redistributed. Jev's API accepts text only, so there is no Jev column.
 
-| Set | What is judged | n | Qwen3.5-4B | vev-4b 0.2.0 |
+| Set | What is judged | n | Qwen3.5-4B | vev-4b-v2 |
 |---|---|---|---|---|
 | policy_mod | Does the image violate this safety policy? (LlavaGuard) | 659 | 0.686 | **0.760** |
 | game_glitch | Does the game screenshot contain a glitch? (VideoGameQA-Bench) | 1000 | 0.646 | 0.647 |
@@ -174,12 +174,12 @@ against a given rule, so we also built judgment sets from human-labelled public 
 
 Bold: significantly better than the base model.
 
-### Against 0.1.0
+### Against vev-4b
 
-On the 18 release sets, `vev-4b` 0.2.0 is significantly more accurate than 0.1.0 on 8 (JevBench, nimble, kev
+On the 18 release sets, `vev-4b-v2` is significantly more accurate than `vev-4b` on 8 (JevBench, nimble, kev
 transfer-v4, MMBench-EN, POPE, MMStar, game_clip, game_glitch) and less accurate on 4: game_vr −22.0 (0.940 to
 0.720), policy_cat −11.2, t2i_elem −4.2 and ui_toggle −0.8. All 18 are in the
-[model card](https://huggingface.co/CountingSheep/vev-4b).
+[model card](https://huggingface.co/CountingSheep/vev-4b-v2).
 
 To evaluate Vev on your own data, prepare a few hundred labelled examples in the [record format](evals/README.md)
 and run `python -m evals.run` against the server. It reports accuracy, calibration, and the accuracy of the most
@@ -193,7 +193,7 @@ confident answers at each coverage level.
   under 4%). Keep the option order fixed in your application.
 - A question's probabilities can differ by a few hundredths between asking it alone and together with other
   questions. Repeating the same request returns the same answer ([spec §6](spec/systemone-api.md#6-semantic-guarantees)).
-- `vev-4b` 0.2.0 is worse than 0.1.0 on four of our image sets, most on game_vr (comparing a game screenshot with a
+- `vev-4b-v2` is worse than `vev-4b` on four of our image sets, most on game_vr (comparing a game screenshot with a
   reference, −22 points).
 - The image judgment sets are converted from public data and are not established benchmarks.
 - Compatible means the request and response formats match `/v1/systemone`; it does not mean Vev behaves like Jev.
@@ -205,25 +205,26 @@ Each question becomes a prompt with the state, the question and the lettered opt
 next-token probabilities for the answer tokens (Yes/No, option letters, level digits) and renormalises them over the
 allowed answers. Fine-tuning (LoRA on Qwen3.5) adjusts these probabilities; there is no separate classifier head.
 
-`vev-4b` 0.2.0 reads a request differently from 0.1.0. The state tokens attend to each other in both directions in
+`vev-4b-v2` reads a request differently from `vev-4b`. The state tokens attend to each other in both directions in
 the 8 full-attention layers, and a short text state is written twice: the state, the question's instructions, the
 state again, then the question with its options. A request with images and one question passes the images twice the
 same way. These settings come from the checkpoint's `vev.json` ([details](docs/serving.md#start)); checkpoints
-without them, such as 0.1.0, are read as before.
+without them, such as `vev-4b`, are read as before.
 
 | Document | Contents |
 |---|---|
 | [spec/systemone-api.md](spec/systemone-api.md) | request format, limits, errors, guarantees, the prompt template |
-| [TRAINING_DATA.md](TRAINING_DATA.md) | training sources of vev-4b 0.2.0, what was removed, overlaps with evaluation data |
-| [TRAINING.md](TRAINING.md) | training recipe of 0.1.0 |
+| [TRAINING_DATA.md](TRAINING_DATA.md) | training sources of vev-4b-v2, what was removed, overlaps with evaluation data |
+| [TRAINING.md](TRAINING.md) | training recipe of vev-4b and vev-9b |
 | [evals/](evals/README.md) | converting the evaluation sets and running them against any `/v1/systemone` server |
 | [conformance/](conformance/README.md) | checking an implementation against the spec, including the official API |
 | [docs/serving.md](docs/serving.md) | pinned environment, start script, warm-up, latency |
 
 | Model | Base | Hugging Face |
 |---|---|---|
-| `vev-4b` | Qwen3.5-4B | [CountingSheep/vev-4b](https://huggingface.co/CountingSheep/vev-4b) (0.2.0); adapter [vev-4b-lora](https://huggingface.co/CountingSheep/vev-4b-lora) (0.1.0 only) |
-| `vev-9b` | Qwen3.5-9B | [CountingSheep/vev-9b](https://huggingface.co/CountingSheep/vev-9b), adapter [vev-9b-lora](https://huggingface.co/CountingSheep/vev-9b-lora) (both 0.1.0) |
+| `vev-4b-v2` | Qwen3.5-4B | [CountingSheep/vev-4b-v2](https://huggingface.co/CountingSheep/vev-4b-v2) |
+| `vev-4b` | Qwen3.5-4B | [CountingSheep/vev-4b](https://huggingface.co/CountingSheep/vev-4b), adapter [vev-4b-lora](https://huggingface.co/CountingSheep/vev-4b-lora) |
+| `vev-9b` | Qwen3.5-9B | [CountingSheep/vev-9b](https://huggingface.co/CountingSheep/vev-9b), adapter [vev-9b-lora](https://huggingface.co/CountingSheep/vev-9b-lora) |
 
 ## License
 
@@ -236,7 +237,6 @@ Code: Apache 2.0. Model weights: CC BY-NC 4.0.
   title  = {Vev: Jev-like decision models that can also see images},
   author = {Wang, Xiaolong},
   year   = {2026},
-  url    = {https://github.com/Xiaooolong/vev},
-  version = {0.2.0}
+  url    = {https://github.com/Xiaooolong/vev}
 }
 ```
